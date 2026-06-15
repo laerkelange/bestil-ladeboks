@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bestil ladeboks – OK</title>
+  <style>
+    @font-face {
+      font-family: 'OK family';
+      src: url('assets/fonts/OKfamily-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'OK family';
+      src: url('assets/fonts/OKfamily-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Fellix';
+      src: url('assets/fonts/Fellix-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Fellix';
+      src: url('assets/fonts/Fellix-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Fellix';
+      src: url('assets/fonts/Fellix-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+  <style>
+    /* ── Design tokens ── */
+    :root {
+      --text:            #23000d;
+      --text-subtle:     #4c433e;
+      --border-subtle:   #e6d9d2;
+      --border-bold:     #460019;
+      --border-tile:     #bfb1aa;
+      --bg-page:         #F7EFEB;
+      --bg-elevated:     #fffaf7;
+      --bg-selected:     #f7efeb;
+      --primary:         #460019;
+      --link:            #460019;
+      --accent:          #FF3C3C;
+      --progress-off:    #f7efeb;
+      --r-tile:          10px;
+      --r-btn:           8px;
+      --r-input:         8px;
+      --input-border-hover: #736761;
+      --error:             #8c0000;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Fellix', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--text);
+      background: #F7EFEB;
+      min-height: 100vh;
+    }
+
+    /* ── 12-column grid – content in centre 6 cols ── */
+    .grid-outer {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      min-height: 100vh;
+    }
+    .col-content {
+      grid-column: 4 / 10;   /* columns 4-9 = 6 of 12 */
+      background: #fff;
+    }
+    @media (max-width: 1100px) { .col-content { grid-column: 3 / 11; } }
+    @media (max-width:  860px) { .col-content { grid-column: 2 / 12; } }
+    @media (max-width:  600px) { .col-content { grid-column: 1 / -1; } }
+
+    /* ── Screen visibility ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .screen-inner {
+      padding: 40px 32px 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .screen-inner.center { align-items: center; }
+
+    /* ── Progress bar ── */
+    .progress { display: flex; flex-direction: column; gap: 8px; }
+    .progress-segs { display: flex; gap: 4px; }
+    .seg {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--progress-off);
+      transition: background .25s;
+      cursor: pointer;
+    }
+    .seg.on { background: var(--primary); }
+    .progress-label {
+      display: flex;
+      gap: 4px;
+      font-size: 14px;
+      line-height: 16px;
+    }
+    .progress-step  { color: var(--text); font-weight: 500; }
+    .progress-name  { color: var(--text-subtle); }
+
+    /* ── Typography ── */
+    h1 {
+      font-family: 'OK family', Georgia, serif;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 48px;
+      color: var(--text);
+    }
+    h2 {
+      font-family: 'OK family', Georgia, serif;
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 40px;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 24px;
+      color: var(--text);
+    }
+    @media (min-width: 768px) {
+      h1 { font-size: 56px; line-height: 64px; }
+      h2 { font-size: 40px; line-height: 48px; }
+      h4 { font-size: 24px; line-height: 32px; }
+    }
+    p { color: var(--text); }
+
+    /* ── Option tiles ── */
+    .option-tiles { display: flex; flex-direction: column; gap: 12px; }
+
+    .option-tile {
+      border: 1px solid var(--border-tile);
+      border-radius: var(--r-tile);
+      padding: 16px;
+      cursor: pointer;
+      background: #fff;
+      box-shadow: 0 0 5px rgba(0,0,0,.15);
+      transition: border .15s, background .15s, box-shadow .15s;
+      user-select: none;
+    }
+    .option-tile.selected {
+      border: 2px solid var(--border-bold);
+      background: var(--bg-selected);
+      box-shadow: none;
+    }
+    .tile-title {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 20px;
+      color: var(--text);
+    }
+    .tile-desc { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+    .tile-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      line-height: 16px;
+      color: var(--text-subtle);
+    }
+
+    /* ── Inputs ── */
+    .input-group { display: flex; flex-direction: column; gap: 4px; }
+    .input-label {
+      font-family: 'Fellix', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+      color: var(--text);
+    }
+    .input-field {
+      width: 100%;
+      border: 2px solid var(--border-tile);
+      border-radius: var(--r-input);
+      padding: 12px 16px;
+      height: 48px;
+      font-family: 'Fellix', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border-color 160ms ease;
+      -webkit-appearance: none;
+      box-sizing: border-box;
+    }
+    .input-field:hover { border-color: var(--input-border-hover); }
+    .input-field:focus { border-color: var(--text-subtle); }
+    .input-field::placeholder { color: #bfb1aa; }
+    .input-field.filled { font-weight: 600; color: var(--text); border-color: var(--border-tile); }
+    .helper { font-family: 'Fellix', sans-serif; font-size: 12px; font-weight: 400; line-height: 12px; color: var(--text-subtle); }
+
+    /* ── Checkboxes (Clara) ── */
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: pointer;
+    }
+    .check-box {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      cursor: pointer;
+      background: url('assets/checkbox-unchecked.svg') center/contain no-repeat;
+    }
+    .check-box:checked {
+      background: url('assets/checkbox-checked.svg') center/contain no-repeat;
+    }
+    .check-label {
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--text);
+    }
+    .check-label-sub {
+      display: block;
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--text-subtle);
+      margin-top: 2px;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 40px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--r-btn);
+      padding: 0 16px;
+      font-size: 16px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(0,0,0,.20);
+      transition: opacity .15s;
+      text-decoration: none;
+    }
+    .btn-primary:hover { opacity: .88; }
+
+    .btn-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 8px 16px;
+      background: none;
+      border: none;
+      color: var(--link);
+      font-size: 16px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-link:hover { text-decoration: underline; }
+
+    /* ── Color swatches ── */
+    .swatches { display: flex; gap: 12px; }
+    .swatch {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1.5px solid var(--border-subtle);
+      transition: border .15s;
+    }
+    .swatch.black { background: #1a1a1a; }
+    .swatch.white { background: #fff; }
+    .swatch.selected.black { border: 2.5px solid var(--border-bold); }
+    .swatch.selected.white { border: 2.5px solid var(--border-bold); }
+
+    /* ── Specs table ── */
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 4px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 16px;
+      color: var(--text);
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-val { font-weight: 600; text-align: right; }
+
+    /* ── USP accordion ── */
+    .usp-list { border: 1px solid var(--border-subtle); border-radius: 8px; overflow: hidden; }
+    .usp-item {
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .usp-item:last-child { border-bottom: none; }
+
+    /* clickable header row */
+    .usp-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .usp-left { display: flex; align-items: center; gap: 12px; }
+    .usp-text { font-size: 16px; font-weight: 500; color: var(--text); }
+
+    /* chevron rotates when open */
+    .usp-chevron {
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .usp-item.open .usp-chevron { transform: rotate(180deg); }
+
+    /* smooth height animation via CSS grid */
+    .usp-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s ease;
+    }
+    .usp-item.open .usp-body { grid-template-rows: 1fr; }
+    .usp-body-inner { overflow: hidden; }
+    .usp-desc {
+      padding: 0 16px 16px 52px;   /* left-aligned under text, past the icon */
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--text-subtle);
+    }
+    .usp-desc a {
+      color: var(--link);
+      text-decoration: underline;
+      font-weight: 500;
+      transition: opacity .15s;
+    }
+    .usp-desc a:hover {
+      opacity: 0.8;
+    }
+    .usp-desc a:active {
+      opacity: 0.7;
+    }
+    .usp-desc a:focus {
+      outline: 2px solid #FF55FF;
+      outline-offset: 2px;
+    }
+
+    /* ── Product card (opsummering) ── */
+    .product-card {
+      border: 2px solid var(--border-subtle);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 5px rgba(0,0,0,.15);
+    }
+    .product-card-img-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 24px 8px;
+    }
+    .product-card-img { display: block; width: 90px; height: auto; }
+    .product-card-content { padding: 8px 24px 24px; display: flex; flex-direction: column; gap: 8px; }
+    .card-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .order-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--text);
+    }
+    .order-section { font-size: 14px; font-weight: 600; color: var(--text); margin-top: 8px; }
+    .foretag-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--link);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+    @media (min-width: 768px) {
+      .product-card { display: flex; flex-direction: row; align-items: stretch; }
+      .product-card-img-wrap {
+        width: 281px;
+        min-height: 308px;
+        flex-shrink: 0;
+        padding: 0;
+      }
+      .product-card-img { width: 81px; }
+      .product-card-content {
+        flex: 1;
+        padding: 24px 24px 24px 32px;
+        gap: 0;
+        justify-content: space-between;
+      }
+      .card-title {
+        font-size: 24px;
+        line-height: 24px;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 0;
+      }
+      .product-card-rows { display: flex; flex-direction: column; gap: 8px; margin-top: 24px; }
+      .foretag-link { margin-top: 0; }
+    }
+
+    /* ── Add-on items ── */
+    .addon-list { display: flex; flex-direction: column; }
+    .addon-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .addon-item.disabled { opacity: 0.5; pointer-events: none; cursor: default; }
+    .addon-item:last-child { border-bottom: none; }
+    .addon-info { flex: 1; }
+    .addon-title { font-size: 14px; font-weight: 500; color: var(--text); }
+    .addon-price { font-size: 14px; line-height: 16px; margin-top: 2px; }
+    .addon-price.included { color: #FF3C3C; }
+    .addon-price.extra    { color: var(--text-subtle); }
+
+    /* ── Info box (OK Fordele) ── */
+    .info-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--bg-selected);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+    .info-box-body { flex: 1; }
+    .info-box-title { font-size: 14px; font-weight: 600; color: var(--text); }
+    .info-box-desc  { font-size: 14px; color: var(--text-subtle); margin-top: 3px; line-height: 16px; }
+
+    /* ── Illustration ── */
+    .illustration { text-align: center; padding: 20px 0; }
+
+    /* ── Price row (product page) ── */
+    .price-row { font-size: 16px; color: var(--text); line-height: 24px; }
+
+    /* ── Back link ── */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      color: var(--text-subtle);
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* ── Forening dropdown ── */
+    .forening-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0; right: 0;
+      background: #fff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-input);
+      box-shadow: 0 0 8px rgba(0,0,0,.12);
+      z-index: 100;
+      max-height: 240px;
+      overflow-y: auto;
+    }
+    .forening-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--text);
+    }
+    .forening-item:last-child { border-bottom: none; }
+    .forening-item:hover { background: var(--bg-selected); }
+    .forening-item-name { font-weight: 500; }
+    .forening-item-by { color: var(--text-subtle); font-size: 12px; }
+    .forening-item-logo { width: 28px; height: 28px; object-fit: contain; flex-shrink: 0; }
+    .forening-empty { padding: 12px 16px; font-size: 14px; color: var(--text-subtle); }
+
+
+    /* ── Input validation error state (Clara) ── */
+    .input-group.error .input-label { color: var(--error); }
+    .input-group.error .input-field  { border-color: var(--error); }
+    .input-error-msg {
+      display: none;
+      font-family: 'Fellix', sans-serif;
+      font-size: 12px;
+      line-height: 12px;
+      color: var(--error);
+      margin-top: 0;
+    }
+    .input-group.error .input-error-msg { display: block; }
+    /* ── Date picker calendar ── */
+    .cal-popup {
+      position: absolute;
+      bottom: calc(100% + 4px);
+      left: 0;
+      width: 324px;
+      background: #fff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,.15);
+      z-index: 100;
+      padding-bottom: 8px;
+    }
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px 10px;
+    }
+    .cal-month-label { font-size: 15px; font-weight: 600; color: var(--text); }
+    .cal-nav {
+      background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; padding: 0;
+    }
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 42px);
+      padding: 0 15px;
+      margin-bottom: 2px;
+    }
+    .cal-weekdays span {
+      font-size: 11px; color: #949494; text-align: center;
+      height: 26px; display: flex; align-items: center; justify-content: center;
+    }
+    .cal-days {
+      display: grid;
+      grid-template-columns: repeat(7, 42px);
+      padding: 0 15px;
+    }
+    .cal-day {
+      width: 42px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: var(--text); cursor: pointer;
+      border-radius: 20px; font-family: inherit;
+    }
+    .cal-day:not(.overflow):hover { background: var(--bg-selected); border-radius: 6px; }
+    .cal-day.today {
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      color: var(--primary);
+    }
+    .cal-day.selected {
+      background: var(--bg-selected);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .cal-day.overflow { color: #bfbfbf; cursor: default; }
+    .cal-day.overflow:hover { background: none; }
+    .cal-footer {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 8px 15px 8px;
+    }
+    .cal-today-link {
+      font-size: 14px; font-weight: 600; color: var(--primary);
+      background: none; border: none; cursor: pointer;
+      padding: 8px 16px; font-family: inherit;
+      border-radius: var(--r-btn);
+    }
+    .cal-today-link:hover { text-decoration: underline; }
+    .cal-confirm-btn {
+      background: var(--primary); color: #fff; border: none;
+      border-radius: var(--r-btn); padding: 8px 16px;
+      font-size: 14px; font-weight: 500; font-family: inherit;
+      cursor: pointer; box-shadow: 0 0 4px rgba(0,0,0,.20);
+      min-width: 112px;
+    }
+    .cal-confirm-btn:hover { opacity: .88; }
+
+    /* ── Produktvalg ── */
+    .produkt-grid { display: flex; flex-direction: column; gap: 12px; }
+    .produkt-tile {
+      border: 1px solid var(--border-tile);
+      border-radius: var(--r-tile);
+      padding: 16px;
+      cursor: pointer;
+      background: #fff;
+      box-shadow: 0 0 5px rgba(0,0,0,.15);
+      transition: border .15s, background .15s, box-shadow .15s;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .produkt-tile:hover { border-color: var(--border-bold); background: var(--bg-selected); box-shadow: none; }
+    .produkt-tile-img { width: 64px; height: 64px; object-fit: contain; flex-shrink: 0; }
+    .produkt-tile-info { flex: 1; }
+    .produkt-tile-navn { font-size: 16px; font-weight: 500; line-height: 20px; color: var(--text); }
+    .produkt-tile-pris { font-size: 14px; line-height: 16px; color: var(--text-subtle); margin-top: 4px; }
+
+    /* ── Confirmation screen ── */
+    .confirm-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 32px;
+      text-align: center;
+      gap: 24px;
+    }
+    /* ── Overlay (shared) ── */
+    .bs-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .bs-overlay.open { opacity: 1; pointer-events: auto; }
+
+    /* ══ MOBILE: bottom sheet ══ */
+    .bs-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 24px 24px 0 0;
+      z-index: 201;
+      max-height: 95dvh;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+      pointer-events: none;
+    }
+    .bs-sheet.open { transform: translateY(0); pointer-events: auto; }
+
+    /* show mobile, hide desktop content by default */
+    .bs-mobile { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+    .bs-desktop { display: none; }
+
+    /* drag handle */
+    .bs-handle-row { display: flex; justify-content: center; padding: 12px 0 8px; flex-shrink: 0; }
+    .bs-handle { width: 36px; height: 4px; background: var(--border-tile); border-radius: 2px; }
+
+    /* shared header */
+    .bs-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 20px 16px; flex-shrink: 0;
+    }
+    .bs-title { font-family: 'OK family', Georgia, serif; font-size: 32px; font-weight: 600; color: var(--text); line-height: 40px; }
+    .bs-close-btn {
+      width: 32px; height: 32px; min-width: 32px;
+      background: transparent; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; border-radius: 50%;
+    }
+    .bs-close-btn:hover { background: var(--bg-selected); }
+
+    /* mobile scrollable area */
+    .bs-scroll { overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
+
+    /* mobile table rows */
+    .bs-row {
+      display: flex; align-items: center; min-height: 56px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .bs-row:last-child { border-bottom: none; }
+    .bs-row.bs-head { min-height: 60px; align-items: stretch; }
+    .bs-label { width: 110px; min-width: 110px; padding-left: 16px; font-size: 14px; line-height: 16px; color: var(--text); }
+    .bs-head-label { width: 110px; min-width: 110px; }
+    .bs-cell { flex: 1; display: flex; align-items: center; justify-content: center; padding: 4px; font-size: 14px; line-height: 16px; color: var(--text); text-align: center; }
+    .bs-head .bs-cell { flex-direction: column; justify-content: center; padding: 12px 4px; font-size: 14px; line-height: 20px; }
+    .bs-head .bs-cell strong { font-size: 16px; font-weight: 600; }
+
+    /* mobile footer */
+    .bs-footer {
+      flex-shrink: 0; padding: 24px 20px;
+      padding-bottom: max(40px, calc(env(safe-area-inset-bottom, 0px) + 24px));
+    }
+
+    /* ══ DESKTOP: centred modal ══ */
+    @media (min-width: 768px) {
+      .bs-mobile  { display: none; }
+      .bs-desktop { display: flex; flex-direction: column; }
+
+      .bs-sheet {
+        /* override: fixed center, not bottom anchor */
+        bottom: auto;
+        left: 50%;
+        right: auto;
+        top: 50%;
+        width: 90%;
+        max-width: 820px;
+        max-height: 90vh;
+        border-radius: 16px;
+        overflow: hidden;
+        /* starts slightly low → slides up to center */
+        transform: translate(-50%, calc(-50% + 48px));
+        transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1),
+                    opacity  0.3s ease;
+        opacity: 0;
+      }
+      .bs-sheet.open {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* desktop modal header */
+      .dm-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 24px; flex-shrink: 0;
+      }
+      .dm-title { font-family: 'OK family', Georgia, serif; font-size: 32px; font-weight: 600; line-height: 40px; color: var(--text); }
+      .dm-close-btn {
+        width: 40px; height: 40px; min-width: 40px;
+        background: transparent; border: none; cursor: pointer;
+        display: flex; align-items: center; justify-content: center; border-radius: 50%;
+      }
+      .dm-close-btn:hover { background: var(--bg-selected); }
+
+      /* desktop table */
+      .dm-table { display: flex; flex-direction: column; padding: 0 32px 32px; overflow-y: auto; }
+      .dm-row {
+        display: flex; align-items: stretch; min-height: 56px;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .dm-row:last-child { border-bottom: none; }
+      .dm-label {
+        width: 180px; min-width: 180px; padding: 12px 16px;
+        display: flex; align-items: center;
+        font-size: 14px; line-height: 16px; color: var(--text); font-weight: 400;
+      }
+      .dm-cell {
+        flex: 1; display: flex; align-items: center; justify-content: center;
+        padding: 12px 16px; font-size: 14px; line-height: 16px;
+        color: var(--text); text-align: center;
+      }
+      /* "Leje" column gets a left accent border */
+      .dm-cell.featured { border-left: 1px solid var(--border-subtle); }
+      .dm-head-label { width: 180px; min-width: 180px; }
+      .dm-head .dm-cell {
+        flex-direction: column; justify-content: flex-end;
+        padding: 12px 16px; font-size: 16px; line-height: 20px; font-weight: 400;
+      }
+      .dm-head .dm-cell strong { font-weight: 600; }
+      /* "Vælg" row cells */
+      .dm-btn-cell { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+      .dm-btn-cell.featured { border-left: 1px solid var(--border-subtle); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid-outer">
+  <div class="col-content" id="app-col">
+
+    <!-- ════════════════════════════════════════════
+         SCREEN PRODUKTVALG · VÆLG LADEBOKS
+    ════════════════════════════════════════════ -->
+    <div class="screen active" id="screen-produktvalg">
+      <div class="screen-inner">
+        <button class="back-btn" onclick="history.back()">
+          <svg width="24" height="24" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.70711 0.292893C7.31658 -0.0976311 6.68342 -0.0976311 6.29289 0.292893L0.292893 6.29289C-0.0976311 6.68342 -0.0976311 7.31658 0.292893 7.70711L6.29289 13.7071C6.68342 14.0976 7.31658 14.0976 7.70711 13.7071C8.09763 13.3166 8.09763 12.6834 7.70711 12.2929L2.41421 7L7.70711 1.70711C8.09763 1.31658 8.09763 0.683418 7.70711 0.292893Z" fill="currentColor"/></svg>
+          Tilbage
+        </button>
+        <h1>Vælg din ladeboks</h1>
+        <div id="produkt-grid" class="produkt-grid"></div>
+      </div>
+    </div><!-- /screen-produktvalg -->
+
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 0 · PRODUKTSIDE
+    ════════════════════════════════════════════ -->
+    <div class="screen" id="screen-produkt">
+      <div class="screen-inner">
+
+        <button class="back-btn" onclick="goTo('screen-produktvalg')">
+          <svg width="24" height="24" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.70711 0.292893C7.31658 -0.0976311 6.68342 -0.0976311 6.29289 0.292893L0.292893 6.29289C-0.0976311 6.68342 -0.0976311 7.31658 0.292893 7.70711L6.29289 13.7071C6.68342 14.0976 7.31658 14.0976 7.70711 13.7071C8.09763 13.3166 8.09763 12.6834 7.70711 12.2929L2.41421 7L7.70711 1.70711C8.09763 1.31658 8.09763 0.683418 7.70711 0.292893Z" fill="currentColor"/></svg>
+          Tilbage
+        </button>
+
+        <h1 id="prod-navn"></h1>
+
+        <!-- Product image -->
+        <div style="text-align:center; padding: 0 0 8px;">
+          <img id="prod-billede" src="" alt="" style="width:200px; height:auto;">
+        </div>
+
+        <!-- Color selection -->
+        <div id="prod-farver-wrap">
+          <h4 style="margin-bottom:16px;">Farve</h4>
+          <div id="prod-farver" class="swatches"></div>
+        </div>
+
+        <!-- Specs -->
+        <div>
+          <h4 style="margin-bottom:4px; padding-bottom:12px;">Detaljer</h4>
+          <div id="prod-specs"></div>
+        </div>
+
+        <!-- USP accordion -->
+        <div class="usp-list" id="usp-accordion"></div>
+
+        <!-- Price -->
+        <div id="prod-priser" style="padding:10px 0 0;"></div>
+
+        <button class="btn-primary" onclick="goTo('screen-finansiering')">Vælg ladeboks</button>
+
+      </div>
+    </div><!-- /screen-produkt -->
+
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 1 · FINANSIERING  (1 af 6)
+    ════════════════════════════════════════════ -->
+    <div class="screen" id="screen-finansiering">
+      <div class="screen-inner">
+
+        <div class="progress">
+          <div class="progress-segs">
+            <div class="seg on" onclick="goToStep(1)"></div><div class="seg" onclick="goToStep(2)"></div><div class="seg" onclick="goToStep(3)"></div><div class="seg" onclick="goToStep(4)"></div><div class="seg" onclick="goToStep(5)"></div><div class="seg" onclick="goToStep(6)"></div>
+          </div>
+          <div class="progress-label">
+            <span class="progress-step">1 af 6</span>
+            <span class="progress-name">– Finansiering</span>
+          </div>
+        </div>
+
+        <h2>Finansiering af din ladeboks</h2>
+
+        <!-- Payment method -->
+        <div>
+          <h4 style="margin-bottom:16px;">Hvordan du vil betale for din ladeboks?</h4>
+          <div class="option-tiles" id="tiles-payment">
+
+            <div class="option-tile selected" onclick="pickTile('tiles-payment',this)">
+              <div class="tile-title">Leje</div>
+              <div class="tile-desc">
+                <div class="tile-row"><span>Leje og serviceaftale</span><span>169 kr. / md.</span></div>
+                <div class="tile-row"><span>Oprettelse</span><span id="tile-leje-oprettelse">895 kr.</span></div>
+              </div>
+            </div>
+
+            <div class="option-tile" onclick="pickTile('tiles-payment',this)">
+              <div class="tile-title">Køb med serviceaftale</div>
+              <div class="tile-desc">
+                <div class="tile-row"><span>Leje og serviceaftale</span><span>49 kr. / md.</span></div>
+                <div class="tile-row"><span>Oprettelse fra</span><span>4.995 kr.</span></div>
+              </div>
+            </div>
+
+            <div class="option-tile" onclick="pickTile('tiles-payment',this)">
+              <div class="tile-title">Køb uden serviceaftale</div>
+              <div class="tile-desc">
+                <div class="tile-row"><span>Oprettelse fra</span><span>4.995 kr.</span></div>
+              </div>
+            </div>
+
+          </div>
+          <button class="btn-link" onclick="openCompare()">Sammenlign</button>
+        </div>
+
+        <!-- OK Elaftale -->
+        <div>
+          <h4 style="margin-bottom:8px;">Vil du have en OK Elaftale?</h4>
+          <p style="font-size:16px; line-height:20px; margin-bottom:16px;">
+            Du sparer 800 kr. når du vælger en OK Elaftale sammen med din ladeboks
+          </p>
+          <div class="option-tiles" id="tiles-elaftale">
+
+            <div class="option-tile selected" onclick="pickTile('tiles-elaftale',this); setElaftaleInfo(true); setElaftaleSamlever(true)">
+              <div class="tile-title">Ja tak</div>
+              <div class="tile-desc">
+                <div class="tile-row"><span>Abonnement</span><span>49 kr. /md.</span></div>
+                <div class="tile-row"><span>kWh-tillæg</span><span>0 kr./kWh</span></div>
+              </div>
+            </div>
+
+            <div class="option-tile" onclick="pickTile('tiles-elaftale',this); setElaftaleInfo(false); setElaftaleSamlever(true)">
+              <div class="tile-title">Jeg er allerede elkunde</div>
+            </div>
+
+            <div class="option-tile" onclick="pickTile('tiles-elaftale',this); setElaftaleInfo(false); setElaftaleSamlever(false)">
+              <div class="tile-title">Nej tak</div>
+            </div>
+
+          </div>
+          <p id="elaftale-info" class="helper" style="margin-top:8px;">Din OK Elaftale vil træde i kraft <span id="elaftale-dato"></span></p>
+          <div id="elaftale-samlever-wrap" style="display:none; margin-top:16px; flex-direction:column; gap:16px;">
+            <label class="check-item">
+              <input type="checkbox" class="check-box" onchange="toggleElaftaleSamleverFields(this)">
+              <span class="check-label">Min nuværende elaftale står i samlevers navn</span>
+            </label>
+            <div id="elaftale-samlever-fields" style="display:none; flex-direction:column; gap:16px;">
+              <div class="input-group">
+                <label class="input-label">Samlevers navn</label>
+                <input type="text" class="input-field" autocomplete="off">
+              </div>
+              <div class="input-group">
+                <label class="input-label">Samlevers cpr-nr.</label>
+                <input type="text" class="input-field" placeholder="xxxxxx-xxxx" inputmode="numeric" maxlength="11" oninput="formatCpr(this)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="goTo('screen-installation')">Videre</button>
+
+      </div>
+    </div><!-- /screen-finansiering -->
+
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 2 · INSTALLATION  (2 af 6)
+    ════════════════════════════════════════════ -->
+    <div class="screen" id="screen-installation">
+      <div class="screen-inner">
+
+        <div class="progress">
+          <div class="progress-segs">
+            <div class="seg on" onclick="goToStep(1)"></div><div class="seg on" onclick="goToStep(2)"></div><div class="seg" onclick="goToStep(3)"></div><div class="seg" onclick="goToStep(4)"></div><div class="seg" onclick="goToStep(5)"></div><div class="seg" onclick="goToStep(6)"></div>
+          </div>
+          <div class="progress-label">
+            <span class="progress-step">2 af 6</span>
+            <span class="progress-name">– Installation</span>
+          </div>
+        </div>
+
+        <h2>Installation</h2>
+
+        <div class="usp-list" id="inst-accordion">
+          <div class="usp-item">
+            <div class="usp-header" onclick="toggleUsp(this)">
+              <div class="usp-left">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 12L11 15L16 9" stroke="#FF3C3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="usp-text">Standardinstallation er inkluderet</span>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg" class="usp-chevron">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L7.70711 7.70711C7.31658 8.09763 6.68342 8.09763 6.29289 7.70711L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="var(--text)"/>
+              </svg>
+            </div>
+            <div class="usp-body">
+              <div class="usp-body-inner">
+                <div class="usp-desc">
+                  Standardinstallationen dækker omkring 75 % af de ladebokse, vi installerer.
+                  <br><br>
+                  Der kan dog være særlige forhold, der gør sig gældende. Eksempelvis gennemboring af mere end én væg eller etage, etablering af jordelektroder og flere andre ting.
+                  <a href="https://www.ok.dk/globalassets/pdfer/e-mobilitet/ok-ladepakke-standardinstallation.pdf" target="_blank" style="margin-top:8px; display:block;">Læs mere om, hvad standardinstallation indeholder</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom:16px;">Hvor skal ladeboksen opsættes?</h4>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div class="input-group">
+              <label class="input-label">Gade og husnummer</label>
+              <input type="text" id="instal-gade" class="input-field" autocomplete="street-address">
+              <span class="input-error-msg">Udfyld venligst gade og husnummer</span>
+            </div>
+            <div class="input-group">
+              <label class="input-label">Postnummer</label>
+              <input type="text" id="instal-postnr" class="input-field" inputmode="numeric" maxlength="4" oninput="fmtPostnr(this,'instal-by')">
+              <span class="input-error-msg">Udfyld venligst postnummer</span>
+            </div>
+            <div class="input-group">
+              <label class="input-label">By</label>
+              <input type="text" id="instal-by" class="input-field" autocomplete="address-level2" oninput="fmtLetters(this)">
+              <span class="input-error-msg">Udfyld venligst by</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <label class="check-item">
+            <input type="checkbox" class="check-box" onchange="toggleInstFaktura(this)">
+            <span class="check-label">Faktura skal sendes til en anden adresse</span>
+          </label>
+          <div id="inst-faktura-fields" style="display:none; flex-direction:column; gap:16px;">
+            <div class="input-group">
+              <label class="input-label">Gade og husnummer</label>
+              <input type="text" id="faktura-gade" class="input-field" autocomplete="street-address">
+              <span class="input-error-msg">Udfyld venligst gade og husnummer</span>
+            </div>
+            <div class="input-group">
+              <label class="input-label">Postnummer</label>
+              <input type="text" id="faktura-postnr" class="input-field" inputmode="numeric" maxlength="4" oninput="fmtPostnr(this,'faktura-by')">
+              <span class="input-error-msg">Udfyld venligst postnummer</span>
+            </div>
+            <div class="input-group">
+              <label class="input-label">By</label>
+              <input type="text" id="faktura-by" class="input-field" autocomplete="address-level2" oninput="fmtLetters(this)">
+              <span class="input-error-msg">Udfyld venligst by</span>
+            </div>
+          </div>
+          <label class="check-item">
+            <input type="checkbox" class="check-box" onchange="toggleInstLevering(this)">
+            <span class="check-label">Ladeboksen skal leveres til en anden adresse</span>
+          </label>
+          <div id="inst-levering-fields" style="display:none; flex-direction:column; gap:16px;">
+            <div class="input-group">
+              <label class="input-label">Gade og husnummer</label>
+              <input type="text" id="levering-gade" class="input-field" autocomplete="street-address">
+              <span class="input-error-msg">Udfyld venligst gade og husnummer</span>
+            </div>
+            <div class="input-group">
+              <label class="input-label">Postnummer</label>
+              <input type="text" id="levering-postnr" class="input-field" inputmode="numeric" maxlength="4" oninput="fmtPostnr(this,'levering-by')">
+              <span class="input-error-msg">Udfyld venligst postnummer</span>
+            </div>
+            <div class="input-group">
+              <label class="input-label">By</label>
+              <input type="text" id="levering-by" class="input-field" autocomplete="address-level2" oninput="fmtLetters(this)">
+              <span class="input-error-msg">Udfyld venligst by</span>
+            </div>
+          </div>
+          <label class="check-item">
+            <input type="checkbox" class="check-box" onchange="toggleInstDato(this)">
+            <span class="check-label">Jeg er ved at flytte til adressen
+              <span class="check-label-sub">Jeg har netop overtaget boligen (inden for 5 dage) eller gør det i fremtiden</span>
+            </span>
+          </label>
+          <div id="inst-dato-field" style="display:none;">
+            <div class="input-group" style="position:relative;">
+              <label class="input-label">Dato for overtagelse</label>
+              <input type="text" id="inst-dato-input" class="input-field" placeholder="dd-mm-yyyy" readonly onclick="toggleCal(event)">
+              <span class="input-error-msg">Vælg venligst en dato for overtagelse</span>
+              <div id="inst-cal" class="cal-popup" style="display:none;">
+                <div class="cal-header">
+                  <button class="cal-nav" onclick="calPrevMonth()" aria-label="Forrige måned">
+                    <svg width="24" height="24" viewBox="0 0 8 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.70711 0.292893C7.31658 -0.0976311 6.68342 -0.0976311 6.29289 0.292893L0.292893 6.29289C-0.0976311 6.68342 -0.0976311 7.31658 0.292893 7.70711L6.29289 13.7071C6.68342 14.0976 7.31658 14.0976 7.70711 13.7071C8.09763 13.3166 8.09763 12.6834 7.70711 12.2929L2.41421 7L7.70711 1.70711C8.09763 1.31658 8.09763 0.683418 7.70711 0.292893Z" fill="#23000d"/></svg>
+                  </button>
+                  <span id="cal-month-label" class="cal-month-label"></span>
+                  <button class="cal-nav" onclick="calNextMonth()" aria-label="Næste måned">
+                    <img src="assets/icon-chevron-right.svg" width="24" height="24" alt="">
+                  </button>
+                </div>
+                <div class="cal-weekdays">
+                  <span>Ma</span><span>Ti</span><span>On</span><span>To</span><span>Fr</span><span>Lø</span><span>Sø</span>
+                </div>
+                <div id="cal-days-grid" class="cal-days"></div>
+                <div class="cal-footer">
+                  <button class="cal-today-link" onclick="calGoToday()">I dag</button>
+                  <button class="cal-confirm-btn" onclick="calConfirm()">Vælg dato</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="goTo('screen-eksisterende-boks')">Videre</button>
+
+      </div>
+    </div><!-- /screen-installation -->
+
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 2b · EKSISTERENDE LADEBOKS  (2 af 6)
+    ════════════════════════════════════════════ -->
+    <div class="screen" id="screen-eksisterende-boks">
+      <div class="screen-inner">
+
+        <div class="progress">
+          <div class="progress-segs">
+            <div class="seg on" onclick="goToStep(1)"></div><div class="seg on" onclick="goToStep(2)"></div><div class="seg" onclick="goToStep(3)"></div><div class="seg" onclick="goToStep(4)"></div><div class="seg" onclick="goToStep(5)"></div><div class="seg" onclick="goToStep(6)"></div>
+          </div>
+          <div class="progress-label">
+            <span class="progress-step">2 af 6</span>
+            <span class="progress-name">– Installation</span>
+          </div>
+        </div>
+
+        <h2>Installation</h2>
+
+        <div>
+          <h4 style="margin-bottom:16px;">Har du en ladeboks på adressen som skal udskiftes?</h4>
+          <div class="option-tiles" id="tiles-eksisterende-boks">
+            <div class="option-tile selected" onclick="pickTile('tiles-eksisterende-boks', this)">
+              <div class="tile-title">Nej</div>
+            </div>
+            <div class="option-tile" onclick="pickTile('tiles-eksisterende-boks', this)">
+              <div class="tile-title">Ja</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="goTo('screen-opsummering')">Videre</button>
+
+      </div>
+    </div><!-- /screen-eksisterende-boks -->
+
+
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 3 · OPSUMMERING / DIN BESTILLING  (3 af 6)
+    ════════════════════════════════════════════ -->
+    <div class="screen" id="screen-opsummering">
+      <div class="screen-inner">
+
+        <div class="progress">
+          <div class="progress-segs">
+            <div class="seg on" onclick="goToStep(1)"></div><div class="seg on" onclick="goToStep(2)"></div><div class="seg on" onclick="goToStep(3)"></div><div class="seg" onclick="goToStep(4)"></div><div class="seg" onclick="goToStep(5)"></div><div class="seg" onclick="goToStep(6)"></div>
+          </div>
+          <div class="progress-label">
+            <span class="progress-step">3 af 6</span>
+            <span class="progress-name">– Kurv</span>
+          </div>
+        </div>
+
+        <h2>Din bestilling</h2>
+
+        <!-- Product card -->
+        <div class="product-card">
+          <div class="product-card-img-wrap">
+            <img src="assets/charger.png" alt="Domo ladeboks" class="product-card-img">
+          </div>
+          <div class="product-card-content">
+            <div>
+              <div class="card-title">Domo ladeboks, sort</div>
+              <div class="product-card-rows">
+                <div class="order-row"><span>Ladeboks</span><span>4.995 kr</span></div>
+                <div class="order-row"><span>Serviceaftale</span><span>69 kr./md.</span></div>
+                <div class="order-row"><span>Standardinstallation</span><span>0 kr</span></div>
+                <div class="order-section">OK Elaftale</div>
+                <div class="order-row"><span>Abonnement</span><span>49 kr./md.</span></div>
+                <div class="order-row"><span>kWh-tillæg</span><span>1,1 kr./kWh.</span></div>
+                <div id="card-kabel9m" class="order-row" style="display:none;"><span>Ekstra ladekabel 9 m</span><span>+ 1.500 kr.</span></div>
+              </div>
+            </div>
+            <div class="foretag-link" onclick="goTo('screen-finansiering')">
+              Foretag ændringer
+              <img src="assets/icon-edit.svg" width="20" height="20" alt="">
+            </div>
+          </div>
+        </div>
+
+        <!-- Add-ons -->
+        <div>
+          <h4 style="margin-bottom:12px;">Har du fået det hele med?</h4>
+          <div class="addon-list">
+            <div class="addon-item disabled">
+              <input type="checkbox" class="check-box" checked disabled>
+              <div class="addon-info">
+                <div class="addon-title">Ekstra ladekabel 7 meter</div>
+                <div class="addon-price included">Inkluderet</div>
+              </div>
+            </div>
+            <div class="addon-item">
+              <input type="checkbox" class="check-box" onchange="toggleKabel9m(this)">
+              <div class="addon-info">
+                <div class="addon-title">Ekstra ladekabel 9 meter</div>
+                <div class="addon-price extra">+ 1.500 kr.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="goTo('screen-personlige')">Videre</button>
+
+      </div>
+    </div><!-- /screen-opsummering -->
+
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 4 · PERSONLIGE OPLYSNINGER  (4 af 6)
+    ════════════════════════════════════════════ -->
+    <div class="screen" id="screen-personlige">
+      <div class="screen-inner">
+
+        <div class="progress">
+          <div class="progress-segs">
+            <div class="seg on" onclick="goToStep(1)"></div><div class="seg on" onclick="goToStep(2)"></div><div class="seg on" onclick="goToStep(3)"></div><div class="seg on" onclick="goToStep(4)"></div><div class="seg" onclick="goToStep(5)"></div><div class="seg" onclick="goToStep(6)"></div>
+          </div>
+          <div class="progress-label">
+            <span class="progress-step">4 af 6</span>
+            <span class="progress-name">– Personlige oplysninger</span>
+          </div>
+        </div>
+
+        <h2>Personlige oplysninger</h2>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div class="input-group">
+            <label class="input-label">Fulde navn</label>
+            <input type="text" id="pers-navn" class="input-field" autocomplete="name" oninput="fmtNavn(this)">
+            <span class="input-error-msg">Udfyld venligst dit fulde navn</span>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Telefonnummer</label>
+            <input type="tel" id="pers-telefon" class="input-field" autocomplete="tel" onfocus="initTlf(this)" oninput="fmtTlf(this)" onkeydown="guardTlf(event,this)">
+            <span class="input-error-msg">Udfyld venligst dit telefonnummer</span>
+          </div>
+          <div class="input-group">
+            <label class="input-label">E-mail</label>
+            <input type="email" id="pers-email" class="input-field" autocomplete="email">
+            <span class="input-error-msg">Udfyld venligst din e-mailadresse</span>
+          </div>
+          <div class="input-group">
+            <label class="input-label">cpr-nummer</label>
+            <input type="text" id="pers-cpr" class="input-field" placeholder="xxxxxx-xx" inputmode="numeric" maxlength="11" oninput="fmtCpr(this)">
+            <span class="input-error-msg">Udfyld venligst dit cpr-nummer</span>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="goTo('screen-fordele')">Videre</button>
+
+      </div>
+    </div><!-- /screen-personlige -->
+
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 5 · OK FORDELE  (5 af 6)
+    ════════════════════════════════════════════ -->
+    <div class="screen" id="screen-fordele">
+      <div class="screen-inner">
+
+        <div class="progress">
+          <div class="progress-segs">
+            <div class="seg on" onclick="goToStep(1)"></div><div class="seg on" onclick="goToStep(2)"></div><div class="seg on" onclick="goToStep(3)"></div><div class="seg on" onclick="goToStep(4)"></div><div class="seg on" onclick="goToStep(5)"></div><div class="seg" onclick="goToStep(6)"></div>
+          </div>
+          <div class="progress-label">
+            <span class="progress-step">5 af 6</span>
+            <span class="progress-name">– OK Fordele</span>
+          </div>
+        </div>
+
+        <h2>OK Fordele</h2>
+
+        <!-- Local support -->
+        <div>
+          <h4 style="margin-bottom:4px;">Støt lokalt når du lader din bil</h4>
+          <p style="font-size:14px; color:var(--text-subtle); margin-bottom:16px; line-height:18px;">
+            Med en OK elaftale støtter du med 1 øre pr. kWh.
+          </p>
+
+          <div class="input-group" style="position:relative;">
+            <label class="input-label">Vælg forening</label>
+            <input type="text" id="forening-input" class="input-field" placeholder="søg på din forening" autocomplete="off" oninput="searchForening(this.value)" onfocus="if(this.value) searchForening(this.value)">
+            <div id="forening-results" class="forening-dropdown" style="display:none;"></div>
+          </div>
+
+          <!-- Info box -->
+          <div class="info-box">
+            <div class="info-box-body">
+              <div class="info-box-title">Din støtte gør en forskel</div>
+              <div class="info-box-desc">I 2025 indsamlede vi i alt 689.000 støttekroner</div>
+            </div>
+            <!-- icon_støtte_digital_tagline -->
+            <div style="flex-shrink:0; position:relative; width:65px; height:64px;">
+              <img src="assets/icon-stoette-tagline.svg" alt=""
+                   style="position:absolute; left:7.3px; top:3.5px; width:54.3px; height:58.1px;">
+              <div style="position:absolute; left:2.7px; top:2.7px; width:41.3px; height:41.3px;
+                          transform:rotate(-90deg);
+                          background:#FF3C3C;
+                          border:0.5px solid rgba(255,255,255,0.6);
+                          border-radius:35.7px 6px 35.7px 35.7px;
+                          display:flex; align-items:center; justify-content:center;">
+                <img src="assets/icon-stoette-heart.svg" alt=""
+                     style="transform:rotate(90deg); width:26.7px; height:21.2px;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coop bonus -->
+        <div>
+          <h4 style="margin-bottom:8px;">Coop-bonus</h4>
+          <p style="font-size:16px; line-height:20px; margin-bottom:16px;">
+            Er du medlem af Coop, får du som OK-kunde Coop-bonus.
+            Med en OK elaftale får du 40 kr. årligt
+          </p>
+          <div class="input-group">
+            <label class="input-label">Indtast Coop medlemsnummer</label>
+            <input type="text" id="coop-nr" class="input-field" placeholder="xxxxxxxx" inputmode="numeric" oninput="fmtDigits(this)">
+            <span class="helper">Du finder dit medlemsnummer på dit Coop-medlemskort</span>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="goTo('screen-betaling')">Videre</button>
+
+      </div>
+    </div><!-- /screen-fordele -->
+
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 6 · BETALINGSSERVICE  (6 af 6)
+    ════════════════════════════════════════════ -->
+    <div class="screen" id="screen-betaling">
+      <div class="screen-inner">
+
+        <div class="progress">
+          <div class="progress-segs">
+            <div class="seg on" onclick="goToStep(1)"></div><div class="seg on" onclick="goToStep(2)"></div><div class="seg on" onclick="goToStep(3)"></div><div class="seg on" onclick="goToStep(4)"></div><div class="seg on" onclick="goToStep(5)"></div><div class="seg on" onclick="goToStep(6)"></div>
+          </div>
+          <div class="progress-label">
+            <span class="progress-step">6 af 6</span>
+            <span class="progress-name">– Betalingsservice</span>
+          </div>
+        </div>
+
+        <h2>Betalingsservice</h2>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div class="input-group">
+            <label class="input-label">Registreringsnummer</label>
+            <input type="text" id="betal-reg" class="input-field" inputmode="numeric" placeholder="xxxx" maxlength="4" oninput="fmtReg(this)">
+            <span class="input-error-msg">Udfyld venligst registreringsnummer</span>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Kontonummer</label>
+            <input type="text" id="betal-konto" class="input-field" inputmode="numeric" oninput="fmtDigits(this)">
+            <span class="input-error-msg">Udfyld venligst kontonummer</span>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="completeOrder()">Godkend bestilling</button>
+
+      </div>
+    </div><!-- /screen-betaling -->
+
+
+    <!-- ════════════════════════════════════════════
+         SCREEN ✓ · BEKRÆFTELSE
+    ════════════════════════════════════════════ -->
+    <div class="screen" id="screen-bekraeftelse">
+      <div class="confirm-screen">
+        <img src="assets/icon-check-circle.svg" width="80" height="80" alt="">
+        <h2>Tak for din bestilling!</h2>
+        <p style="font-size:16px; color:var(--text-subtle); max-width:280px; line-height:24px;">
+          Du vil modtage en bekræftelse på e-mail inden for kort tid.
+        </p>
+        <div style="background:var(--bg-selected); border-radius:12px; padding:24px; max-width:320px; width:100%; text-align:left;">
+          <img src="assets/hand.png" alt="" width="80" height="80" style="display:block; margin:0 auto 16px;">
+          <h2 style="font-size:24px; line-height:32px; margin-bottom:8px;">
+            Vi kommer på besøg<br>
+            <span style="color:var(--accent);">d. 12.-19. maj</span>
+          </h2>
+          <p style="font-size:14px; line-height:20px; color:var(--text-subtle);">
+            Vi installerer din ladeboks på en af dagene i denne periode. Vi giver dig besked om den præcise dato.
+          </p>
+        </div>
+        <button class="btn-primary" style="max-width:240px;" onclick="restart()">
+          Tilbage til forsiden
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /col-content -->
+</div><!-- /grid-outer -->
+
+<!-- ════════════════════════════════════════════
+     OVERLAY + COMPARISON (bottom sheet on mobile, modal on desktop)
+════════════════════════════════════════════ -->
+<div id="bs-overlay" class="bs-overlay" onclick="closeCompare()"></div>
+
+<div id="bs-sheet" class="bs-sheet" role="dialog" aria-modal="true" aria-label="Sammenlign finansieringsformer">
+
+  <!-- ─── MOBILE: bottom sheet ─── -->
+  <div class="bs-mobile">
+    <div class="bs-handle-row"><div class="bs-handle"></div></div>
+
+    <div class="bs-header">
+      <span class="bs-title">Sammenlign</span>
+      <button class="bs-close-btn" onclick="closeCompare()" aria-label="Luk">
+        <img src="assets/icon-close.svg" width="24" height="24" alt="">
+      </button>
+    </div>
+
+    <div class="bs-scroll">
+      <div class="bs-row bs-head" style="border-top:1px solid var(--border-subtle);">
+        <div class="bs-head-label"></div>
+        <div class="bs-cell"><strong>Leje</strong></div>
+        <div class="bs-cell">Køb <strong>med service­aftale</strong></div>
+        <div class="bs-cell">Køb <strong>uden service­aftale</strong></div>
+      </div>
+      <div class="bs-row"><div class="bs-label">Månedlig ydelse</div><div class="bs-cell">169 kr.</div><div class="bs-cell">49 kr.</div><div class="bs-cell">–</div></div>
+      <div class="bs-row"><div class="bs-label">Oprettelse</div><div class="bs-cell" id="cmp-m-leje-opr">895 kr.</div><div class="bs-cell" id="cmp-m-service-opr">4.995 kr.</div><div class="bs-cell" id="cmp-m-køb-opr">4.995 kr.</div></div>
+      <div class="bs-row">
+        <div class="bs-label">Serviceaftale</div>
+        <div class="bs-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+        <div class="bs-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+        <div class="bs-cell"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683418 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="#4c433e"/></svg></div>
+      </div>
+      <div class="bs-row">
+        <div class="bs-label">10% på OK's ladenetværk</div>
+        <div class="bs-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+        <div class="bs-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+        <div class="bs-cell"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683418 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="#4c433e"/></svg></div>
+      </div>
+      <div class="bs-row">
+        <div class="bs-label">Du ejer ladeboksen</div>
+        <div class="bs-cell"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683418 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="#4c433e"/></svg></div>
+        <div class="bs-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+        <div class="bs-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+      </div>
+      <div class="bs-row"><div class="bs-label">Garanti</div><div class="bs-cell">Så længe du lejer</div><div class="bs-cell">Livstid</div><div class="bs-cell">3 år</div></div>
+    </div>
+
+    <div class="bs-footer">
+      <button class="btn-primary" onclick="closeCompare()">Luk</button>
+    </div>
+  </div><!-- /bs-mobile -->
+
+  <!-- ─── DESKTOP: centred modal ─── -->
+  <div class="bs-desktop">
+
+    <!-- Header -->
+    <div class="dm-header">
+      <span class="dm-title">Sammenlign</span>
+      <button class="dm-close-btn" onclick="closeCompare()" aria-label="Luk">
+        <img src="assets/icon-close.svg" width="24" height="24" alt="">
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="dm-table">
+
+      <!-- Column headers -->
+      <div class="dm-row dm-head">
+        <div class="dm-head-label"></div>
+        <div class="dm-cell featured"><strong>Leje</strong></div>
+        <div class="dm-cell">Køb <strong>med serviceaftale</strong></div>
+        <div class="dm-cell">Køb <strong>uden serviceaftale</strong></div>
+      </div>
+
+      <!-- Månedlig ydelse -->
+      <div class="dm-row">
+        <div class="dm-label">Månedlig ydelse</div>
+        <div class="dm-cell featured">169 kr./md.</div>
+        <div class="dm-cell">49 kr./md.</div>
+        <div class="dm-cell">—</div>
+      </div>
+
+      <!-- Oprettelse -->
+      <div class="dm-row">
+        <div class="dm-label">Oprettelse</div>
+        <div class="dm-cell featured" id="cmp-d-leje-opr">895 kr.</div>
+        <div class="dm-cell" id="cmp-d-service-opr">4.995 kr.</div>
+        <div class="dm-cell" id="cmp-d-køb-opr">4.995 kr.</div>
+      </div>
+
+      <!-- Serviceaftale -->
+      <div class="dm-row">
+        <div class="dm-label">Serviceaftale</div>
+        <div class="dm-cell featured"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+        <div class="dm-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+        <div class="dm-cell"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683418 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="#4c433e"/></svg></div>
+      </div>
+
+      <!-- 10% på OK's ladenetværk -->
+      <div class="dm-row">
+        <div class="dm-label">10% på OK's ladenetværk</div>
+        <div class="dm-cell featured"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+        <div class="dm-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+        <div class="dm-cell"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683418 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="#4c433e"/></svg></div>
+      </div>
+
+      <!-- Du ejer ladeboksen -->
+      <div class="dm-row">
+        <div class="dm-label">Du ejer ladeboksen</div>
+        <div class="dm-cell featured"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683418 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="#4c433e"/></svg></div>
+        <div class="dm-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+        <div class="dm-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
+      </div>
+
+      <!-- Garanti -->
+      <div class="dm-row">
+        <div class="dm-label">Garanti</div>
+        <div class="dm-cell featured">Så længe du lejer</div>
+        <div class="dm-cell">Livstid</div>
+        <div class="dm-cell">3 år</div>
+      </div>
+
+      <!-- Vælg buttons -->
+      <div class="dm-row" style="border-bottom:none;">
+        <div class="dm-head-label"></div>
+        <div class="dm-btn-cell featured">
+          <button class="btn-primary" onclick="selectAndClose(0)">Vælg</button>
+        </div>
+        <div class="dm-btn-cell">
+          <button class="btn-primary" onclick="selectAndClose(1)">Vælg</button>
+        </div>
+        <div class="dm-btn-cell">
+          <button class="btn-primary" onclick="selectAndClose(2)">Vælg</button>
+        </div>
+      </div>
+
+    </div><!-- /dm-table -->
+  </div><!-- /bs-desktop -->
+
+</div><!-- /bs-sheet -->
+
+<script>
+  /* ── Comparison (bottom sheet / modal) ── */
+  function openCompare() {
+    document.getElementById('bs-overlay').classList.add('open');
+    document.getElementById('bs-sheet').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCompare() {
+    document.getElementById('bs-overlay').classList.remove('open');
+    document.getElementById('bs-sheet').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  // Desktop "Vælg" buttons — select the tile at the given index then close
+  function selectAndClose(index) {
+    const tiles = document.querySelectorAll('#tiles-payment .option-tile');
+    tiles.forEach(t => t.classList.remove('selected'));
+    if (tiles[index]) tiles[index].classList.add('selected');
+    closeCompare();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCompare(); });
+
+  /* ── USP accordion ── */
+  function toggleUsp(header) {
+    const item   = header.closest('.usp-item');
+    const isOpen = item.classList.contains('open');
+
+    if (isOpen) {
+      // Tap on the open row → just collapse it with animation
+      item.classList.remove('open');
+      return;
+    }
+
+    // 1. Snapshot clicked header's Y position in the viewport BEFORE any DOM change
+    const headerTop = header.getBoundingClientRect().top;
+
+    // 2. Kill transitions on all bodies so the close is instant (no animation)
+    document.querySelectorAll('#usp-accordion .usp-body').forEach(b => {
+      b.style.transition = 'none';
+    });
+
+    // 3. Close everything (happens synchronously, no visual flash)
+    document.querySelectorAll('#usp-accordion .usp-item').forEach(i => i.classList.remove('open'));
+
+    // 4. One frame later: restore transitions, lock the header back to its original Y,
+    //    then animate only this item opening downward
+    requestAnimationFrame(() => {
+      document.querySelectorAll('#usp-accordion .usp-body').forEach(b => {
+        b.style.transition = '';
+      });
+
+      // Compensate any scroll shift caused by the instant close above
+      const shift = header.getBoundingClientRect().top - headerTop;
+      if (shift !== 0) window.scrollBy({ top: shift, behavior: 'instant' });
+
+      // Now open with smooth animation – header is pinned, content grows downward
+      item.classList.add('open');
+    });
+  }
+
+  const STEPS = [
+    'screen-finansiering',
+    'screen-installation',
+    'screen-opsummering',
+    'screen-personlige',
+    'screen-fordele',
+    'screen-betaling'
+  ];
+  function goToStep(n) { goTo(STEPS[n - 1]); }
+
+  /* ── Form state persistence ── */
+  function saveFormData() {
+    const inputs = {};
+    document.querySelectorAll('.screen input, .screen textarea').forEach((el, i) => {
+      inputs[i] = el.type === 'checkbox' ? el.checked : el.value;
+    });
+    const tiles = {};
+    document.querySelectorAll('.option-tiles').forEach(g => {
+      if (g.id) tiles[g.id] = [...g.querySelectorAll('.option-tile')].findIndex(t => t.classList.contains('selected'));
+    });
+    const display = {};
+    ['inst-faktura-fields','inst-dato-field','elaftale-samlever-wrap','elaftale-samlever-fields','elaftale-info'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) display[id] = el.style.display;
+    });
+    sessionStorage.setItem('flowState', JSON.stringify({ inputs, tiles, display }));
+  }
+
+  function restoreFormData() {
+    const saved = sessionStorage.getItem('flowState');
+    if (!saved) return;
+    const { inputs, tiles, display } = JSON.parse(saved);
+    document.querySelectorAll('.screen input, .screen textarea').forEach((el, i) => {
+      if (inputs[i] == null) return;
+      if (el.type === 'checkbox') el.checked = inputs[i];
+      else { el.value = inputs[i]; if (inputs[i]) el.classList.add('filled'); }
+    });
+    Object.entries(tiles).forEach(([groupId, idx]) => {
+      const group = document.getElementById(groupId);
+      if (!group || idx < 0) return;
+      const ts = group.querySelectorAll('.option-tile');
+      ts.forEach(t => t.classList.remove('selected'));
+      if (ts[idx]) ts[idx].classList.add('selected');
+    });
+    Object.entries(display).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = val;
+    });
+  }
+
+  /* ── Navigation ── */
+  function goTo(id) {
+    saveFormData();
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  /* ── Option tile radio selection ── */
+  function pickTile(groupId, tile) {
+    const grp = document.getElementById(groupId);
+    grp.querySelectorAll('.option-tile').forEach(t => t.classList.remove('selected'));
+    tile.classList.add('selected');
+  }
+
+  /* ── Color swatch selection ── */
+  function selectSwatch(sw) {
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
+    sw.classList.add('selected');
+  }
+
+  /* ── Produkter ── */
+  let products = [];
+  let currentProduct = null;
+
+  async function loadProducts() {
+    try {
+      const res = await fetch('products.json');
+      products = await res.json();
+      renderProduktGrid();
+    } catch (e) { console.error('Kunne ikke hente products.json', e); }
+  }
+
+  function renderProduktGrid() {
+    const grid = document.getElementById('produkt-grid');
+    grid.innerHTML = products.map(p => `
+      <div class="produkt-tile" onclick="selectProduct('${p.id}')">
+        <img class="produkt-tile-img" src="${p.billede}" alt="${p.navn}">
+        <div class="produkt-tile-info">
+          <div class="produkt-tile-navn">${p.navn}</div>
+          <div class="produkt-tile-pris">${p.priser.køb ? 'Køb fra ' + p.priser.køb.toLocaleString('da-DK') + ' kr.' : ''}</div>
+        </div>
+        <img src="assets/icon-chevron-right.svg" width="24" height="24" alt="">
+      </div>`).join('');
+  }
+
+  function selectProduct(id) {
+    currentProduct = products.find(p => p.id === id);
+    if (!currentProduct) return;
+    renderProductPage(currentProduct);
+    goTo('screen-produkt');
+  }
+
+  function renderProductPage(p) {
+    document.getElementById('prod-navn').textContent = p.navn;
+    const img = document.getElementById('prod-billede');
+    img.src = p.billede; img.alt = p.navn;
+
+    // Farver
+    const farverWrap = document.getElementById('prod-farver-wrap');
+    const farverEl = document.getElementById('prod-farver');
+    farverWrap.style.display = p.farver.length ? '' : 'none';
+    farverEl.innerHTML = p.farver.map((f, i) =>
+      `<div class="swatch ${f}${i === 0 ? ' selected' : ''}" onclick="selectSwatch(this)" title="${f.charAt(0).toUpperCase() + f.slice(1)}"></div>`
+    ).join('');
+
+    // Specs
+    document.getElementById('prod-specs').innerHTML = p.specs.map(s =>
+      `<div class="spec-row"><span>${s.label}</span><span class="spec-val">${s.value}</span></div>`
+    ).join('');
+
+    // USPs
+    document.getElementById('usp-accordion').innerHTML = p.usps.map(u => `
+      <div class="usp-item">
+        <div class="usp-header" onclick="toggleUsp(this)">
+          <div class="usp-left">
+            <img src="assets/icon-check.svg" alt="" width="24" height="24">
+            <span class="usp-text">${u.titel}</span>
+          </div>
+          <img src="assets/icon-chevron-down.svg" alt="" width="24" height="24" class="usp-chevron">
+        </div>
+        <div class="usp-body"><div class="usp-body-inner"><p class="usp-desc">${u.tekst}</p></div></div>
+      </div>`).join('');
+
+    // Priser – produktside
+    const pr = document.getElementById('prod-priser');
+    const købPris = p.priser.oprettelse_køb || p.priser.køb;
+    pr.innerHTML = [
+      købPris  ? `<p class="price-row">Køb fra <strong>${købPris.toLocaleString('da-DK')} kr.</strong></p>` : '',
+      p.priser.leje ? `<p class="price-row">Lej for <strong>${p.priser.leje.toLocaleString('da-DK')} kr./md.</strong></p>` : ''
+    ].join('');
+
+    // Priser – finansieringstiles og sammenligningstabel
+    const oKøb = (p.priser.oprettelse_køb || 0).toLocaleString('da-DK');
+    const oLeje = (p.priser.oprettelse_leje || 0).toLocaleString('da-DK');
+    const købStr = oKøb + ' kr.';
+    const lejeStr = oLeje === '0' ? 'Inkluderet' : oLeje + ' kr.';
+
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set('tile-leje-oprettelse', lejeStr);
+    set('tile-køb-service-oprettelse', købStr);
+    set('tile-køb-oprettelse', købStr);
+    set('cmp-m-leje-opr',    lejeStr);
+    set('cmp-m-service-opr', købStr);
+    set('cmp-m-køb-opr',     købStr);
+    set('cmp-d-leje-opr',    lejeStr);
+    set('cmp-d-service-opr', købStr);
+    set('cmp-d-køb-opr',     købStr);
+  }
+
+  loadProducts();
+
+  /* ── Elaftale info tekst ── */
+  (function () {
+    const d = new Date(); d.setDate(d.getDate() + 15);
+    const months = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+    document.getElementById('elaftale-dato').textContent = d.getDate() + '. ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    setElaftaleSamlever(true);
+  })();
+  function setElaftaleInfo(show) {
+    document.getElementById('elaftale-info').style.display = show ? '' : 'none';
+  }
+  function setElaftaleSamlever(show) {
+    const wrap = document.getElementById('elaftale-samlever-wrap');
+    wrap.style.display = show ? 'flex' : 'none';
+    if (!show) {
+      const cb = wrap.querySelector('.check-box');
+      cb.checked = false;
+      document.getElementById('elaftale-samlever-fields').style.display = 'none';
+    }
+  }
+  // formatCpr replaced by fmtCpr above
+  function toggleElaftaleSamleverFields(cb) {
+    document.getElementById('elaftale-samlever-fields').style.display = cb.checked ? 'flex' : 'none';
+  }
+
+  /* ── Forening søgning ── */
+  let foreningTimer = null;
+  function searchForening(val) {
+    clearTimeout(foreningTimer);
+    const drop = document.getElementById('forening-results');
+    if (!val || val.length < 2) { drop.style.display = 'none'; return; }
+    foreningTimer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/proxy/sponsor?searchterm=${encodeURIComponent(val)}&global=false`);
+        const data = await res.json();
+        renderForeningResults(data.slice(0, 8));
+      } catch { drop.style.display = 'none'; }
+    }, 280);
+  }
+  function renderForeningResults(items) {
+    const drop = document.getElementById('forening-results');
+    if (!items.length) {
+      drop.innerHTML = '<div class="forening-empty">Ingen foreninger fundet</div>';
+      drop.style.display = 'block'; return;
+    }
+    drop.innerHTML = items.map(it => `
+      <div class="forening-item" onclick="selectForening(${it.sponsoraftalenr}, '${it.sponsoraftalenavn.replace(/'/g,"\\'")}')">
+        <div class="forening-item-name">${it.sponsoraftalenavn}</div>
+        <div class="forening-item-by">${it.by} ${it.postnr}</div>
+      </div>`).join('');
+    drop.style.display = 'block';
+  }
+  function selectForening(nr, navn) {
+    const inp = document.getElementById('forening-input');
+    inp.value = navn;
+    inp.classList.add('filled');
+    document.getElementById('forening-results').style.display = 'none';
+  }
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('forening-input')?.parentElement;
+    if (wrap && !wrap.contains(e.target))
+      document.getElementById('forening-results').style.display = 'none';
+  });
+
+  /* ── Installation checkbox logic ── */
+  function toggleInstFaktura(cb) {
+    const el = document.getElementById('inst-faktura-fields');
+    el.style.display = cb.checked ? 'flex' : 'none';
+  }
+  function toggleInstDato(cb) {
+    const el = document.getElementById('inst-dato-field');
+    el.style.display = cb.checked ? 'block' : 'none';
+    if (!cb.checked) closeCal();
+  }
+  function toggleInstLevering(cb) {
+    const el = document.getElementById('inst-levering-fields');
+    el.style.display = cb.checked ? 'flex' : 'none';
+  }
+
+  /* ── Date picker ── */
+  const calS = { year: 0, month: 0, sel: null };
+
+  function toggleCal(e) {
+    e.stopPropagation();
+    const cal = document.getElementById('inst-cal');
+    if (cal.style.display === 'none') {
+      const t = new Date();
+      calS.year = t.getFullYear(); calS.month = t.getMonth();
+      renderCal(); cal.style.display = 'block';
+    } else { cal.style.display = 'none'; }
+  }
+  function closeCal() {
+    const cal = document.getElementById('inst-cal');
+    if (cal) cal.style.display = 'none';
+  }
+  function calPrevMonth() { calS.month--; if (calS.month < 0) { calS.month = 11; calS.year--; } renderCal(); }
+  function calNextMonth() { calS.month++; if (calS.month > 11) { calS.month = 0; calS.year++; } renderCal(); }
+
+  const DA_MONTHS = ['Januar','Februar','Marts','April','Maj','Juni','Juli','August','September','Oktober','November','December'];
+
+  function renderCal() {
+    const { year, month, sel } = calS;
+    const today = new Date();
+    document.getElementById('cal-month-label').textContent = DA_MONTHS[month] + ' ' + year;
+    const grid = document.getElementById('cal-days-grid');
+    grid.innerHTML = '';
+    let dow = new Date(year, month, 1).getDay();
+    dow = dow === 0 ? 6 : dow - 1; // Mon=0
+    const prevLast = new Date(year, month, 0).getDate();
+    for (let i = dow - 1; i >= 0; i--) mkDay(grid, prevLast - i, 'overflow', null);
+    const last = new Date(year, month + 1, 0).getDate();
+    for (let d = 1; d <= last; d++) {
+      const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+      const isSel = sel && sel.d === d && sel.m === month && sel.y === year;
+      const cls = (isToday ? ' today' : '') + (isSel ? ' selected' : '');
+      mkDay(grid, d, cls.trim(), () => { calS.sel = {y:year, m:month, d}; setCalValue(year, month, d); });
+    }
+    const filled = grid.children.length;
+    const over = filled % 7 === 0 ? 0 : 7 - (filled % 7);
+    for (let i = 1; i <= over; i++) mkDay(grid, i, 'overflow', null);
+  }
+
+  function mkDay(grid, num, cls, onclick) {
+    const el = document.createElement('div');
+    el.className = 'cal-day' + (cls ? ' ' + cls : '');
+    el.textContent = num;
+    if (onclick) el.addEventListener('click', onclick);
+    grid.appendChild(el);
+  }
+
+  function setCalValue(y, m, d) {
+    const input = document.getElementById('inst-dato-input');
+    input.value = String(d).padStart(2,'0') + '-' + String(m+1).padStart(2,'0') + '-' + y;
+    input.classList.add('filled');
+    renderCal();
+    closeCal();
+  }
+
+  function calGoToday() {
+    const t = new Date();
+    calS.year = t.getFullYear(); calS.month = t.getMonth();
+    calS.sel = { y: t.getFullYear(), m: t.getMonth(), d: t.getDate() };
+    setCalValue(t.getFullYear(), t.getMonth(), t.getDate());
+  }
+
+  function calConfirm() {
+    if (calS.sel) {
+      const { d, m, y } = calS.sel;
+      setCalValue(y, m, d);
+    } else { closeCal(); }
+  }
+
+  document.addEventListener('click', e => {
+    const cal = document.getElementById('inst-cal');
+    if (cal && cal.style.display !== 'none' && !cal.contains(e.target) && e.target.id !== 'inst-dato-input') closeCal();
+  });
+
+  /* ── Input formatters ── */
+  function advanceTo(nextId) {
+    const next = document.getElementById(nextId);
+    if (next) next.focus();
+  }
+
+  function fmtPostnr(el, nextId) {
+    el.value = el.value.replace(/\D/g, '').slice(0, 4);
+    if (el.value.length === 4 && nextId) advanceTo(nextId);
+  }
+
+  function fmtLetters(el) {
+    el.value = el.value.replace(/[^a-zA-ZæøåÆØÅ\s\-\.]/g, '');
+  }
+
+  function fmtNavn(el) {
+    el.value = el.value.replace(/[^a-zA-ZæøåÆØÅ\s\-']/g, '');
+  }
+
+  function initTlf(el) {
+    if (!el.value.startsWith('+45 ')) {
+      el.value = '+45 ';
+      setTimeout(() => el.setSelectionRange(4, 4), 0);
+    }
+  }
+
+  function fmtTlf(el) {
+    const prefix = '+45 ';
+    if (!el.value.startsWith(prefix)) el.value = prefix;
+    const digits = el.value.slice(prefix.length).replace(/\D/g, '').slice(0, 8);
+    el.value = prefix + digits;
+    if (digits.length === 8) advanceTo('pers-email');
+  }
+
+  function guardTlf(e, el) {
+    const protectedLen = 4; // '+45 '
+    if (['Backspace','Delete'].includes(e.key) && el.selectionStart <= protectedLen && el.selectionEnd <= protectedLen) {
+      e.preventDefault();
+    }
+  }
+
+  function fmtCpr(el) {
+    const digits = el.value.replace(/\D/g, '').slice(0, 10);
+    el.value = digits.length > 6 ? digits.slice(0, 6) + '-' + digits.slice(6) : digits;
+  }
+
+  function fmtReg(el) {
+    el.value = el.value.replace(/\D/g, '').slice(0, 4);
+    if (el.value.length === 4) advanceTo('betal-konto');
+  }
+
+  function fmtDigits(el) {
+    el.value = el.value.replace(/\D/g, '');
+  }
+
+  /* ── Validation ── */
+  function clearErrors() {
+    document.querySelectorAll('.input-group.error').forEach(g => g.classList.remove('error'));
+  }
+
+  document.addEventListener('input', e => {
+    if (e.target.classList.contains('input-field'))
+      e.target.closest('.input-group')?.classList.remove('error');
+  });
+
+  function validateAllFields() {
+    clearErrors();
+    let firstErrorScreen = null;
+    let firstErrorEl = null;
+
+    function check(id, screenId) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!el.value.trim()) {
+        el.closest('.input-group')?.classList.add('error');
+        if (!firstErrorScreen) { firstErrorScreen = screenId; firstErrorEl = el; }
+      }
+    }
+
+    check('instal-gade',   'screen-installation');
+    check('instal-postnr', 'screen-installation');
+    check('instal-by',     'screen-installation');
+
+    if (document.getElementById('inst-faktura-fields')?.style.display === 'flex') {
+      check('faktura-gade',   'screen-installation');
+      check('faktura-postnr', 'screen-installation');
+      check('faktura-by',     'screen-installation');
+    }
+
+    if (document.getElementById('inst-dato-field')?.style.display !== 'none') {
+      check('inst-dato-input', 'screen-installation');
+    }
+
+    // Navn: required + min 2 ord
+    const navnEl = document.getElementById('pers-navn');
+    if (navnEl) {
+      const words = navnEl.value.trim().split(/\s+/).filter(Boolean);
+      if (words.length < 2) {
+        navnEl.closest('.input-group')?.classList.add('error');
+        if (!firstErrorScreen) { firstErrorScreen = 'screen-personlige'; firstErrorEl = navnEl; }
+      }
+    }
+    // Telefon: required + 8 cifre efter +45
+    const tlfEl = document.getElementById('pers-telefon');
+    if (tlfEl) {
+      const digits = tlfEl.value.replace('+45 ','').replace(/\D/g,'');
+      if (!digits || digits.length !== 8) {
+        tlfEl.closest('.input-group')?.classList.add('error');
+        if (!firstErrorScreen) { firstErrorScreen = 'screen-personlige'; firstErrorEl = tlfEl; }
+      }
+    }
+    // Email: skal indeholde @
+    const emailEl = document.getElementById('pers-email');
+    if (emailEl) {
+      if (!emailEl.value.trim() || !emailEl.value.includes('@')) {
+        emailEl.closest('.input-group')?.classList.add('error');
+        if (!firstErrorScreen) { firstErrorScreen = 'screen-personlige'; firstErrorEl = emailEl; }
+      }
+    }
+    // CPR: 10 cifre
+    const cprEl = document.getElementById('pers-cpr');
+    if (cprEl) {
+      const d = cprEl.value.replace(/\D/g,'');
+      if (d.length !== 10) {
+        cprEl.closest('.input-group')?.classList.add('error');
+        if (!firstErrorScreen) { firstErrorScreen = 'screen-personlige'; firstErrorEl = cprEl; }
+      }
+    }
+    check('betal-reg',    'screen-betaling');
+    check('betal-konto',  'screen-betaling');
+
+    if (firstErrorScreen) {
+      goTo(firstErrorScreen);
+      setTimeout(() => firstErrorEl?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
+      return false;
+    }
+    return true;
+  }
+
+  /* ── Order data collection ── */
+  function collectOrderData() {
+    const tileVal = (groupId, labels) => {
+      const grp = document.getElementById(groupId);
+      const idx = [...(grp?.querySelectorAll('.option-tile') ?? [])].findIndex(t => t.classList.contains('selected'));
+      return labels[idx] ?? null;
+    };
+    const inp = sel => document.querySelector(sel)?.value?.trim() ?? '';
+    const chk = sel => document.querySelector(sel)?.checked ?? false;
+    const adresse = (gade, postnr, by) => [gade, postnr, by].filter(Boolean).join(', ');
+
+    // Installationsadresse
+    const [igade, ipostnr, iby] = ['#screen-installation input[autocomplete="street-address"]',
+      '#screen-installation input[inputmode="numeric"][maxlength="4"]',
+      '#screen-installation input[autocomplete="address-level2"]'].map(inp);
+
+    // Faktura-adresse (vis kun hvis checkboxen er markeret)
+    const fakturaChecked = chk('#screen-installation .check-box:first-of-type');
+    const [fgade, fpostnr, fby] = fakturaChecked
+      ? ['#inst-faktura-fields input[autocomplete="street-address"]',
+         '#inst-faktura-fields input[inputmode="numeric"][maxlength="4"]',
+         '#inst-faktura-fields input[autocomplete="address-level2"]'].map(inp)
+      : ['', '', ''];
+
+    // Levering-adresse (vis kun hvis checkboxen er markeret)
+    const leveringChecked = chk('#screen-installation .check-box:nth-of-type(2)');
+    const [lgade, lpostnr, lby] = leveringChecked
+      ? ['#inst-levering-fields input[autocomplete="street-address"]',
+         '#inst-levering-fields input[inputmode="numeric"][maxlength="4"]',
+         '#inst-levering-fields input[autocomplete="address-level2"]'].map(inp)
+      : ['', '', ''];
+
+    // Personlige
+    const pInputs = document.querySelectorAll('#screen-personlige .input-field');
+    const [pNavn, pTlf, pEmail, pCpr] = [...pInputs].map(el => el.value?.trim() ?? '');
+
+    // Betaling
+    const bInputs = document.querySelectorAll('#screen-betaling .input-field');
+    const [regNr, kontoNr] = [...bInputs].map(el => el.value?.trim() ?? '');
+
+    return {
+      timestamp: new Date().toISOString(),
+      produkt: document.getElementById('prod-navn')?.textContent?.trim() ?? '',
+      betalingsform: tileVal('tiles-payment', ['Leje', 'Køb med serviceaftale', 'Køb uden serviceaftale']),
+      elaftale: tileVal('tiles-elaftale', ['Ja tak', 'Jeg er allerede elkunde', 'Nej tak']),
+      samleversNavn: inp('#elaftale-samlever-fields .input-field:first-of-type'),
+      samleversCpr:  inp('#elaftale-samlever-fields .input-field:last-of-type'),
+      instalAdresse: adresse(igade, ipostnr, iby),
+      fakturaTilAndenAdresse: fakturaChecked,
+      fakturaAdresse: adresse(fgade, fpostnr, fby),
+      leveringTilAndenAdresse: leveringChecked,
+      leveringAdresse: adresse(lgade, lpostnr, lby),
+      flytning: chk('#screen-installation .check-box:last-of-type'),
+      overtagelsesdato: inp('#inst-dato-input'),
+      eksisterendeBoks: tileVal('tiles-eksisterende-boks', ['Nej', 'Ja']),
+      personlige: { navn: pNavn, telefon: pTlf, email: pEmail, cpr: pCpr },
+      forening: inp('#forening-input'),
+      coopNr: inp('#screen-fordele .input-field:last-of-type'),
+      betalingsservice: { registreringsnummer: regNr, kontonummer: kontoNr },
+      addon9mKabel: chk('#screen-opsummering .addon-item:last-of-type .check-box'),
+    };
+  }
+
+  /* ── Complete order ── */
+  function completeOrder() {
+    if (!validateAllFields()) return;
+    const order = collectOrderData();
+
+    // Gem som backup i localStorage
+    localStorage.setItem('ok_ladeboks_order', JSON.stringify(order, null, 2));
+    console.log('[Bestilling] Klar til afsendelse:', order);
+
+    // ─────────────────────────────────────────────────────────
+    // TODO: Send til email / backend her
+    //
+    // Option A – EmailJS (kræver konto på emailjs.com):
+    //   emailjs.send('SERVICE_ID', 'TEMPLATE_ID', order, 'PUBLIC_KEY');
+    //
+    // Option B – Formspree (kræver konto på formspree.io):
+    //   fetch('https://formspree.io/f/FORM_ID', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(order),
+    //   });
+    //
+    // Option C – OK intern backend endpoint:
+    //   fetch('/api/ladeboks/bestilling', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(order),
+    //   });
+    // ─────────────────────────────────────────────────────────
+
+    goTo('screen-bekraeftelse');
+  }
+
+  /* ── Add-on: ekstra ladekabel 9m ── */
+  function toggleKabel9m(cb) {
+    document.getElementById('card-kabel9m').style.display = cb.checked ? 'flex' : 'none';
+  }
+
+  /* ── Restart ── */
+  function restart() {
+    sessionStorage.removeItem('flowState');
+    goTo('screen-produktvalg');
+  }
+
+  restoreFormData();
+</script>
+
+</body>
+</html>
