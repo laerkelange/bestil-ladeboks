@@ -689,12 +689,28 @@
     .cal-confirm-btn:hover { opacity: .88; }
 
     /* ── Produktvalg ── */
+    #screen-produktvalg {
+      background: #fff !important;
+    }
+    #screen-produktvalg .screen-inner {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+    @media (min-width: 768px) {
+      #screen-produktvalg .screen-inner {
+        padding-left: 128px;
+        padding-right: 128px;
+      }
+    }
     .produkt-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      grid-template-columns: 1fr;
       gap: 24px;
-      max-width: 900px;
-      margin: 0 auto;
+    }
+    @media (min-width: 768px) {
+      .produkt-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
     .produkt-tile {
       border: 3px solid var(--border-subtle);
