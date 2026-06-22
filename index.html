@@ -1435,7 +1435,7 @@
           </div>
 
           <!-- Info box -->
-          <div class="info-box">
+          <div class="info-box" onclick="openStoetteModal()" style="cursor:pointer;">
             <div class="info-box-body">
               <div class="info-box-title">Din støtte gør en forskel</div>
               <div class="info-box-desc">I 2025 indsamlede vi i alt 689.000 støttekroner</div>
@@ -1686,6 +1686,22 @@
 </div><!-- /bs-sheet -->
 
 <!-- ════════════════════════════════════════════
+     MODAL · STØTTE INFO
+════════════════════════════════════════════ -->
+<div id="stoette-modal-overlay" class="cpr-modal-overlay" onclick="if(event.target === this) closeStoetteModal()">
+  <div class="cpr-modal" role="dialog" aria-modal="true" aria-labelledby="stoette-modal-title">
+    <button class="cpr-modal-close" onclick="closeStoetteModal()" aria-label="Luk modal">
+      <img src="assets/icon-close.svg" width="24" height="24" alt="">
+    </button>
+    <h2 id="stoette-modal-title" class="cpr-modal-title">Sådan støtter du - helt automatisk</h2>
+    <p style="font-size:16px; line-height:24px; color:var(--text);">Når du har din elaftale hos OK, støtter du den valgte forening med 1 øre pr. kWh, du bruger. Det gælder både, når du tænder lyset eller streamer en god serie i sofaen - men også når du lader din bil.</p>
+    <p style="font-size:16px; line-height:24px; color:var(--text); margin-top:16px;">Når du lader din bil på farten, støtter du med 5 øre pr. kWh.</p>
+    <p style="font-size:16px; line-height:24px; color:var(--text); margin-top:16px;">Vi sørger for at beregne og udbetale støtten til den valgte forening - helt automatisk.</p>
+    <p style="font-size:16px; line-height:24px; color:var(--text); margin-top:16px;">Det koster dig 0 kr. ekstra at støtte.</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
      MODAL · CPR INFO
 ════════════════════════════════════════════ -->
 <div id="cpr-modal-overlay" class="cpr-modal-overlay" onclick="if(event.target === this) closeCprModal()">
@@ -1722,7 +1738,13 @@
     if (tiles[index]) tiles[index].classList.add('selected');
     closeCompare();
   }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCompare(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeCompare();
+      closeCprModal();
+      closeStoetteModal();
+    }
+  });
 
   /* ── CPR Info Modal ── */
   function openCprModal() {
@@ -1733,7 +1755,16 @@
     document.getElementById('cpr-modal-overlay').classList.remove('open');
     document.body.style.overflow = '';
   }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCprModal(); });
+
+  /* ── Støtte Info Modal ── */
+  function openStoetteModal() {
+    document.getElementById('stoette-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeStoetteModal() {
+    document.getElementById('stoette-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
 
   /* ── USP accordion ── */
   function toggleUsp(header) {
