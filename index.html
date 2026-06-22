@@ -692,9 +692,19 @@
     #screen-produktvalg {
       background: #fff !important;
     }
+    .grid-outer:has(#screen-produktvalg.active) {
+      background: #fff !important;
+    }
+    .grid-outer:has(#screen-produktvalg.active) .col-content {
+      background: #fff !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
     #screen-produktvalg .screen-inner {
       padding-left: 32px;
       padding-right: 32px;
+      padding-top: 40px;
+      padding-bottom: 56px;
     }
     @media (min-width: 768px) {
       #screen-produktvalg .screen-inner {
