@@ -570,6 +570,28 @@
     .forening-empty { padding: 12px 16px; font-size: 14px; color: var(--text-subtle); }
 
 
+    /* ── Info icon ── */
+    .input-label-group { display: flex; align-items: center; gap: 8px; }
+    .info-icon {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--border-subtle);
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-subtle);
+      transition: all .15s;
+    }
+    .info-icon:hover {
+      border-color: var(--border-bold);
+      color: var(--text);
+    }
+
     /* ── Input validation error state (Clara) ── */
     .input-group.error .input-label { color: var(--error); }
     .input-group.error .input-field  { border-color: var(--error); }
@@ -706,6 +728,78 @@
       transition: opacity 0.3s ease;
     }
     .bs-overlay.open { opacity: 1; pointer-events: auto; }
+
+    /* ── CPR Info Modal ── */
+    .cpr-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cpr-modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .cpr-modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 0 20px rgba(0,0,0,.15);
+    }
+    .cpr-modal-title {
+      font-family: 'OK family', Georgia, serif;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 32px;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .cpr-modal-text {
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .cpr-modal-list {
+      margin: 16px 0;
+      padding-left: 20px;
+    }
+    .cpr-modal-list li {
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .cpr-modal-link {
+      display: block;
+      margin-top: 20px;
+      color: var(--link);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: opacity .15s;
+    }
+    .cpr-modal-link:hover { text-decoration: underline; opacity: .8; }
+    .cpr-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cpr-modal-close:hover { background: var(--bg-selected); border-radius: 50%; }
 
     /* ══ MOBILE: bottom sheet ══ */
     .bs-sheet {
@@ -1292,7 +1386,10 @@
             <span class="input-error-msg">Udfyld venligst din e-mailadresse</span>
           </div>
           <div class="input-group">
-            <label class="input-label">cpr-nummer</label>
+            <div class="input-label-group">
+              <label class="input-label">cpr-nummer</label>
+              <button class="info-icon" onclick="openCprModal()" type="button" aria-label="Mere info om CPR-nummer">?</button>
+            </div>
             <input type="text" id="pers-cpr" class="input-field" placeholder="xxxxxx-xx" inputmode="numeric" maxlength="11" oninput="fmtCpr(this)">
             <span class="input-error-msg">Udfyld venligst dit cpr-nummer</span>
           </div>
@@ -1586,6 +1683,24 @@
 
 </div><!-- /bs-sheet -->
 
+<!-- ════════════════════════════════════════════
+     MODAL · CPR INFO
+════════════════════════════════════════════ -->
+<div id="cpr-modal-overlay" class="cpr-modal-overlay" onclick="if(event.target === this) closeCprModal()">
+  <div class="cpr-modal" role="dialog" aria-modal="true" aria-labelledby="cpr-modal-title">
+    <button class="cpr-modal-close" onclick="closeCprModal()" aria-label="Luk modal">
+      <img src="assets/icon-close.svg" width="24" height="24" alt="">
+    </button>
+    <h2 id="cpr-modal-title" class="cpr-modal-title">Hvorfor skal jeg oplyse mit CPR-nr.?</h2>
+    <p class="cpr-modal-text">Det skal du, fordi ...:</p>
+    <ul class="cpr-modal-list">
+      <li>Vi indhenter en kreditvurdering på dit køb</li>
+      <li>Vi automatisk modtager ændringer om dit bopælsforhold - eksempelvis navn- og adresseændringer</li>
+    </ul>
+    <a href="https://www.ok.dk/persondatapolitik#cpr" target="_blank" class="cpr-modal-link">Læs mere i vores persondatapolitik</a>
+  </div>
+</div>
+
 <script>
   /* ── Comparison (bottom sheet / modal) ── */
   function openCompare() {
@@ -1606,6 +1721,17 @@
     closeCompare();
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCompare(); });
+
+  /* ── CPR Info Modal ── */
+  function openCprModal() {
+    document.getElementById('cpr-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCprModal() {
+    document.getElementById('cpr-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCprModal(); });
 
   /* ── USP accordion ── */
   function toggleUsp(header) {
