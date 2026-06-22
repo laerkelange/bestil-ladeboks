@@ -2007,10 +2007,11 @@
         lejePris = '';
       }
       const highlights = (p.highlights || []).map(h => `<div class="produkt-tile-highlight">${h}</div>`).join('');
+      const billede = p.billede_produktvalg || p.billede;
       return `
       <div class="produkt-tile" onclick="selectProduct('${p.id}')">
         <div class="produkt-tile-img-wrap">
-          <img class="produkt-tile-img" src="${p.billede}" alt="${p.navn}">
+          <img class="produkt-tile-img" src="${billede}" alt="${p.navn}">
         </div>
         <div class="produkt-tile-content">
           <h3 class="produkt-tile-navn">${p.navn}</h3>

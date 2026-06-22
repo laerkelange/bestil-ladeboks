@@ -2,7 +2,8 @@
   {
     "id": "peblar",
     "navn": "Peblar",
-    "billede": "assets/peblar-productcard.png",
+    "billede": "assets/peblar.png",
+    "billede_produktvalg": "assets/peblar-productcard.png",
     "description": "11 kW ladeboks uden fast kabel. Smart opladning med OK-appen eller ladebrik.",
     "highlights": [
       "Med fast ladekabel",
@@ -69,7 +70,8 @@
   {
     "id": "domo",
     "navn": "Domo",
-    "billede": "assets/domo-productcard.png",
+    "billede": "assets/domo-black.png",
+    "billede_produktvalg": "assets/domo-productcard.png",
     "description": "11 kW ladeboks uden fast kabel. Smart opladning med OK-appen eller ladebrik.",
     "highlights": [
       "Dansk designet og produceret",
@@ -80,12 +82,12 @@
       {
         "color": "sort",
         "label": "Sort",
-        "billede": "assets/domo-productcard.png"
+        "billede": "assets/domo-black.png"
       },
       {
         "color": "hvid",
         "label": "Hvid",
-        "billede": "assets/domo-productcard.png"
+        "billede": "assets/domo-white.png"
       }
     ],
     "priser": {
