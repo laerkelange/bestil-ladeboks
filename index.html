@@ -1331,13 +1331,6 @@
         <div id="addon-section" style="display:none;">
           <h4 style="margin-bottom:12px;">Har du fået det hele med?</h4>
           <div class="addon-list">
-            <div class="addon-item disabled" id="addon-kabel-default">
-              <input type="checkbox" class="check-box" checked disabled>
-              <div class="addon-info">
-                <div class="addon-title" id="addon-kabel-default-title">Ekstra ladekabel 7 meter</div>
-                <div class="addon-price included">Inkluderet</div>
-              </div>
-            </div>
             <div class="addon-item">
               <input type="checkbox" class="check-box" onchange="toggleKabel9m(this)">
               <div class="addon-info">
@@ -2042,8 +2035,6 @@
     if (!currentProduct) return;
     const addonSection = document.getElementById('addon-section');
     if (currentProduct.hasKabelVariants) {
-      const kabelLength = selectedVariants.kabel || currentProduct.kabelVariants[0].length;
-      document.getElementById('addon-kabel-default-title').textContent = `Ekstra ladekabel ${kabelLength} meter`;
       addonSection.style.display = '';
     } else if (currentProduct.hasColorVariants) {
       addonSection.style.display = 'none';
