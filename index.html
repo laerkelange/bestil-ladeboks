@@ -1327,13 +1327,13 @@
         </div>
 
         <!-- Add-ons -->
-        <div>
+        <div id="addon-section" style="display:none;">
           <h4 style="margin-bottom:12px;">Har du fået det hele med?</h4>
           <div class="addon-list">
-            <div class="addon-item disabled">
+            <div class="addon-item disabled" id="addon-kabel-default">
               <input type="checkbox" class="check-box" checked disabled>
               <div class="addon-info">
-                <div class="addon-title">Ekstra ladekabel 7 meter</div>
+                <div class="addon-title" id="addon-kabel-default-title">Ekstra ladekabel 7 meter</div>
                 <div class="addon-price included">Inkluderet</div>
               </div>
             </div>
@@ -1862,6 +1862,7 @@
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'instant' });
+    if (id === 'screen-opsummering') updateAddonSection();
   }
 
   /* ── Option tile radio selection ── */
@@ -2034,6 +2035,18 @@
       `<div class="spec-row"><span>${s.label}</span><span class="spec-val">${s.value}</span></div>`
     ).join('');
     updateProductPrices();
+  }
+
+  function updateAddonSection() {
+    if (!currentProduct) return;
+    const addonSection = document.getElementById('addon-section');
+    if (currentProduct.hasKabelVariants) {
+      const kabelLength = selectedVariants.kabel || currentProduct.kabelVariants[0].length;
+      document.getElementById('addon-kabel-default-title').textContent = `Ekstra ladekabel ${kabelLength} meter`;
+      addonSection.style.display = '';
+    } else if (currentProduct.hasColorVariants) {
+      addonSection.style.display = 'none';
+    }
   }
 
   loadProducts();
