@@ -1860,6 +1860,10 @@
     document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
     el.classList.add('selected');
     selectedVariants.color = color;
+    const variant = currentProduct.colorVariants.find(v => v.color === color);
+    if (variant && variant.billede) {
+      document.getElementById('prod-billede').src = variant.billede;
+    }
   }
 
   function selectKabel(length) {

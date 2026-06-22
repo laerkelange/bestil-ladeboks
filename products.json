@@ -2,7 +2,7 @@
   {
     "id": "peblar",
     "navn": "Peblar",
-    "billede": "assets/charger.png",
+    "billede": "assets/peblar.png",
     "hasKabelVariants": true,
     "kabelVariants": [
       {
@@ -64,16 +64,18 @@
   {
     "id": "domo",
     "navn": "Domo",
-    "billede": "assets/charger.png",
+    "billede": "assets/domo-black.png",
     "hasColorVariants": true,
     "colorVariants": [
       {
         "color": "sort",
-        "label": "Sort"
+        "label": "Sort",
+        "billede": "assets/domo-black.png"
       },
       {
         "color": "hvid",
-        "label": "Hvid"
+        "label": "Hvid",
+        "billede": "assets/domo-white.png"
       }
     ],
     "priser": {
