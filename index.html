@@ -49,7 +49,7 @@
       --border-subtle:   #e6d9d2;
       --border-bold:     #460019;
       --border-tile:     #bfb1aa;
-      --bg-page:         #F7EFEB;
+      --bg-page:         #FFFAF7;
       --bg-elevated:     #fffaf7;
       --bg-selected:     #f7efeb;
       --primary:         #460019;
@@ -72,7 +72,7 @@
       font-size: 16px;
       line-height: 20px;
       color: var(--text);
-      background: #F7EFEB;
+      background: #FFFAF7;
       min-height: 100vh;
     }
 
@@ -85,6 +85,7 @@
     .col-content {
       grid-column: 4 / 10;   /* columns 4-9 = 6 of 12 */
       background: #fff;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
     }
     @media (max-width: 1100px) { .col-content { grid-column: 3 / 11; } }
     @media (max-width:  860px) { .col-content { grid-column: 2 / 12; } }
@@ -99,6 +100,16 @@
       display: flex;
       flex-direction: column;
       gap: 32px;
+    }
+    @media (min-width: 768px) {
+      .screen-inner {
+        padding-left: 128px;
+        padding-right: 128px;
+      }
+      .progress {
+        margin-left: -96px;
+        margin-right: -96px;
+      }
     }
     .screen-inner.center { align-items: center; }
 
@@ -269,6 +280,13 @@
       text-decoration: none;
     }
     .btn-primary:hover { opacity: .88; }
+    @media (min-width: 768px) {
+      .btn-primary {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
 
     .btn-link {
       display: flex;
@@ -301,6 +319,41 @@
     .swatch.white { background: #fff; }
     .swatch.selected.black { border: 2.5px solid var(--border-bold); }
     .swatch.selected.white { border: 2.5px solid var(--border-bold); }
+
+    /* ── Color selector (Domo variants) ── */
+    .color-selector { display: flex; gap: 16px; }
+    .color-swatch {
+      width: 56px;
+      height: 56px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid var(--border-subtle);
+      transition: border .15s;
+    }
+    .color-swatch.sort { background: #1a1a1a; }
+    .color-swatch.hvid { background: #fff; }
+    .color-swatch.selected { border: 2px solid var(--border-bold); }
+
+    /* ── Kabel dropdown (Peblar variant) ── */
+    .kabel-select {
+      width: 100%;
+      border: 2px solid var(--border-tile);
+      border-radius: var(--r-input);
+      padding: 12px 16px;
+      height: 48px;
+      font-family: 'Fellix', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      cursor: pointer;
+      -webkit-appearance: none;
+      box-sizing: border-box;
+    }
+    .kabel-select:hover { border-color: var(--input-border-hover); }
+    .kabel-select:focus { border-color: var(--text-subtle); }
 
     /* ── Specs table ── */
     .spec-row {
@@ -903,7 +956,7 @@
         <div>
           <h4 style="margin-bottom:8px;">Vil du have en OK Elaftale?</h4>
           <p style="font-size:16px; line-height:20px; margin-bottom:16px;">
-            Du sparer 800 kr. når du vælger en OK Elaftale sammen med din ladeboks
+            Du sparer 1000 kr. når du vælger en OK Elaftale sammen med din ladeboks
           </p>
           <div class="option-tiles" id="tiles-elaftale">
 
@@ -943,7 +996,7 @@
           </div>
         </div>
 
-        <button class="btn-primary" onclick="goTo('screen-installation')">Videre</button>
+        <button class="btn-primary" onclick="goTo('screen-eksisterende-boks')">Videre</button>
 
       </div>
     </div><!-- /screen-finansiering -->
@@ -1127,7 +1180,7 @@
           </div>
         </div>
 
-        <button class="btn-primary" onclick="goTo('screen-opsummering')">Videre</button>
+        <button class="btn-primary" onclick="goTo('screen-installation')">Videre</button>
 
       </div>
     </div><!-- /screen-eksisterende-boks -->
@@ -1273,7 +1326,7 @@
         <div>
           <h4 style="margin-bottom:4px;">Støt lokalt når du lader din bil</h4>
           <p style="font-size:14px; color:var(--text-subtle); margin-bottom:16px; line-height:18px;">
-            Med en OK elaftale støtter du med 1 øre pr. kWh.
+            Med en elaftale hos OK støtter du med 1 øre pr. kWh, du bruger - uanset om du koger kartofler eller lader bilen derhjemme.
           </p>
 
           <div class="input-group" style="position:relative;">
@@ -1425,7 +1478,7 @@
         <div class="bs-cell"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683418 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="#4c433e"/></svg></div>
       </div>
       <div class="bs-row">
-        <div class="bs-label">10% på OK's ladenetværk</div>
+        <div class="bs-label">10% rabat på OK's ladenetværk</div>
         <div class="bs-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
         <div class="bs-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
         <div class="bs-cell"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683418 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="#4c433e"/></svg></div>
@@ -1666,6 +1719,7 @@
   /* ── Produkter ── */
   let products = [];
   let currentProduct = null;
+  let selectedVariants = {};
 
   async function loadProducts() {
     try {
@@ -1677,22 +1731,66 @@
 
   function renderProduktGrid() {
     const grid = document.getElementById('produkt-grid');
-    grid.innerHTML = products.map(p => `
+    grid.innerHTML = products.map(p => {
+      let pris = 'Køb fra ';
+      if (p.hasKabelVariants) {
+        pris += p.kabelVariants[0].priser.køb.toLocaleString('da-DK') + ' kr.';
+      } else if (p.priser) {
+        pris += p.priser.køb.toLocaleString('da-DK') + ' kr.';
+      } else {
+        pris = '';
+      }
+      return `
       <div class="produkt-tile" onclick="selectProduct('${p.id}')">
         <img class="produkt-tile-img" src="${p.billede}" alt="${p.navn}">
         <div class="produkt-tile-info">
           <div class="produkt-tile-navn">${p.navn}</div>
-          <div class="produkt-tile-pris">${p.priser.køb ? 'Køb fra ' + p.priser.køb.toLocaleString('da-DK') + ' kr.' : ''}</div>
+          <div class="produkt-tile-pris">${pris}</div>
         </div>
         <img src="assets/icon-chevron-right.svg" width="24" height="24" alt="">
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
 
   function selectProduct(id) {
     currentProduct = products.find(p => p.id === id);
     if (!currentProduct) return;
+    selectedVariants = {};
     renderProductPage(currentProduct);
     goTo('screen-produkt');
+  }
+
+  function updateProductPrices() {
+    const p = currentProduct;
+    if (!p) return;
+    let priser;
+    if (p.hasKabelVariants) {
+      const kabelLength = selectedVariants.kabel || p.kabelVariants[0].length;
+      const variant = p.kabelVariants.find(v => v.length === kabelLength);
+      priser = variant.priser;
+    } else {
+      priser = p.priser;
+    }
+    const pr = document.getElementById('prod-priser');
+    const købPris = priser.oprettelse_køb || priser.køb;
+    pr.innerHTML = [
+      købPris  ? `<p class="price-row">Køb fra <strong>${købPris.toLocaleString('da-DK')} kr.</strong></p>` : '',
+      priser.leje ? `<p class="price-row">Lej for <strong>${priser.leje.toLocaleString('da-DK')} kr./md.</strong></p>` : ''
+    ].join('');
+    const oKøb = (priser.oprettelse_køb || 0).toLocaleString('da-DK');
+    const oLeje = (priser.oprettelse_leje || 0).toLocaleString('da-DK');
+    const købStr = oKøb + ' kr.';
+    const lejeStr = oLeje === '0' ? 'Inkluderet' : oLeje + ' kr.';
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set('tile-leje-oprettelse', lejeStr);
+    set('tile-køb-service-oprettelse', købStr);
+    set('tile-køb-oprettelse', købStr);
+    set('cmp-m-leje-opr',    lejeStr);
+    set('cmp-m-service-opr', købStr);
+    set('cmp-m-køb-opr',     købStr);
+    set('cmp-d-leje-opr',    lejeStr);
+    set('cmp-d-service-opr', købStr);
+    set('cmp-d-køb-opr',     købStr);
   }
 
   function renderProductPage(p) {
@@ -1700,21 +1798,50 @@
     const img = document.getElementById('prod-billede');
     img.src = p.billede; img.alt = p.navn;
 
-    // Farver
     const farverWrap = document.getElementById('prod-farver-wrap');
-    const farverEl = document.getElementById('prod-farver');
-    farverWrap.style.display = p.farver.length ? '' : 'none';
-    farverEl.innerHTML = p.farver.map((f, i) =>
-      `<div class="swatch ${f}${i === 0 ? ' selected' : ''}" onclick="selectSwatch(this)" title="${f.charAt(0).toUpperCase() + f.slice(1)}"></div>`
-    ).join('');
+    const headingEl = farverWrap.querySelector('h4');
 
-    // Specs
-    document.getElementById('prod-specs').innerHTML = p.specs.map(s =>
+    if (p.hasColorVariants) {
+      headingEl.textContent = 'Farve';
+      farverWrap.style.display = 'flex';
+      farverWrap.style.flexDirection = 'column';
+      farverWrap.style.gap = '16px';
+      const farverEl = document.getElementById('prod-farver');
+      farverEl.innerHTML = `<div class="color-selector">${p.colorVariants.map((c, i) =>
+        `<div class="color-swatch ${c.color}${i === 0 ? ' selected' : ''}" onclick="selectColor('${c.color}', this)" title="${c.label}"></div>`
+      ).join('')}</div>`;
+      selectedVariants.color = selectedVariants.color || p.colorVariants[0].color;
+    } else if (p.hasKabelVariants) {
+      headingEl.textContent = 'Kabel';
+      farverWrap.style.display = '';
+      farverWrap.style.flexDirection = '';
+      farverWrap.style.gap = '';
+      const farverEl = document.getElementById('prod-farver');
+      farverEl.innerHTML = `
+        <select class="kabel-select" onchange="selectKabel(this.value)">
+          ${p.kabelVariants.map((v, i) =>
+            `<option value="${v.length}"${i === 0 ? ' selected' : ''}>Fastmonteret, ${v.length} m</option>`
+          ).join('')}
+        </select>
+      `;
+      selectedVariants.kabel = selectedVariants.kabel || p.kabelVariants[0].length;
+    } else {
+      farverWrap.style.display = 'none';
+    }
+
+    let specs = [];
+    if (p.hasKabelVariants) {
+      const kabelLength = selectedVariants.kabel || p.kabelVariants[0].length;
+      specs = [{ label: 'Kabel', value: `Fastmonteret, ${kabelLength} m` }, ...p.baseSpecs];
+    } else {
+      specs = p.specs;
+    }
+    document.getElementById('prod-specs').innerHTML = specs.map(s =>
       `<div class="spec-row"><span>${s.label}</span><span class="spec-val">${s.value}</span></div>`
     ).join('');
 
-    // USPs
-    document.getElementById('usp-accordion').innerHTML = p.usps.map(u => `
+    const usps = p.usps || p.usps;
+    document.getElementById('usp-accordion').innerHTML = usps.map(u => `
       <div class="usp-item">
         <div class="usp-header" onclick="toggleUsp(this)">
           <div class="usp-left">
@@ -1726,30 +1853,22 @@
         <div class="usp-body"><div class="usp-body-inner"><p class="usp-desc">${u.tekst}</p></div></div>
       </div>`).join('');
 
-    // Priser – produktside
-    const pr = document.getElementById('prod-priser');
-    const købPris = p.priser.oprettelse_køb || p.priser.køb;
-    pr.innerHTML = [
-      købPris  ? `<p class="price-row">Køb fra <strong>${købPris.toLocaleString('da-DK')} kr.</strong></p>` : '',
-      p.priser.leje ? `<p class="price-row">Lej for <strong>${p.priser.leje.toLocaleString('da-DK')} kr./md.</strong></p>` : ''
-    ].join('');
+    updateProductPrices();
+  }
 
-    // Priser – finansieringstiles og sammenligningstabel
-    const oKøb = (p.priser.oprettelse_køb || 0).toLocaleString('da-DK');
-    const oLeje = (p.priser.oprettelse_leje || 0).toLocaleString('da-DK');
-    const købStr = oKøb + ' kr.';
-    const lejeStr = oLeje === '0' ? 'Inkluderet' : oLeje + ' kr.';
+  function selectColor(color, el) {
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedVariants.color = color;
+  }
 
-    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    set('tile-leje-oprettelse', lejeStr);
-    set('tile-køb-service-oprettelse', købStr);
-    set('tile-køb-oprettelse', købStr);
-    set('cmp-m-leje-opr',    lejeStr);
-    set('cmp-m-service-opr', købStr);
-    set('cmp-m-køb-opr',     købStr);
-    set('cmp-d-leje-opr',    lejeStr);
-    set('cmp-d-service-opr', købStr);
-    set('cmp-d-køb-opr',     købStr);
+  function selectKabel(length) {
+    selectedVariants.kabel = length;
+    const specs = [{ label: 'Kabel', value: `Fastmonteret, ${length} m` }, ...currentProduct.baseSpecs];
+    document.getElementById('prod-specs').innerHTML = specs.map(s =>
+      `<div class="spec-row"><span>${s.label}</span><span class="spec-val">${s.value}</span></div>`
+    ).join('');
+    updateProductPrices();
   }
 
   loadProducts();

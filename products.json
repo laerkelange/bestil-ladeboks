@@ -1,20 +1,30 @@
 [
   {
-    "id": "peblar-5m",
-    "navn": "Peblar — 5 m kabel",
+    "id": "peblar",
+    "navn": "Peblar",
     "billede": "assets/charger.png",
-    "farver": [],
-    "priser": {
-      "køb": 5995,
-      "leje": 169,
-      "oprettelse_leje": 1500,
-      "oprettelse_køb": 5995
-    },
-    "specs": [
+    "hasKabelVariants": true,
+    "kabelVariants": [
       {
-        "label": "Kabel",
-        "value": "Fastmonteret, 5 m"
+        "length": "5",
+        "priser": {
+          "køb": 5995,
+          "leje": 169,
+          "oprettelse_leje": 1500,
+          "oprettelse_køb": 5995
+        }
       },
+      {
+        "length": "7,5",
+        "priser": {
+          "køb": 6245,
+          "leje": 169,
+          "oprettelse_leje": 1750,
+          "oprettelse_køb": 6245
+        }
+      }
+    ],
+    "baseSpecs": [
       {
         "label": "Stik",
         "value": "Type 2"
@@ -52,114 +62,20 @@
     ]
   },
   {
-    "id": "peblar-7m",
-    "navn": "Peblar — 7,5 m kabel",
+    "id": "domo",
+    "navn": "Domo",
     "billede": "assets/charger.png",
-    "farver": [],
-    "priser": {
-      "køb": 6245,
-      "leje": 169,
-      "oprettelse_leje": 1750,
-      "oprettelse_køb": 6245
-    },
-    "specs": [
+    "hasColorVariants": true,
+    "colorVariants": [
       {
-        "label": "Kabel",
-        "value": "Fastmonteret, 7,5 m"
+        "color": "sort",
+        "label": "Sort"
       },
       {
-        "label": "Stik",
-        "value": "Type 2"
-      },
-      {
-        "label": "Effekt",
-        "value": "11 kW (3-faset)"
-      },
-      {
-        "label": "Mål (B × H × D)",
-        "value": "207 × 387 × 128 mm"
-      },
-      {
-        "label": "Driftstemperatur",
-        "value": "−30 til +50 °C"
+        "color": "hvid",
+        "label": "Hvid"
       }
     ],
-    "usps": [
-      {
-        "titel": "Smarte ladeplaner",
-        "tekst": "Brug OK-appen til at opsætte ladeplaner, så du altid har strøm nok – og lader, når elprisen er lavest. Du kan også starte opladningen direkte fra appen eller scanne OK-ladebrikken over kortlæseren på boksen."
-      },
-      {
-        "titel": "Følg forbruget på ladeboksen",
-        "tekst": "Brug OK-appen til at følge med i forbruget på ladeboksen og holde øje med elpriserne time for time – så du har fuldt overblik over, hvad det koster at lade din bil derhjemme."
-      },
-      {
-        "titel": "Fuld strøm på få timer",
-        "tekst": "Med 3-faset opladning på 11 kW er en typisk elbil fuldt opladet natten over. En Hyundai IONIQ 5 med 58 kWh batteri er fx fuldt ladet på ca. 6 timer."
-      },
-      {
-        "titel": "Indbygget display",
-        "tekst": "På fronten er der et display, som viser antal opladte kWh i den igangværende session – så du altid kan se, hvad der er gået i bilen, uden at åbne appen."
-      }
-    ]
-  },
-  {
-    "id": "domo-sort",
-    "navn": "Domo, sort",
-    "billede": "assets/charger.png",
-    "farver": [],
-    "priser": {
-      "køb": 4995,
-      "leje": 169,
-      "oprettelse_leje": 895,
-      "oprettelse_køb": 4995
-    },
-    "specs": [
-      {
-        "label": "Kabel",
-        "value": "Ikke inkluderet"
-      },
-      {
-        "label": "Stik",
-        "value": "Type 2"
-      },
-      {
-        "label": "Effekt",
-        "value": "11 kW (3-faset)"
-      },
-      {
-        "label": "Mål (B × H × D)",
-        "value": "190 × 338 × 116 mm"
-      },
-      {
-        "label": "Driftstemperatur",
-        "value": "−25 til +45 °C"
-      }
-    ],
-    "usps": [
-      {
-        "titel": "Smarte ladeplaner",
-        "tekst": "Brug OK-appen til at opsætte ladeplaner, så du altid har strøm nok – og lader, når elprisen er lavest. Du kan også starte opladningen direkte fra appen eller scanne OK-ladebrikken over kortlæseren på boksen."
-      },
-      {
-        "titel": "Følg forbruget på ladeboksen",
-        "tekst": "Brug OK-appen til at følge med i forbruget på ladeboksen og holde øje med elpriserne time for time – så du har fuldt overblik over, hvad det koster at lade din bil derhjemme."
-      },
-      {
-        "titel": "Fuld strøm på få timer",
-        "tekst": "Med 3-faset opladning på 11 kW er en typisk elbil fuldt opladet natten over. En Hyundai IONIQ 5 med 58 kWh batteri er fx fuldt ladet på ca. 6 timer."
-      },
-      {
-        "titel": "Dansk designet og produceret",
-        "tekst": "Domo er udviklet, designet og produceret i Danmark. Det giver en kompakt boks med et rent, stilfuldt udtryk – og en kvalitet, der er bygget til at holde i mange år."
-      }
-    ]
-  },
-  {
-    "id": "domo-hvid",
-    "navn": "Domo, hvid",
-    "billede": "assets/charger.png",
-    "farver": [],
     "priser": {
       "køb": 4995,
       "leje": 169,
