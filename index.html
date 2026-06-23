@@ -814,6 +814,61 @@
       color: var(--text);
     }
 
+    /* ── Godkendelse screen ── */
+    .godkend-section { display: flex; flex-direction: column; gap: 16px; }
+    .godkend-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .godkend-section-title {
+      font-family: 'OK family', Georgia, serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0;
+    }
+    .godkend-ret {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      color: var(--link);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      text-decoration: underline;
+      font-family: inherit;
+    }
+    .godkend-ret:hover { opacity: 0.8; }
+    .godkend-info-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .godkend-info-row:last-child { border-bottom: none; }
+    .godkend-info-label {
+      font-size: 14px;
+      color: var(--text-subtle);
+      font-weight: 400;
+    }
+    .godkend-info-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .godkend-divider {
+      border: none;
+      border-top: 1px solid var(--border-subtle);
+      margin: 0;
+    }
+
     /* ── Confirmation screen ── */
     .confirm-screen {
       display: flex;
@@ -1610,6 +1665,100 @@
 
       </div>
     </div><!-- /screen-betaling -->
+
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 7 · GODKENDELSE
+    ════════════════════════════════════════════ -->
+    <div class="screen" id="screen-godkend">
+      <div class="screen-inner">
+
+        <div class="progress">
+          <div class="progress-segs">
+            <div class="seg on" onclick="goToStep(1)"></div><div class="seg on" onclick="goToStep(2)"></div><div class="seg on" onclick="goToStep(3)"></div><div class="seg on" onclick="goToStep(4)"></div><div class="seg on" onclick="goToStep(5)"></div><div class="seg on" onclick="goToStep(6)"></div>
+          </div>
+          <div class="progress-label">
+            <span class="progress-step">7 af 7</span>
+            <span class="progress-name">– Godkend bestilling</span>
+          </div>
+        </div>
+
+        <h2>Godkend bestilling</h2>
+
+        <!-- LADEBOKSEN SECTION -->
+        <div class="godkend-section" id="godkend-ladeboks">
+          <div style="text-align:center;">
+            <img id="godkend-product-img" src="" alt="" style="width:160px; height:auto; margin-bottom:16px;">
+          </div>
+          <div id="godkend-ladeboks-specs"></div>
+          <button class="godkend-ret" onclick="goTo('screen-finansiering')">
+            <span>Ret</span>
+            <img src="assets/icon-chevron-right.svg" width="16" height="16" alt="">
+          </button>
+        </div>
+
+        <hr class="godkend-divider">
+
+        <!-- ELAFTALEN SECTION -->
+        <div class="godkend-section" id="godkend-elaftale" style="display:none;">
+          <div class="godkend-section-header">
+            <h3 class="godkend-section-title">Elaftalen</h3>
+            <button class="godkend-ret" onclick="goTo('screen-finansiering')">
+              <span>Ret</span>
+              <img src="assets/icon-chevron-right.svg" width="16" height="16" alt="">
+            </button>
+          </div>
+          <div id="godkend-elaftale-specs"></div>
+        </div>
+
+        <hr class="godkend-divider" id="godkend-divider-2" style="display:none;">
+
+        <!-- DINE OPLYSNINGER SECTION -->
+        <div class="godkend-section">
+          <div class="godkend-section-header">
+            <h3 class="godkend-section-title">Dine oplysninger</h3>
+            <button class="godkend-ret" onclick="goTo('screen-personlige')">
+              <span>Ret</span>
+              <img src="assets/icon-chevron-right.svg" width="16" height="16" alt="">
+            </button>
+          </div>
+          <div id="godkend-oplysninger-rows"></div>
+        </div>
+
+        <hr class="godkend-divider">
+
+        <!-- BETALINGSOPLYSNINGER SECTION -->
+        <div class="godkend-section">
+          <div class="godkend-section-header">
+            <h3 class="godkend-section-title">Betalingsoplysninger</h3>
+            <button class="godkend-ret" onclick="goTo('screen-betaling')">
+              <span>Ret</span>
+              <img src="assets/icon-chevron-right.svg" width="16" height="16" alt="">
+            </button>
+          </div>
+          <div id="godkend-betaling-specs"></div>
+        </div>
+
+        <!-- CHECKBOXES -->
+        <div style="margin-top:24px;">
+          <label class="check-item">
+            <input type="checkbox" class="check-box" id="godkend-cb-ladeboks">
+            <span class="check-label">Jeg accepterer betingelserne for opsætning og leje af ladeboks</span>
+          </label>
+          <label class="check-item" id="godkend-cb-el-wrap" style="display:none;">
+            <input type="checkbox" class="check-box" id="godkend-cb-el">
+            <span class="check-label">Jeg accepterer betingelserne for køb af el</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" class="check-box" id="godkend-cb-persdata">
+            <span class="check-label">Jeg accepterer OK's persondatapolitik</span>
+          </label>
+        </div>
+
+        <button class="btn-primary" onclick="submitOrder()">Godkend bestilling</button>
+
+      </div>
+    </div><!-- /screen-godkend -->
 
 
     <!-- ════════════════════════════════════════════
@@ -2521,34 +2670,155 @@
   /* ── Complete order ── */
   function completeOrder() {
     if (!validateAllFields()) return;
-    const order = collectOrderData();
+    populateGodkend();
+    goTo('screen-godkend');
+  }
 
-    // Gem som backup i localStorage
+  function submitOrder() {
+    const cb1 = document.getElementById('godkend-cb-ladeboks').checked;
+    const cb2Wrap = document.getElementById('godkend-cb-el-wrap');
+    const cb2 = cb2Wrap.style.display !== 'none' ? document.getElementById('godkend-cb-el').checked : true;
+    const cb3 = document.getElementById('godkend-cb-persdata').checked;
+
+    if (!cb1 || !cb2 || !cb3) {
+      alert('Du skal acceptere alle betingelser for at kunne godkende bestillingen.');
+      return;
+    }
+
+    const order = collectOrderData();
     localStorage.setItem('ok_ladeboks_order', JSON.stringify(order, null, 2));
     console.log('[Bestilling] Klar til afsendelse:', order);
 
-    // ─────────────────────────────────────────────────────────
-    // TODO: Send til email / backend her
-    //
-    // Option A – EmailJS (kræver konto på emailjs.com):
-    //   emailjs.send('SERVICE_ID', 'TEMPLATE_ID', order, 'PUBLIC_KEY');
-    //
-    // Option B – Formspree (kræver konto på formspree.io):
-    //   fetch('https://formspree.io/f/FORM_ID', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(order),
-    //   });
-    //
-    // Option C – OK intern backend endpoint:
-    //   fetch('/api/ladeboks/bestilling', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(order),
-    //   });
-    // ─────────────────────────────────────────────────────────
-
     goTo('screen-bekraeftelse');
+  }
+
+  function populateGodkend() {
+    // LADEBOKSEN SECTION
+    const productImg = document.getElementById('godkend-product-img');
+    productImg.src = currentProduct.billede;
+    productImg.alt = currentProduct.navn;
+
+    // Samle spec-rows for ladeboksen
+    const specs = [];
+    specs.push({ label: 'Ladeboks', value: currentProduct.navn });
+
+    if (currentProduct.hasColorVariants) {
+      const selectedColor = selectedVariants.color || currentProduct.colorVariants[0].color;
+      const colorLabel = currentProduct.colorVariants.find(c => c.color === selectedColor)?.label || selectedColor;
+      specs.push({ label: 'Farve', value: colorLabel });
+    } else if (currentProduct.hasKabelVariants) {
+      const selectedKabel = selectedVariants.kabel || currentProduct.kabelVariants[0].length;
+      specs.push({ label: 'Kabel', value: `${selectedKabel} m` });
+    }
+
+    // Aftaletype
+    const paymentTiles = document.querySelectorAll('#tiles-payment .option-tile');
+    let aftaletype = 'Leje';
+    paymentTiles.forEach((tile, idx) => {
+      if (tile.classList.contains('selected')) {
+        const titles = ['Leje', 'Køb med serviceaftale', 'Køb uden serviceaftale'];
+        aftaletype = titles[idx];
+      }
+    });
+    specs.push({ label: 'Aftaletype', value: aftaletype });
+
+    // Priser
+    let priser;
+    if (currentProduct.hasKabelVariants) {
+      const kabelLength = selectedVariants.kabel || currentProduct.kabelVariants[0].length;
+      priser = currentProduct.kabelVariants.find(v => v.length === kabelLength).priser;
+    } else {
+      priser = currentProduct.priser;
+    }
+
+    const oprettelse = paymentTiles[0].classList.contains('selected')
+      ? priser.oprettelse_leje || 0
+      : priser.oprettelse_køb || 0;
+    const maanedlig = priser.leje || 0;
+
+    specs.push({ label: 'Oprettelse', value: oprettelse.toLocaleString('da-DK') + ' kr.' });
+    specs.push({ label: 'Pr. måned', value: maanedlig.toLocaleString('da-DK') + ' kr./md.' });
+
+    // Ekstra kabel 9m
+    const kabel9m = document.querySelector('input[onchange="toggleKabel9m(this)"]');
+    if (kabel9m && kabel9m.checked) {
+      specs.push({ label: 'Løst kabel', value: '+ 1.500 kr.' });
+    }
+
+    // Leveringsadresse
+    const gade = document.getElementById('instal-gade')?.value || '';
+    const postnr = document.getElementById('instal-postnr')?.value || '';
+    const by = document.getElementById('instal-by')?.value || '';
+    const addr = [gade, postnr, by].filter(Boolean).join(', ');
+    if (addr) specs.push({ label: 'Leveringsadresse', value: addr });
+
+    document.getElementById('godkend-ladeboks-specs').innerHTML = specs.map(s =>
+      `<div class="spec-row"><span>${s.label}</span><span class="spec-val">${s.value}</span></div>`
+    ).join('');
+
+    // ELAFTALEN SECTION
+    const elaftaleTiles = document.querySelectorAll('#tiles-elaftale .option-tile');
+    const hasElaftale = elaftaleTiles[0].classList.contains('selected') || elaftaleTiles[1].classList.contains('selected');
+
+    const elSection = document.getElementById('godkend-elaftale');
+    const divider2 = document.getElementById('godkend-divider-2');
+
+    if (hasElaftale) {
+      elSection.style.display = 'flex';
+      divider2.style.display = 'block';
+      const elDate = document.getElementById('elaftale-dato')?.textContent || '';
+      const elSpecs = [
+        { label: 'Elprodukt', value: 'OK El Højt Forbrug' },
+        { label: 'Aftalens start', value: elDate }
+      ];
+      document.getElementById('godkend-elaftale-specs').innerHTML = elSpecs.map(s =>
+        `<div class="spec-row"><span>${s.label}</span><span class="spec-val">${s.value}</span></div>`
+      ).join('');
+    } else {
+      elSection.style.display = 'none';
+      divider2.style.display = 'none';
+    }
+
+    // Vis/skjul el-checkbox baseret på elaftale valg
+    const cbElWrap = document.getElementById('godkend-cb-el-wrap');
+    cbElWrap.style.display = hasElaftale ? 'flex' : 'none';
+
+    // DINE OPLYSNINGER SECTION
+    const oplysninger = [];
+    const navn = document.getElementById('pers-navn')?.value || '';
+    const telefon = document.getElementById('pers-telefon')?.value || '';
+    const email = document.getElementById('pers-email')?.value || '';
+    const cpr = document.getElementById('pers-cpr')?.value || '';
+    const forening = document.getElementById('forening-input')?.value || '';
+
+    if (navn) oplysninger.push({ label: 'Fulde navn', value: navn });
+    if (telefon) oplysninger.push({ label: 'Telefonnummer', value: telefon });
+    if (email) oplysninger.push({ label: 'E-mail', value: email });
+    if (cpr) {
+      const masked = cpr.substring(0, 6) + '-****';
+      oplysninger.push({ label: 'CPR-nr.', value: masked });
+    }
+    if (forening) oplysninger.push({ label: 'Du støtter', value: forening });
+
+    document.getElementById('godkend-oplysninger-rows').innerHTML = oplysninger.map(o =>
+      `<div class="godkend-info-row"><div class="godkend-info-label">${o.label}</div><div class="godkend-info-value">${o.value}</div></div>`
+    ).join('');
+
+    // BETALINGSOPLYSNINGER SECTION
+    const reg = document.getElementById('betal-reg')?.value || '';
+    const konto = document.getElementById('betal-konto')?.value || '';
+    const betaling = [
+      { label: 'Reg.nr.', value: reg },
+      { label: 'Kontonr.', value: konto }
+    ];
+    document.getElementById('godkend-betaling-specs').innerHTML = betaling.map(b =>
+      `<div class="spec-row"><span>${b.label}</span><span class="spec-val">${b.value}</span></div>`
+    ).join('');
+
+    // Reset checkboxes
+    document.getElementById('godkend-cb-ladeboks').checked = false;
+    document.getElementById('godkend-cb-el').checked = false;
+    document.getElementById('godkend-cb-persdata').checked = false;
   }
 
   /* ── Add-on: ekstra ladekabel 9m ── */
