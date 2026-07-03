@@ -472,18 +472,28 @@
     }
 
     /* ── Product card (opsummering) ── */
+    #screen-opsummering {
+      background: var(--bg-elevated);
+    }
+    .grid-outer:has(#screen-opsummering.active) {
+      background: var(--bg-elevated);
+    }
+    .grid-outer:has(#screen-opsummering.active) .col-content {
+      grid-column: 1 / -1;
+      background: var(--bg-elevated);
+      box-shadow: none;
+    }
     #screen-opsummering .screen-inner {
-      align-items: center;
-      gap: 48px;
-      padding-top: 70px;
+      gap: 32px;
+      padding-top: 56px;
     }
     #screen-opsummering .progress,
     #screen-opsummering h2 {
       width: 100%;
     }
     #screen-opsummering h2 {
-      font-size: 32px;
-      line-height: 40px;
+      font-size: 40px;
+      line-height: 48px;
     }
     .summary-price-overview {
       display: flex;
@@ -494,6 +504,8 @@
       font-size: 20px;
       font-weight: 600;
       line-height: 24px;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 28px;
     }
     .summary-price-line {
       display: flex;
@@ -513,47 +525,62 @@
       overflow: hidden;
       box-shadow: 0 0 5px rgba(0,0,0,.15);
       background: #fff;
-      padding: 0 24px 24px;
+      padding: 32px 24px 24px;
     }
     .product-card-img-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 159px;
-      padding: 16px 0;
+      height: 132px;
+      padding: 0;
     }
     .product-card-img {
       display: block;
-      width: 115px;
-      max-height: 127px;
+      width: 82px;
+      max-height: 112px;
       height: auto;
       object-fit: contain;
     }
     .product-card-content {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
       padding: 0;
       width: 100%;
     }
     .card-title {
-      font-size: 16px;
+      font-size: 24px;
       font-weight: 600;
-      line-height: 20px;
+      line-height: 28px;
       color: var(--text);
       margin-bottom: 4px;
+    }
+    .card-subtitle {
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--text-subtle);
     }
     .product-card-rows {
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 20px;
       width: 100%;
     }
     .summary-spec-group {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 12px;
       width: 100%;
+    }
+    .summary-spec-group + .summary-spec-group {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 16px;
+    }
+    .summary-spec-group--elaftale .summary-spec-row::before {
+      display: none;
+    }
+    .summary-spec-group--elaftale .summary-spec-heading {
+      margin-bottom: 2px;
     }
     .summary-spec-heading {
       display: flex;
@@ -568,15 +595,26 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      font-size: 16px;
+      gap: 12px;
+      font-size: 14px;
       line-height: 20px;
       color: var(--text);
+    }
+    .summary-spec-row::before {
+      content: '';
+      width: 20px;
+      height: 20px;
+      flex: 0 0 20px;
+      background: url('assets/icon-check.svg') center/20px 20px no-repeat;
+    }
+    .summary-spec-row > span:first-child {
+      flex: 1;
     }
     .summary-spec-row span:last-child {
       flex-shrink: 0;
       text-align: right;
       white-space: nowrap;
+      font-weight: 500;
     }
     .order-row {
       display: flex;
@@ -621,7 +659,7 @@
     .summary-info {
       border-top: 1px solid var(--border-subtle);
       margin-top: 0;
-      padding-top: 12px;
+      padding-top: 16px;
     }
     .summary-info-toggle {
       width: 100%;
@@ -662,7 +700,7 @@
       gap: 6px;
       color: var(--link);
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       justify-content: flex-end;
       margin-top: 0;
@@ -681,12 +719,42 @@
     }
     @media (min-width: 768px) {
       #screen-opsummering .screen-inner {
-        padding-left: 96px;
-        padding-right: 96px;
+        padding-left: 0;
+        padding-right: 0;
+        max-width: 900px;
+        margin: 0 auto;
       }
       #screen-opsummering .progress {
         margin-left: 0;
         margin-right: 0;
+      }
+      #screen-opsummering h2 {
+        font-size: 48px;
+        line-height: 56px;
+      }
+      .product-card {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        align-items: center;
+        gap: 48px;
+        border-radius: 20px;
+        padding: 40px 56px;
+      }
+      .product-card-img-wrap {
+        height: 220px;
+      }
+      .product-card-img {
+        width: 96px;
+        max-height: 160px;
+      }
+      .card-title {
+        font-size: 32px;
+        line-height: 36px;
+      }
+      .summary-price-overview {
+        padding: 0 28px 32px;
+        border-top: none;
+        border-bottom: 1px solid var(--border-subtle);
       }
       #screen-opsummering .summary-actions {
         flex-direction: row;
@@ -1475,48 +1543,6 @@
 
 
     <!-- ════════════════════════════════════════════
-         SCREEN 0 · PRODUKTSIDE
-    ════════════════════════════════════════════ -->
-    <div class="screen" id="screen-produkt">
-      <div class="screen-inner">
-
-        <button class="back-btn" onclick="goTo('screen-produktvalg')">
-          <svg width="24" height="24" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.70711 0.292893C7.31658 -0.0976311 6.68342 -0.0976311 6.29289 0.292893L0.292893 6.29289C-0.0976311 6.68342 -0.0976311 7.31658 0.292893 7.70711L6.29289 13.7071C6.68342 14.0976 7.31658 14.0976 7.70711 13.7071C8.09763 13.3166 8.09763 12.6834 7.70711 12.2929L2.41421 7L7.70711 1.70711C8.09763 1.31658 8.09763 0.683418 7.70711 0.292893Z" fill="currentColor"/></svg>
-          Tilbage
-        </button>
-
-        <h1 id="prod-navn"></h1>
-
-        <!-- Product image -->
-        <div style="text-align:center; padding: 0 0 8px;">
-          <img id="prod-billede" src="" alt="" style="width:280px; height:auto;">
-        </div>
-
-        <!-- Color selection -->
-        <div id="prod-farver-wrap">
-          <h4 style="margin-bottom:16px;">Farve</h4>
-          <div id="prod-farver" class="swatches"></div>
-        </div>
-
-        <!-- Specs -->
-        <div>
-          <h4 style="margin-bottom:4px; padding-bottom:12px;">Detaljer</h4>
-          <div id="prod-specs"></div>
-        </div>
-
-        <!-- USP accordion -->
-        <div class="usp-list" id="usp-accordion"></div>
-
-        <!-- Price -->
-        <div id="prod-priser" style="padding:10px 0 0;"></div>
-
-        <button class="btn-primary" onclick="goTo('screen-finansiering')">Videre</button>
-
-      </div>
-    </div><!-- /screen-produkt -->
-
-
-    <!-- ════════════════════════════════════════════
          SCREEN 1 · PRISVALG  (1 af 3)
     ════════════════════════════════════════════ -->
     <div class="screen" id="screen-finansiering">
@@ -1838,9 +1864,7 @@
           </div>
         </div>
 
-        <h2>Din pris</h2>
-
-        <div class="summary-price-overview" id="summary-price-overview"></div>
+        <h2>Din bestilling</h2>
 
         <!-- Product card -->
         <div class="product-card">
@@ -1859,6 +1883,8 @@
             </div>
           </div>
         </div>
+
+        <div class="summary-price-overview" id="summary-price-overview"></div>
 
         <div class="summary-actions">
           <button class="btn-secondary" type="button" onclick="openCallbackModal()">
@@ -2599,30 +2625,22 @@
     currentProduct = products.find(p => p.id === id);
     if (!currentProduct) return;
     selectedVariants = {};
-    renderProductPage(currentProduct);
-    goTo('screen-produkt');
+    if (currentProduct.hasColorVariants) {
+      selectedVariants.color = currentProduct.colorVariants[0].color;
+    }
+    if (currentProduct.hasKabelVariants) {
+      selectedVariants.kabel = currentProduct.kabelVariants[0].length;
+    }
+    goTo('screen-finansiering');
   }
 
   function updateProductPrices() {
     const p = currentProduct;
     if (!p) return;
-    let priser;
-    if (p.hasKabelVariants) {
-      const kabelLength = selectedVariants.kabel || p.kabelVariants[0].length;
-      const variant = p.kabelVariants.find(v => v.length === kabelLength);
-      priser = variant.priser;
-    } else {
-      priser = p.priser;
-    }
-    const pr = document.getElementById('prod-priser');
     const elaftaleIndex = getSelectedTileIndex('tiles-elaftale');
     const leaseUpfront = getSelectedUpfrontPrice(0, elaftaleIndex);
     const buyServiceUpfront = getSelectedUpfrontPrice(1, elaftaleIndex);
     const buyNoServiceUpfront = getSelectedUpfrontPrice(2, elaftaleIndex);
-    pr.innerHTML = [
-      buyNoServiceUpfront ? `<p class="price-row">Køb fra <strong>${buyNoServiceUpfront.toLocaleString('da-DK')} kr.</strong></p>` : '',
-      priser.leje ? `<p class="price-row">Lej for <strong>${priser.leje.toLocaleString('da-DK')} kr./md.</strong></p>` : ''
-    ].join('');
     const formatUpfront = value => value === 0 ? 'Inkluderet' : value.toLocaleString('da-DK') + ' kr.';
     const lejeStr = formatUpfront(leaseUpfront);
     const købServiceStr = formatUpfront(buyServiceUpfront);
@@ -2637,88 +2655,6 @@
     set('cmp-d-leje-opr',    lejeStr);
     set('cmp-d-service-opr', købServiceStr);
     set('cmp-d-køb-opr',     købStr);
-  }
-
-  function renderProductPage(p) {
-    document.getElementById('prod-navn').textContent = p.navn;
-    const img = document.getElementById('prod-billede');
-    img.src = p.billede; img.alt = p.navn;
-
-    const farverWrap = document.getElementById('prod-farver-wrap');
-    const headingEl = farverWrap.querySelector('h4');
-
-    if (p.hasColorVariants) {
-      headingEl.textContent = 'Farve';
-      farverWrap.style.display = 'flex';
-      farverWrap.style.flexDirection = 'column';
-      farverWrap.style.gap = '16px';
-      const farverEl = document.getElementById('prod-farver');
-      farverEl.innerHTML = `<div class="color-selector">${p.colorVariants.map((c, i) =>
-        `<div class="color-swatch ${c.color}${i === 0 ? ' selected' : ''}" onclick="selectColor('${c.color}', this)" title="${c.label}"></div>`
-      ).join('')}</div>`;
-      selectedVariants.color = selectedVariants.color || p.colorVariants[0].color;
-    } else if (p.hasKabelVariants) {
-      headingEl.textContent = 'Kabel';
-      farverWrap.style.display = '';
-      farverWrap.style.flexDirection = '';
-      farverWrap.style.gap = '';
-      const farverEl = document.getElementById('prod-farver');
-      farverEl.innerHTML = `
-        <select class="kabel-select" onchange="selectKabel(this.value)">
-          ${p.kabelVariants.map((v, i) =>
-            `<option value="${v.length}"${i === 0 ? ' selected' : ''}>Fastmonteret, ${v.length} m</option>`
-          ).join('')}
-        </select>
-      `;
-      selectedVariants.kabel = selectedVariants.kabel || p.kabelVariants[0].length;
-    } else {
-      farverWrap.style.display = 'none';
-    }
-
-    let specs = [];
-    if (p.hasKabelVariants) {
-      const kabelLength = selectedVariants.kabel || p.kabelVariants[0].length;
-      specs = [{ label: 'Kabel', value: `Fastmonteret, ${kabelLength} m` }, ...p.baseSpecs];
-    } else {
-      specs = p.specs;
-    }
-    document.getElementById('prod-specs').innerHTML = specs.map(s =>
-      `<div class="spec-row"><span>${s.label}</span><span class="spec-val">${s.value}</span></div>`
-    ).join('');
-
-    const usps = p.usps || p.usps;
-    document.getElementById('usp-accordion').innerHTML = usps.map(u => `
-      <div class="usp-item">
-        <div class="usp-header" onclick="toggleUsp(this)">
-          <div class="usp-left">
-            <img src="assets/icon-check.svg" alt="" width="24" height="24">
-            <span class="usp-text">${u.titel}</span>
-          </div>
-          <img src="assets/icon-chevron-down.svg" alt="" width="24" height="24" class="usp-chevron">
-        </div>
-        <div class="usp-body"><div class="usp-body-inner"><p class="usp-desc">${u.tekst}</p></div></div>
-      </div>`).join('');
-
-    updateProductPrices();
-  }
-
-  function selectColor(color, el) {
-    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedVariants.color = color;
-    const variant = currentProduct.colorVariants.find(v => v.color === color);
-    if (variant && variant.billede) {
-      document.getElementById('prod-billede').src = variant.billede;
-    }
-  }
-
-  function selectKabel(length) {
-    selectedVariants.kabel = length;
-    const specs = [{ label: 'Kabel', value: `Fastmonteret, ${length} m` }, ...currentProduct.baseSpecs];
-    document.getElementById('prod-specs').innerHTML = specs.map(s =>
-      `<div class="spec-row"><span>${s.label}</span><span class="spec-val">${s.value}</span></div>`
-    ).join('');
-    updateProductPrices();
   }
 
   const PRICE_MATRIX = {
@@ -2852,25 +2788,32 @@
     img.alt = currentProduct.navn;
     document.getElementById('summary-title').textContent = getSelectedProductTitle();
     document.getElementById('summary-price-overview').innerHTML = `
-      <div class="summary-price-line"><span>Betaling nu</span><span>${formatKr(data.upfrontTotal)}</span></div>
-      <div class="summary-price-line"><span>Pr. måned fra</span><span>${formatKr(data.monthlyTotal)}/md.</span></div>
+      <div class="summary-price-line"><span>Startpris (engangsbetaling)</span><span>${formatKr(data.upfrontTotal)}</span></div>
+      <div class="summary-price-line"><span>Fast månedlig pris</span><span>${formatKr(data.monthlyTotal)}/md.</span></div>
     `;
 
-    const serviceLabel = data.ladeboksMonthly
-      ? `${formatKr(data.ladeboksMonthly)}/md.`
-      : data.paymentLabel === 'Køb uden serviceaftale'
-        ? 'Nej tak'
-        : '0 kr./md.';
+    const serviceLabel = data.paymentLabel === 'Leje'
+      ? 'Inkluderet'
+      : data.paymentLabel === 'Køb med serviceaftale'
+        ? '49 kr./md.'
+        : 'Nej tak';
+    const solutionLabel = data.paymentLabel === 'Leje' ? 'Leje-løsningen' : data.paymentLabel;
+    const monthlySolutionLabel = data.paymentLabel === 'Leje' ? 'Ladeløsning (Leje)' : 'Ladeløsning';
+    const monthlySolutionValue = data.paymentLabel === 'Køb uden serviceaftale'
+      ? '0 kr./md.'
+      : data.paymentLabel === 'Køb med serviceaftale'
+        ? '49 kr./md.'
+        : `${formatKr(data.ladeboksMonthly)}/md.`;
 
     const rows = [
       `<div class="summary-spec-group">
-        <div class="summary-spec-row"><span>Aftaletype</span><span>${data.paymentLabel}</span></div>
-        <div class="summary-spec-row"><span>Eksisterende installation</span><span>${data.existingInstallation ? 'Ja' : 'Nej'}</span></div>
+        <div class="card-subtitle">${solutionLabel}</div>
         <div class="summary-spec-row"><span>Oprettelse</span><span>${formatKr(data.oprettelse)}</span></div>
+        <div class="summary-spec-row"><span>${monthlySolutionLabel}</span><span>${monthlySolutionValue}</span></div>
         <div class="summary-spec-row"><span>Serviceaftale</span><span>${serviceLabel}</span></div>
         <div class="summary-spec-row"><span>Standardinstallation</span><span>0 kr.</span></div>
       </div>`,
-      data.elaftaleMonthly ? `<div class="summary-spec-group">
+      data.elaftaleMonthly ? `<div class="summary-spec-group summary-spec-group--elaftale">
         <div class="summary-spec-heading">
           <span>OK El Højt Forbrug</span>
           <button class="info-icon summary-el-info-icon" type="button" onclick="openElModal()" aria-label="Mere info om OK El Højt Forbrug">
@@ -3237,7 +3180,7 @@
 
     return {
       timestamp: new Date().toISOString(),
-      produkt: document.getElementById('prod-navn')?.textContent?.trim() ?? '',
+      produkt: currentProduct ? `${currentProduct.navn} ladeboks` : '',
       betalingsform: tileVal('tiles-payment', ['Leje', 'Køb med serviceaftale', 'Køb uden serviceaftale']),
       elaftale: tileVal('tiles-elaftale', ['Ja tak', 'Jeg er allerede elkunde', 'Nej tak']),
       instalAdresse: adresse(igade, ipostnr, iby),
