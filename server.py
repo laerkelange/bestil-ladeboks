@@ -59,7 +59,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def log_message(self, *a): pass
 
+class ThreadingHTTPServer(http.server.ThreadingHTTPServer):
+    daemon_threads = True
+    allow_reuse_address = True
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-httpd = http.server.HTTPServer(('', 8765), Handler)
+httpd = ThreadingHTTPServer(('', 8765), Handler)
 print('Serving on :8765')
 httpd.serve_forever()

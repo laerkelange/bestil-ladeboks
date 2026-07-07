@@ -61,6 +61,7 @@
       --r-input:         8px;
       --input-border-hover: #736761;
       --error:             #8c0000;
+      --icon-check-circle: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508ZM12 5C11.0807 5 10.1705 5.18106 9.32122 5.53284C8.47194 5.88463 7.70026 6.40024 7.05025 7.05025C6.40024 7.70026 5.88463 8.47194 5.53284 9.32122C5.18106 10.1705 5 11.0807 5 12C5 12.9193 5.18106 13.8295 5.53284 14.6788C5.88463 15.5281 6.40024 16.2997 7.05025 16.9497C7.70026 17.5998 8.47194 18.1154 9.32122 18.4672C10.1705 18.8189 11.0807 19 12 19C12.9193 19 13.8295 18.8189 14.6788 18.4672C15.5281 18.1154 16.2997 17.5998 16.9497 16.9497C17.5998 16.2997 18.1154 15.5281 18.4672 14.6788C18.8189 13.8295 19 12.9193 19 12C19 11.0807 18.8189 10.1705 18.4672 9.32122C18.1154 8.47194 17.5998 7.70026 16.9497 7.05025C16.2997 6.40024 15.5281 5.88463 14.6788 5.53284C13.8295 5.18106 12.9193 5 12 5ZM15.3738 9.51512C15.7643 9.90564 15.7643 10.5388 15.3738 10.9293L11.8182 14.4849C11.4277 14.8754 10.7945 14.8754 10.404 14.4849L8.62623 12.7071C8.2357 12.3166 8.2357 11.6834 8.62623 11.2929C9.01675 10.9024 9.64992 10.9024 10.0404 11.2929L11.1111 12.3636L13.9596 9.51512C14.3501 9.12459 14.9832 9.12459 15.3738 9.51512Z' fill='%23460019'/%3E%3C/svg%3E");
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -85,7 +86,6 @@
     .col-content {
       grid-column: 4 / 10;   /* columns 4-9 = 6 of 12 */
       background: #fff;
-      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
     }
     @media (max-width: 1100px) { .col-content { grid-column: 3 / 11; } }
     @media (max-width:  860px) { .col-content { grid-column: 2 / 12; } }
@@ -96,22 +96,72 @@
     .screen.active { display: block; }
 
     .screen-inner {
-      padding: 40px 32px 56px;
+      position: relative;
+      padding: 40px 24px 56px;
       display: flex;
       flex-direction: column;
       gap: 32px;
     }
     @media (min-width: 768px) {
       .screen-inner {
-        padding-left: 96px;
-        padding-right: 96px;
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+    }
+    @media (min-width: 1024px) {
+      .screen-inner {
+        padding-left: 48px;
+        padding-right: 48px;
       }
       .progress {
         margin-left: 0;
         margin-right: 0;
       }
+      .grid-outer:has(.screen.active .progress) .col-content {
+        grid-column: 1 / -1;
+      }
+      .screen:has(.progress) .screen-inner {
+        width: min(calc(100% - 64px), 700px);
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 64px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+    .screen:has(.progress) .screen-inner {
+      padding-top: 64px;
     }
     .screen-inner.center { align-items: center; }
+    .grid-outer:has(.screen.active .progress) {
+      background: #fff;
+    }
+    .flow-exit {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+    }
+    .flow-exit img {
+      display: block;
+      width: 16px;
+      height: 16px;
+    }
+    @media (min-width: 1024px) {
+      .flow-exit {
+        top: 16px;
+        right: 0;
+      }
+    }
 
     /* ── Progress bar ── */
     .progress { display: flex; flex-direction: column; gap: 8px; }
@@ -155,7 +205,7 @@
       line-height: 24px;
       color: var(--text);
     }
-    @media (min-width: 768px) {
+    @media (min-width: 1024px) {
       h1 { font-size: 56px; line-height: 64px; }
       h2 { font-size: 40px; line-height: 48px; }
       h4 { font-size: 24px; line-height: 32px; }
@@ -479,13 +529,12 @@
       background: var(--bg-elevated);
     }
     .grid-outer:has(#screen-opsummering.active) .col-content {
-      grid-column: 1 / -1;
       background: var(--bg-elevated);
       box-shadow: none;
     }
     #screen-opsummering .screen-inner {
       gap: 32px;
-      padding-top: 56px;
+      padding-top: 64px;
     }
     #screen-opsummering .progress,
     #screen-opsummering h2 {
@@ -514,38 +563,63 @@
       gap: 24px;
       width: 100%;
     }
+    .summary-price-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .summary-price-info-icon {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border: none;
+      color: var(--primary);
+      padding: 0;
+      background: transparent;
+    }
+    .summary-price-info-icon svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+    }
     .summary-price-line span:last-child {
       text-align: right;
       white-space: nowrap;
     }
     .product-card {
+      position: relative;
       width: 100%;
       border: 1px solid var(--border-subtle);
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 0 5px rgba(0,0,0,.15);
       background: #fff;
-      padding: 32px 24px 24px;
+      padding: 0;
     }
     .product-card-img-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 132px;
+      height: 220px;
       padding: 0;
+      overflow: hidden;
     }
     .product-card-img {
       display: block;
-      width: 82px;
-      max-height: 112px;
-      height: auto;
-      object-fit: contain;
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      object-fit: cover;
+      object-position: center;
     }
     .product-card-content {
       display: flex;
       flex-direction: column;
       gap: 20px;
-      padding: 0;
+      justify-content: space-between;
+      align-self: stretch;
+      padding: 24px;
       width: 100%;
     }
     .card-title {
@@ -553,12 +627,7 @@
       font-weight: 600;
       line-height: 28px;
       color: var(--text);
-      margin-bottom: 4px;
-    }
-    .card-subtitle {
-      font-size: 14px;
-      line-height: 20px;
-      color: var(--text-subtle);
+      margin-bottom: 24px;
     }
     .product-card-rows {
       display: flex;
@@ -569,52 +638,62 @@
     .summary-spec-group {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 24px;
       width: 100%;
     }
     .summary-spec-group + .summary-spec-group {
       border-top: 1px solid var(--border-subtle);
       padding-top: 16px;
     }
-    .summary-spec-group--elaftale .summary-spec-row::before {
-      display: none;
+    .summary-detail-rows {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
     }
-    .summary-spec-group--elaftale .summary-spec-heading {
-      margin-bottom: 2px;
+    .summary-detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 8px 0;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--text);
     }
-    .summary-spec-heading {
+    .summary-detail-row:first-child {
+      padding-top: 0;
+    }
+    .summary-detail-row span:last-child {
+      flex-shrink: 0;
+      text-align: right;
+      font-weight: 600;
+    }
+    .summary-feature-list {
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg-page);
+    }
+    .summary-feature-row {
       display: flex;
       align-items: center;
       gap: 8px;
+      padding: 12px;
+      border-bottom: 1px solid var(--border-subtle);
       font-size: 16px;
+      line-height: 20px;
+      color: var(--text);
       font-weight: 600;
-      line-height: 20px;
-      color: var(--text);
     }
-    .summary-spec-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 14px;
-      line-height: 20px;
-      color: var(--text);
+    .summary-feature-row:last-child {
+      border-bottom: none;
     }
-    .summary-spec-row::before {
+    .summary-feature-row::before {
       content: '';
-      width: 20px;
-      height: 20px;
-      flex: 0 0 20px;
-      background: url('assets/icon-check.svg') center/20px 20px no-repeat;
-    }
-    .summary-spec-row > span:first-child {
-      flex: 1;
-    }
-    .summary-spec-row span:last-child {
-      flex-shrink: 0;
-      text-align: right;
-      white-space: nowrap;
-      font-weight: 500;
+      width: 24px;
+      height: 24px;
+      flex: 0 0 24px;
+      background: var(--icon-check-circle) center/contain no-repeat;
     }
     .order-row {
       display: flex;
@@ -628,15 +707,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-    }
-    .summary-el-info-icon {
-      width: 20px;
-      height: 20px;
-      min-width: 20px;
-      border: none;
-      color: var(--primary);
-      padding: 0;
-      background: transparent;
     }
     .summary-total {
       border-top: 1px solid var(--border-subtle);
@@ -661,12 +731,19 @@
       margin-top: 0;
       padding-top: 16px;
     }
+    #summary-info-outside {
+      width: 100%;
+    }
+    #summary-info-outside .summary-info {
+      border-top: none;
+      padding-top: 0;
+    }
     .summary-info-toggle {
       width: 100%;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      justify-content: flex-end;
+      gap: 8px;
       border: none;
       background: transparent;
       color: var(--link);
@@ -688,22 +765,14 @@
     .summary-info-body {
       display: none;
       padding-top: 12px;
+      max-width: 700px;
+      margin-left: auto;
+      text-align: right;
     }
     .summary-info.open .summary-info-body { display: block; }
     .summary-info a {
       color: var(--link);
       font-weight: 600;
-    }
-    .foretag-link {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--link);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      justify-content: flex-end;
-      margin-top: 0;
     }
     .summary-actions {
       width: 100%;
@@ -717,12 +786,13 @@
       margin-left: 0;
       margin-right: 0;
     }
-    @media (min-width: 768px) {
+    @media (min-width: 1024px) {
+      .grid-outer:has(#screen-opsummering.active) .col-content {
+        grid-column: 1 / -1;
+      }
       #screen-opsummering .screen-inner {
         padding-left: 0;
         padding-right: 0;
-        max-width: 900px;
-        margin: 0 auto;
       }
       #screen-opsummering .progress {
         margin-left: 0;
@@ -734,27 +804,31 @@
       }
       .product-card {
         display: grid;
-        grid-template-columns: 250px 1fr;
-        align-items: center;
-        gap: 48px;
+        grid-template-columns: 320px 1fr;
+        align-items: stretch;
+        gap: 0;
         border-radius: 20px;
-        padding: 40px 56px;
       }
       .product-card-img-wrap {
-        height: 220px;
+        align-self: stretch;
+        height: auto;
+        min-height: 320px;
       }
       .product-card-img {
-        width: 96px;
-        max-height: 160px;
+        width: 100%;
+        max-height: none;
+      }
+      .product-card-content {
+        padding: 24px;
       }
       .card-title {
         font-size: 32px;
         line-height: 36px;
       }
       .summary-price-overview {
-        padding: 0 28px 32px;
+        padding: 0 0 32px;
         border-top: none;
-        border-bottom: 1px solid var(--border-subtle);
+        border-bottom: none;
       }
       #screen-opsummering .summary-actions {
         flex-direction: row;
@@ -976,41 +1050,59 @@
       background: #fff !important;
     }
     .grid-outer:has(#screen-produktvalg.active) {
+      display: block;
       background: #fff !important;
     }
     .grid-outer:has(#screen-produktvalg.active) .col-content {
+      width: 100%;
       background: #fff !important;
       box-shadow: none !important;
       padding: 0 !important;
     }
-    @media (min-width: 1101px) {
-      .grid-outer:has(#screen-produktvalg.active) .col-content {
-        grid-column: 2 / 12;
-      }
-    }
     #screen-produktvalg .screen-inner {
-      padding-left: 32px;
-      padding-right: 32px;
-      padding-top: 40px;
-      padding-bottom: 56px;
+      max-width: 1120px;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 40px 24px 56px;
     }
-    @media (min-width: 768px) {
-      #screen-produktvalg .screen-inner {
-        padding-left: 96px;
-        padding-right: 96px;
-      }
+    #screen-produktvalg h1 {
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 40px;
+      line-height: 48px;
     }
     .produkt-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 32px;
+      align-items: stretch;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
     }
     @media (min-width: 768px) {
-      .produkt-grid {
-        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      #screen-produktvalg .screen-inner {
+        padding-left: 40px;
+        padding-right: 40px;
       }
     }
     @media (min-width: 1024px) {
+      #screen-produktvalg .screen-inner {
+        padding-left: 48px;
+        padding-right: 48px;
+      }
+      #screen-produktvalg h1,
+      .produkt-grid {
+        max-width: none;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      #screen-produktvalg h1 {
+        font-size: 56px;
+        line-height: 64px;
+      }
       .produkt-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -1022,19 +1114,14 @@
       cursor: pointer;
       background: #fff;
       box-shadow: 0 0 5px rgba(0,0,0,.15);
-      transition: border-color .15s, box-shadow .15s;
       display: flex;
       flex-direction: column;
       height: 100%;
-    }
-    @media (min-width: 768px) {
-      .produkt-tile {
-        min-height: 100%;
-      }
+      width: 100%;
     }
     .produkt-tile-img-wrap {
       width: 100%;
-      min-height: 240px;
+      height: 360px;
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -1058,15 +1145,6 @@
     .produkt-tile--peblar .produkt-tile-img {
       transform: scale(1.3);
     }
-    @media (min-width: 768px) {
-      .produkt-tile-img-wrap {
-        min-height: 360px;
-      }
-      .produkt-tile-img {
-        width: 100%;
-        max-height: none;
-      }
-    }
     .produkt-tile-content {
       display: flex;
       flex-direction: column;
@@ -1074,7 +1152,7 @@
       padding: 24px;
       flex: 1;
     }
-    @media (min-width: 768px) {
+    @media (min-width: 1024px) {
       .produkt-tile-content {
         padding: 32px;
       }
@@ -1124,7 +1202,7 @@
       width: 24px;
       height: 24px;
       min-width: 24px;
-      background: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508ZM12 5C11.0807 5 10.1705 5.18106 9.32122 5.53284C8.47194 5.88463 7.70026 6.40024 7.05025 7.05025C6.40024 7.70026 5.88463 8.47194 5.53284 9.32122C5.18106 10.1705 5 11.0807 5 12C5 12.9193 5.18106 13.8295 5.53284 14.6788C5.88463 15.5281 6.40024 16.2997 7.05025 16.9497C7.70026 17.5998 8.47194 18.1154 9.32122 18.4672C10.1705 18.8189 11.0807 19 12 19C12.9193 19 13.8295 18.8189 14.6788 18.4672C15.5281 18.1154 16.2997 17.5998 16.9497 16.9497C17.5998 16.2997 18.1154 15.5281 18.4672 14.6788C18.8189 13.8295 19 12.9193 19 12C19 11.0807 18.8189 10.1705 18.4672 9.32122C18.1154 8.47194 17.5998 7.70026 16.9497 7.05025C16.2997 6.40024 15.5281 5.88463 14.6788 5.53284C13.8295 5.18106 12.9193 5 12 5ZM15.3738 9.51512C15.7643 9.90564 15.7643 10.5388 15.3738 10.9293L11.8182 14.4849C11.4277 14.8754 10.7945 14.8754 10.404 14.4849L8.62623 12.7071C8.2357 12.3166 8.2357 11.6834 8.62623 11.2929C9.01675 10.9024 9.64992 10.9024 10.0404 11.2929L11.1111 12.3636L13.9596 9.51512C14.3501 9.12459 14.9832 9.12459 15.3738 9.51512Z' fill='%23460019'/%3E%3C/svg%3E");
+      background: var(--icon-check-circle);
       background-size: contain;
       background-repeat: no-repeat;
     }
@@ -1216,11 +1294,11 @@
       inset: 0;
       background: rgba(0,0,0,0.5);
       z-index: 200;
+      display: none;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
     }
-    .bs-overlay.open { opacity: 1; pointer-events: auto; }
+    .bs-overlay.open { display: block; opacity: 1; pointer-events: auto; }
 
     /* ── CPR Info Modal ── */
     .cpr-modal-overlay {
@@ -1403,13 +1481,12 @@
       border-radius: 24px 24px 0 0;
       z-index: 201;
       max-height: 95dvh;
-      display: flex;
+      display: none;
       flex-direction: column;
       transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
       pointer-events: none;
     }
-    .bs-sheet.open { transform: translateY(0); pointer-events: auto; }
+    .bs-sheet.open { display: flex; transform: translateY(0); pointer-events: auto; }
 
     /* show mobile, hide desktop content by default */
     .bs-mobile { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
@@ -1470,13 +1547,11 @@
         max-height: 90vh;
         border-radius: 16px;
         overflow: hidden;
-        /* starts slightly low → slides up to center */
         transform: translate(-50%, calc(-50% + 48px));
-        transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1),
-                    opacity  0.3s ease;
         opacity: 0;
       }
       .bs-sheet.open {
+        display: flex;
         transform: translate(-50%, -50%);
         opacity: 1;
         pointer-events: auto;
@@ -1864,9 +1939,11 @@
           </div>
         </div>
 
-        <h2>Din bestilling</h2>
+        <h2>Din pris</h2>
 
         <!-- Product card -->
+        <div class="summary-price-overview" id="summary-price-overview"></div>
+
         <div class="product-card">
           <div class="product-card-img-wrap">
             <img id="summary-product-img" src="" alt="" class="product-card-img">
@@ -1877,14 +1954,8 @@
               <div class="product-card-rows" id="summary-rows">
               </div>
             </div>
-            <div class="foretag-link" onclick="goTo('screen-finansiering')">
-              Ret valg
-              <img src="assets/icon-edit.svg" width="20" height="20" alt="">
-            </div>
           </div>
         </div>
-
-        <div class="summary-price-overview" id="summary-price-overview"></div>
 
         <div class="summary-actions">
           <button class="btn-secondary" type="button" onclick="openCallbackModal()">
@@ -1893,6 +1964,8 @@
           </button>
           <button class="btn-primary" type="button">Bestil løsning</button>
         </div>
+
+        <div id="summary-info-outside"></div>
 
       </div>
     </div><!-- /screen-opsummering -->
@@ -2342,6 +2415,20 @@
 </div>
 
 <!-- ════════════════════════════════════════════
+     MODAL · PRISDETALJER
+════════════════════════════════════════════ -->
+<div id="price-modal-overlay" class="cpr-modal-overlay" onclick="if(event.target === this) closePriceModal()">
+  <div class="cpr-modal" role="dialog" aria-modal="true" aria-labelledby="price-modal-title">
+    <button class="cpr-modal-close" onclick="closePriceModal()" aria-label="Luk modal">
+      <img src="assets/icon-close.svg" width="24" height="24" alt="">
+    </button>
+    <h2 id="price-modal-title" class="cpr-modal-title">Fast månedlig pris</h2>
+    <p class="el-modal-desc">Her kan du se, hvad den faste månedlige pris består af.</p>
+    <div id="price-modal-content"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
      MODAL · OK EL HØJT FORBRUG
 ════════════════════════════════════════════ -->
 <div id="el-modal-overlay" class="cpr-modal-overlay" onclick="if(event.target === this) closeElModal()">
@@ -2426,6 +2513,7 @@
       closeCompare();
       closeCprModal();
       closeStoetteModal();
+      closePriceModal();
       closeElModal();
       closeCallbackModal();
     }
@@ -2448,6 +2536,67 @@
   }
   function closeStoetteModal() {
     document.getElementById('stoette-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── Price Details Modal ── */
+  function getMonthlyPriceRows(data) {
+    const rows = [];
+    if (data.paymentLabel === 'Leje') {
+      rows.push({ label: 'Ladeløsning (Leje)', value: `${formatKr(data.ladeboksMonthly)}/md.` });
+    } else if (data.paymentLabel === 'Køb med serviceaftale') {
+      rows.push({ label: 'Serviceaftale', value: '49 kr./md.' });
+    } else {
+      rows.push({ label: 'Ladeløsning', value: '0 kr./md.' });
+    }
+
+    if (data.elaftaleMonthly) {
+      rows.push({ label: 'OK El Højt Forbrug abonnement', value: `${formatKr(data.elaftaleMonthly)}/md.` });
+      rows.push({ label: 'Pristillæg', value: '0 øre/kWh' });
+    }
+
+    return rows;
+  }
+
+  function renderPriceModalContent() {
+    const data = getSelectedPriceData();
+    if (!data) return;
+
+    const monthlyRows = getMonthlyPriceRows(data);
+    const monthlyRowsHtml = monthlyRows.map(row =>
+      `<div class="el-modal-row"><span>${row.label}</span><span>${row.value}</span></div>`
+    ).join('');
+    const elInfoHtml = data.elaftaleMonthly ? `
+      <div class="el-modal-details-title">OK El Højt Forbrug</div>
+      <p class="el-modal-desc">Variabel elpris. Billigst for dig der har et forbrug over 3.100 kWh årligt.</p>
+      <div class="el-modal-rows">
+        <div class="el-modal-row"><span>Den rene elpris</span><span>102,88 øre/kWh</span></div>
+        <div class="el-modal-row"><span>Pristillæg*</span><span>0 øre/kWh</span></div>
+        <div class="el-modal-row"><span>Transport og afgifter</span><span>Afhængig af adresse</span></div>
+        <div class="el-modal-row"><strong>Estimeret kWh-pris</strong><strong>1,03 kr./kWh</strong></div>
+      </div>
+    ` : '';
+
+    document.getElementById('price-modal-content').innerHTML = `
+      <div class="el-modal-rows">
+        <div class="el-modal-row"><span>Startpris (engangsbetaling)</span><span>${formatKr(data.upfrontTotal)}</span></div>
+      </div>
+      <div class="el-modal-details-title">Fast månedlig pris består af</div>
+      <div class="el-modal-rows">
+        ${monthlyRowsHtml}
+        <div class="el-modal-row"><strong>I alt pr. måned</strong><strong>${formatKr(data.monthlyTotal)}/md.</strong></div>
+      </div>
+      ${elInfoHtml}
+    `;
+  }
+
+  function openPriceModal() {
+    renderPriceModalContent();
+    document.getElementById('price-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePriceModal() {
+    document.getElementById('price-modal-overlay').classList.remove('open');
     document.body.style.overflow = '';
   }
 
@@ -2586,13 +2735,71 @@
   let products = [];
   let currentProduct = null;
   let selectedVariants = {};
+  const fallbackProducts = [
+    {
+      id: 'peblar',
+      navn: 'Peblar',
+      billede: 'assets/peblar.png',
+      billede_produktvalg: 'https://www.ok.dk/imagevault/publishedmedia/kdl5jnnf5ze5xgdnhkpo/peblar-sort-v-g.png',
+      description: '11 kW ladeboks uden fast kabel. Smart opladning med OK-appen eller ladebrik.',
+      highlights: ['Med fast ladekabel', 'Vælg mellem 5 eller 7,5 meter ladekabel'],
+      hasKabelVariants: true,
+      kabelVariants: [
+        { length: '5', priser: { køb: 5995, leje: 169, oprettelse_leje: 1500, oprettelse_køb: 5995 } },
+        { length: '7,5', priser: { køb: 6245, leje: 169, oprettelse_leje: 1750, oprettelse_køb: 6245 } }
+      ],
+      baseSpecs: [
+        { label: 'Stik', value: 'Type 2' },
+        { label: 'Effekt', value: '11 kW (3-faset)' },
+        { label: 'Mål (B × H × D)', value: '207 × 387 × 128 mm' },
+        { label: 'Driftstemperatur', value: '−30 til +50 °C' }
+      ],
+      usps: [
+        { titel: 'Smarte ladeplaner' },
+        { titel: 'Følg forbruget på ladeboksen' },
+        { titel: 'Fuld strøm på få timer' },
+        { titel: 'Indbygget display' }
+      ]
+    },
+    {
+      id: 'domo',
+      navn: 'Domo',
+      billede: 'assets/domo-black.png',
+      billede_produktvalg: 'https://www.ok.dk/imagevault/publishedmedia/ge62mn9w5obn02ll5jxx/domo-mursten.png',
+      description: '11 kW ladeboks uden fast kabel. Smart opladning med OK-appen eller ladebrik.',
+      highlights: ['Dansk designet og produceret', 'Vælg mellem sort og hvid'],
+      hasColorVariants: true,
+      colorVariants: [
+        { color: 'sort', label: 'Sort', billede: 'assets/domo-black.png' },
+        { color: 'hvid', label: 'Hvid', billede: 'assets/domo-white.png' }
+      ],
+      priser: { køb: 4995, leje: 169, oprettelse_leje: 895, oprettelse_køb: 4995 },
+      specs: [
+        { label: 'Kabel', value: 'Ikke inkluderet' },
+        { label: 'Stik', value: 'Type 2' },
+        { label: 'Effekt', value: '11 kW (3-faset)' },
+        { label: 'Mål (B × H × D)', value: '190 × 338 × 116 mm' },
+        { label: 'Driftstemperatur', value: '−25 til +45 °C' }
+      ],
+      usps: [
+        { titel: 'Smarte ladeplaner' },
+        { titel: 'Følg forbruget på ladeboksen' },
+        { titel: 'Fuld strøm på få timer' },
+        { titel: 'Dansk designet og produceret' }
+      ]
+    }
+  ];
 
   async function loadProducts() {
     try {
       const res = await fetch('products.json');
+      if (!res.ok) throw new Error('products.json kunne ikke hentes');
       products = await res.json();
-      renderProduktGrid();
-    } catch (e) { console.error('Kunne ikke hente products.json', e); }
+    } catch (e) {
+      console.warn('Kunne ikke hente products.json, bruger indlejrede produktdata', e);
+      products = fallbackProducts;
+    }
+    renderProduktGrid();
   }
 
   function renderProduktGrid() {
@@ -2754,20 +2961,29 @@
 
   function getSelectedProductTitle() {
     if (!currentProduct) return '';
-    const parts = [currentProduct.navn + ' ladeboks'];
-    if (currentProduct.hasColorVariants) {
-      const selectedColor = selectedVariants.color || currentProduct.colorVariants[0].color;
-      const colorLabel = currentProduct.colorVariants.find(c => c.color === selectedColor)?.label || selectedColor;
-      parts.push(colorLabel.toLowerCase());
-    } else if (currentProduct.hasKabelVariants) {
+    return currentProduct.navn;
+  }
+
+  function getSelectedProductSpecs() {
+    if (!currentProduct) return [];
+    if (currentProduct.hasKabelVariants) {
       const selectedKabel = selectedVariants.kabel || currentProduct.kabelVariants[0].length;
-      parts.push(`fastmonteret kabel ${selectedKabel} m`);
+      return [
+        { label: 'Kabel', value: `Fastmonteret, ${selectedKabel} m` },
+        ...(currentProduct.baseSpecs || [])
+      ];
     }
-    return parts.join(', ');
+    return currentProduct.specs || currentProduct.baseSpecs || [];
+  }
+
+  function getSelectedProductFeatures() {
+    if (!currentProduct) return [];
+    return (currentProduct.usps || []).slice(0, 3).map(usp => usp.titel);
   }
 
   function getSelectedProductImage() {
     if (!currentProduct) return '';
+    if (currentProduct.billede_produktvalg) return currentProduct.billede_produktvalg;
     if (currentProduct.hasColorVariants) {
       const selectedColor = selectedVariants.color || currentProduct.colorVariants[0].color;
       return currentProduct.colorVariants.find(c => c.color === selectedColor)?.billede || currentProduct.billede;
@@ -2789,46 +3005,37 @@
     document.getElementById('summary-title').textContent = getSelectedProductTitle();
     document.getElementById('summary-price-overview').innerHTML = `
       <div class="summary-price-line"><span>Startpris (engangsbetaling)</span><span>${formatKr(data.upfrontTotal)}</span></div>
-      <div class="summary-price-line"><span>Fast månedlig pris</span><span>${formatKr(data.monthlyTotal)}/md.</span></div>
-    `;
-
-    const serviceLabel = data.paymentLabel === 'Leje'
-      ? 'Inkluderet'
-      : data.paymentLabel === 'Køb med serviceaftale'
-        ? '49 kr./md.'
-        : 'Nej tak';
-    const solutionLabel = data.paymentLabel === 'Leje' ? 'Leje-løsningen' : data.paymentLabel;
-    const monthlySolutionLabel = data.paymentLabel === 'Leje' ? 'Ladeløsning (Leje)' : 'Ladeløsning';
-    const monthlySolutionValue = data.paymentLabel === 'Køb uden serviceaftale'
-      ? '0 kr./md.'
-      : data.paymentLabel === 'Køb med serviceaftale'
-        ? '49 kr./md.'
-        : `${formatKr(data.ladeboksMonthly)}/md.`;
-
-    const rows = [
-      `<div class="summary-spec-group">
-        <div class="card-subtitle">${solutionLabel}</div>
-        <div class="summary-spec-row"><span>Oprettelse</span><span>${formatKr(data.oprettelse)}</span></div>
-        <div class="summary-spec-row"><span>${monthlySolutionLabel}</span><span>${monthlySolutionValue}</span></div>
-        <div class="summary-spec-row"><span>Serviceaftale</span><span>${serviceLabel}</span></div>
-        <div class="summary-spec-row"><span>Standardinstallation</span><span>0 kr.</span></div>
-      </div>`,
-      data.elaftaleMonthly ? `<div class="summary-spec-group summary-spec-group--elaftale">
-        <div class="summary-spec-heading">
-          <span>OK El Højt Forbrug</span>
-          <button class="info-icon summary-el-info-icon" type="button" onclick="openElModal()" aria-label="Mere info om OK El Højt Forbrug">
+      <div class="summary-price-line">
+        <span class="summary-price-label">
+          <span>Fast månedlig pris</span>
+          <button class="summary-price-info-icon" type="button" onclick="openPriceModal()" aria-label="Se hvad den faste månedlige pris består af">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M8 9C8 8.44771 8.44771 8 9 8H10.5C11.0523 8 11.5 8.44771 11.5 9V14H12C12.5523 14 13 14.4477 13 15C13 15.5523 12.5523 16 12 16H9C8.44771 16 8 15.5523 8 15C8 14.4477 8.44771 14 9 14H9.5V10H9C8.44771 10 8 9.55229 8 9Z" fill="#460019"/>
               <path d="M11 6C11 6.55228 10.5523 7 10 7C9.44771 7 9 6.55228 9 6C9 5.44772 9.44771 5 10 5C10.5523 5 11 5.44772 11 6Z" fill="#460019"/>
               <path fill-rule="evenodd" clip-rule="evenodd" d="M0 10C0 4.47715 4.47715 0 10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10ZM10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2Z" fill="#460019"/>
             </svg>
           </button>
+        </span>
+        <span>${formatKr(data.monthlyTotal)}/md.</span>
+      </div>
+    `;
+
+    const specs = getSelectedProductSpecs();
+    const features = getSelectedProductFeatures();
+    const rows = [
+      `<div class="summary-spec-group">
+        <div class="summary-detail-rows">
+          ${specs.map(spec => `<div class="summary-detail-row"><span>${spec.label}</span><span>${spec.value}</span></div>`).join('')}
         </div>
-        <div class="summary-spec-row"><span>Abonnement</span><span>${formatKr(data.elaftaleMonthly)}/md.</span></div>
-        <div class="summary-spec-row"><span>Pristillæg</span><span>0 øre/kWh.</span></div>
-        ${data.elaftaleDiscount ? `<div class="summary-spec-row"><span>Elaftale-rabat</span><span>- ${formatKr(data.elaftaleDiscount)}</span></div>` : ''}
-      </div>` : '',
-      `<div class="summary-info">
+        <div class="summary-feature-list">
+          ${features.map(feature => `<div class="summary-feature-row"><span>${feature}</span></div>`).join('')}
+        </div>
+      </div>`
+    ];
+
+    document.getElementById('summary-rows').innerHTML = rows.join('');
+    document.getElementById('summary-info-outside').innerHTML = `
+      <div class="summary-info">
         <button class="summary-info-toggle" type="button" aria-expanded="false" onclick="toggleSummaryInfo(this)">
           <span>Sådan beregner vi prisen</span>
           <img src="assets/icon-chevron-down.svg" alt="">
@@ -2843,10 +3050,8 @@
             Tjek vores <a href="https://www.ok.dk/privat/produkter/opladning/hjemme#fordelemedhjemmeopladning" target="_blank" rel="noopener">elbilsberegner</a> for at udregne, hvad det koster at lade bilen op.
           </p>
         </div>
-      </div>`
-    ].filter(Boolean);
-
-    document.getElementById('summary-rows').innerHTML = rows.join('');
+      </div>
+    `;
   }
 
   function toggleSummaryInfo(button) {
@@ -2855,6 +3060,22 @@
     button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   }
 
+  function ensureFlowExitButtons() {
+    document.querySelectorAll('.screen .progress').forEach(progress => {
+      const screenInner = progress.closest('.screen-inner');
+      if (!screenInner || screenInner.querySelector('.flow-exit')) return;
+
+      const button = document.createElement('button');
+      button.className = 'flow-exit';
+      button.type = 'button';
+      button.setAttribute('aria-label', 'Afslut beregner');
+      button.innerHTML = '<img src="assets/icon-close.svg" width="16" height="16" alt="">';
+      button.addEventListener('click', () => goTo('screen-produktvalg'));
+      screenInner.insertBefore(button, progress);
+    });
+  }
+
+  ensureFlowExitButtons();
   loadProducts();
 
   /* ── Elaftale info tekst ── */
