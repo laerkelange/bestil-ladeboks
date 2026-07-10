@@ -61,6 +61,7 @@
       --r-input:         8px;
       --input-border-hover: #736761;
       --error:             #8c0000;
+      --receipt-burst-bg:  #FFCDFF;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -94,12 +95,57 @@
     /* ── Screen visibility ── */
     .screen { display: none; }
     .screen.active { display: block; }
+    .flow-screen {
+      position: relative;
+    }
+    .flow-close-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 20;
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      appearance: none;
+      background: transparent;
+      box-shadow: none;
+      cursor: pointer;
+    }
+    .flow-close-btn:hover {
+      background: transparent;
+    }
+    .flow-close-btn img {
+      width: 14px;
+      height: 14px;
+      display: block;
+    }
+    .flow-screen .screen-inner {
+      padding-top: 72px;
+    }
+    .flow-screen .confirm-screen {
+      padding-top: 72px;
+    }
 
     .screen-inner {
       padding: 40px 32px 56px;
       display: flex;
       flex-direction: column;
       gap: 32px;
+    }
+    .screen-heading-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .body-text {
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
     }
     @media (min-width: 768px) {
       .screen-inner {
@@ -312,6 +358,55 @@
       text-decoration: none;
     }
     .btn-link:hover { text-decoration: underline; }
+
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .payment-options-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    .payment-options-header h4 {
+      margin: 0;
+      padding-bottom: 16px;
+    }
+    .compare-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      min-height: 20px;
+      padding: 0;
+      border: 0;
+      border-radius: 10px;
+      appearance: none;
+      background: none;
+      color: var(--link);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0;
+      text-align: left;
+      cursor: pointer;
+    }
+    .compare-link:hover {
+      text-decoration: underline;
+    }
+    .compare-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .compare-link img {
+      width: 20px;
+      height: 20px;
+      display: block;
+      flex-shrink: 0;
+    }
 
     /* ── Color swatches ── */
     .swatches { display: flex; gap: 12px; }
@@ -838,8 +933,7 @@
     .product-card-main,
     .product-card-title-group,
     .product-card-rows,
-    .card-el-summary,
-    .desktop-el-summary {
+    .card-el-summary {
       display: flex;
       flex-direction: column;
     }
@@ -891,26 +985,25 @@
       white-space: nowrap;
       text-align: right;
     }
-    .summary-divider,
     .card-divider {
       width: 100%;
       height: 1px;
       background: var(--border-subtle);
       opacity: .5;
     }
-    .card-el-summary,
-    .desktop-el-summary {
+    .card-el-summary {
       gap: 12px;
-      font-size: 16px;
       line-height: 20px;
       color: var(--text);
     }
+    .card-el-summary,
     .card-el-summary .order-row,
-    .desktop-el-summary .order-row,
-    .card-el-summary .order-section,
-    .desktop-el-summary .order-section {
-      font-size: 16px;
+    .card-el-summary .order-section {
+      font-size: 14px;
       line-height: 20px;
+    }
+    .card-el-summary .text-link {
+      padding-bottom: 16px;
     }
     .order-section { font-size: 14px; font-weight: 500; color: var(--text); }
     .foretag-link {
@@ -935,67 +1028,40 @@
       height: 20px;
       display: block;
     }
-    .price-summary {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      width: 100%;
-      padding: 0 12px;
-      color: var(--primary);
-      font-size: 16px;
-      line-height: 20px;
-      font-weight: 600;
-    }
-    .price-summary-row {
-      display: flex;
+    .text-link {
+      width: fit-content;
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      width: 100%;
-      padding: 8px 12px;
+      gap: 6px;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--link);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      text-align: left;
+      cursor: pointer;
     }
-    .price-summary-row span:last-child {
+    .text-link:hover {
+      text-decoration: underline;
+    }
+    .text-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .text-link img {
+      width: 16px;
+      height: 16px;
+      display: block;
       flex-shrink: 0;
-      text-align: right;
-      white-space: nowrap;
     }
-    .mobile-only { display: flex; }
-    .desktop-only { display: none; }
     #screen-opsummering .btn-primary {
       height: 40px;
       width: 100%;
       margin: 8px 0 0;
     }
-
-    /* ── Add-on items ── */
-    #addon-section {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      gap: 16px;
-      padding: 24px 32px;
-      background: var(--bg-selected);
-      border-radius: 24px;
-    }
-    #addon-section h4 {
-      font-size: 20px;
-      line-height: 24px;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .addon-list { display: flex; flex-direction: column; gap: 16px; }
-    .addon-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 0;
-    }
-    .addon-item.disabled { opacity: 0.5; pointer-events: none; cursor: default; }
-    .addon-info { flex: 1; }
-    .addon-title { font-size: 16px; line-height: 20px; font-weight: 400; color: var(--text); }
-    .addon-price { font-size: 14px; line-height: 20px; margin-top: 0; }
-    .addon-price.included { color: #FF3C3C; }
-    .addon-price.extra    { color: #FF3C3C; }
     @media (min-width: 768px) {
       #screen-opsummering .screen-inner {
         max-width: 720px;
@@ -1038,19 +1104,6 @@
         line-height: 20px;
         font-weight: 500;
         color: #736761;
-      }
-      .mobile-only { display: none; }
-      .desktop-only { display: flex; }
-      .summary-divider {
-        height: 2px;
-      }
-      .desktop-el-summary {
-        width: 100%;
-        padding: 0 24px;
-      }
-      #addon-section h4 {
-        font-size: 24px;
-        line-height: 24px;
       }
       #screen-opsummering .btn-primary {
         width: 348px;
@@ -1279,83 +1332,134 @@
     /* ── Produktvalg ── */
     #screen-produktvalg {
       background: #fff !important;
+      min-height: 100vh;
     }
     .grid-outer:has(#screen-produktvalg.active) {
       background: #fff !important;
     }
     .grid-outer:has(#screen-produktvalg.active) .col-content {
+      grid-column: 1 / -1;
       background: #fff !important;
       box-shadow: none !important;
       padding: 0 !important;
     }
     #screen-produktvalg .screen-inner {
-      padding-left: 32px;
-      padding-right: 32px;
+      width: 100%;
+      max-width: 1120px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 24px;
+      padding-right: 24px;
       padding-top: 40px;
       padding-bottom: 56px;
     }
+    #screen-produktvalg h1 {
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
     @media (min-width: 768px) {
       #screen-produktvalg .screen-inner {
-        padding-left: 128px;
-        padding-right: 128px;
+        padding-left: 64px;
+        padding-right: 64px;
+      }
+    }
+    @media (min-width: 1024px) {
+      #screen-produktvalg h1 {
+        max-width: none;
+        margin-left: 0;
+        margin-right: 0;
+        text-align: left;
       }
     }
     .produkt-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      align-items: stretch;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
     }
     @media (min-width: 768px) {
       .produkt-grid {
-        grid-template-columns: repeat(2, minmax(298px, 1fr));
+        max-width: none;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
     .produkt-tile {
-      border: 3px solid var(--border-subtle);
-      border-radius: 24px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
       overflow: hidden;
       cursor: pointer;
-      background: var(--bg-elevated);
+      background: #fff;
       box-shadow: 0 0 5px rgba(0,0,0,.15);
-      transition: border .15s, box-shadow .15s;
+      transition: transform .15s ease, box-shadow .15s ease;
       display: flex;
       flex-direction: column;
       height: 100%;
+      width: 100%;
     }
     .produkt-tile:hover {
-      border-color: var(--border-bold);
-      box-shadow: 0 0 8px rgba(0,0,0,.2);
+      box-shadow: 0 4px 14px rgba(0,0,0,.16);
+      transform: translateY(-1px);
     }
     .produkt-tile-img-wrap {
       width: 100%;
-      height: 256px;
+      height: clamp(260px, 41vw, 360px);
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #f5f5f5;
+      background: #f7efeb;
     }
     .produkt-tile-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
+      display: block;
+      transform-origin: center;
+    }
+    .produkt-tile--peblar .produkt-tile-img {
+      transform: scale(1.3);
+    }
+    .produkt-tile--domo .produkt-tile-img {
+      transform: scale(1.72);
     }
     .produkt-tile-content {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 24px;
       padding: 24px;
       flex: 1;
     }
+    @media (min-width: 1024px) {
+      .produkt-tile-content {
+        padding: 32px;
+      }
+    }
+    .produkt-tile-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .produkt-tile-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
     .produkt-tile-navn {
-      font-size: 24px;
+      font-family: 'OK family', Georgia, serif;
+      font-size: 28px;
       font-weight: 600;
-      line-height: 24px;
+      line-height: 32px;
       color: var(--text);
       margin: 0;
     }
     .produkt-tile-desc {
-      font-size: 14px;
+      font-size: 16px;
       line-height: 20px;
       color: var(--text);
       margin: 0;
@@ -1363,23 +1467,27 @@
     .produkt-tile-highlights {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 8px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
     .produkt-tile-highlight {
       display: flex;
-      gap: 4px;
-      align-items: center;
-      font-size: 14px;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 16px;
       line-height: 20px;
       color: var(--text);
     }
     .produkt-tile-highlight::before {
       content: '';
       display: inline-block;
-      width: 20px;
-      height: 20px;
-      min-width: 20px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23FF3C3C'/%3E%3Cpath d='M8 12L11 15L16 9' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      margin-top: -2px;
+      background: url("assets/icon-check-circle.svg");
       background-size: contain;
       background-repeat: no-repeat;
     }
@@ -1393,13 +1501,45 @@
     .produkt-tile-priser {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
+      align-items: flex-start;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      text-align: left;
     }
     .produkt-tile-pris {
-      font-size: 14px;
-      font-weight: 600;
+      margin: 0;
+    }
+    .produkt-tile-button {
+      width: auto;
+      min-width: 120px;
+      height: 40px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #fff;
+      font-family: 'Fellix', Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 500;
       line-height: 20px;
-      color: var(--text);
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,.25);
+    }
+    .produkt-tile-button:hover {
+      opacity: .92;
+    }
+    @media (max-width: 520px) {
+      .produkt-tile-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+      }
+      .produkt-tile-button {
+        width: 100%;
+      }
     }
 
     /* ── Godkendelse screen ── */
@@ -1468,17 +1608,228 @@
       text-align: center;
       gap: 24px;
     }
+    #screen-bekraeftelse {
+      background: var(--bg-elevated);
+      min-height: 100vh;
+    }
+    .grid-outer:has(#screen-bekraeftelse.active) {
+      background: var(--bg-elevated);
+    }
+    .grid-outer:has(#screen-bekraeftelse.active) .col-content {
+      grid-column: 1 / -1;
+      background: var(--bg-elevated);
+      box-shadow: none;
+    }
+    .receipt-screen {
+      width: 100%;
+      max-width: 390px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 82px 24px 64px 32px;
+      background: #fff;
+      color: var(--text);
+    }
+    .receipt-logo {
+      display: block;
+      width: 48px;
+      height: 20px;
+      margin: 0 0 42px;
+    }
+    .receipt-variant {
+      display: none;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .receipt-variant.active {
+      display: flex;
+    }
+    .receipt-header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .receipt-title {
+      margin: 0;
+      color: var(--primary);
+      font-family: 'OK family', Georgia, serif;
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 48px;
+      letter-spacing: 0;
+    }
+    .receipt-text {
+      margin: 0;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: 0;
+    }
+    .receipt-text strong {
+      font-weight: 600;
+    }
+    .receipt-text-muted {
+      color: var(--text-subtle);
+    }
+    .receipt-intro strong {
+      font-weight: 500;
+    }
+    .receipt-visit {
+      width: 326px;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+    .receipt-hand {
+      width: 192px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .receipt-visit-title {
+      margin: 0;
+      font-family: 'OK family', Georgia, serif;
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 40px;
+      letter-spacing: 0;
+      color: var(--primary);
+    }
+    .receipt-visit-date {
+      display: block;
+      color: var(--accent);
+    }
+    .receipt-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .receipt-section-title {
+      margin: 0;
+      color: var(--text);
+      font-family: 'Fellix', Arial, sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 26px;
+      letter-spacing: 0;
+    }
+    .receipt-mitid-card {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 16px 16px 24px;
+      border: 2px solid var(--border-subtle);
+      border-radius: 6px;
+      background: var(--bg-selected);
+    }
+    .receipt-pill {
+      width: fit-content;
+      max-width: 100%;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      border-radius: 100px;
+      background: var(--receipt-burst-bg);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+    .receipt-card-title {
+      margin: 0;
+      color: var(--text);
+      font-family: 'Fellix', Arial, sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 26px;
+      letter-spacing: 0;
+    }
+    .receipt-alert {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px;
+      color: var(--text-subtle);
+    }
+    .receipt-alert-icon {
+      width: 24px;
+      min-width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-subtle);
+    }
+    .receipt-alert-icon::before {
+      content: "!";
+      width: 17px;
+      height: 17px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .receipt-alert-copy {
+      flex: 1;
+      min-width: 0;
+    }
+    .receipt-alert-copy strong {
+      display: block;
+      font-weight: 500;
+    }
+    .receipt-app-button {
+      width: 158px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--primary);
+      box-shadow: 0 0 8px rgba(0,0,0,.2);
+      color: #fff;
+      font-family: 'Fellix', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      cursor: pointer;
+    }
+    .receipt-app-button:hover {
+      filter: brightness(1.08);
+    }
+    .receipt-app-button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
     /* ── Overlay (shared) ── */
     .bs-overlay {
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.5);
       z-index: 200;
-      opacity: 0;
+      display: none;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: none;
     }
-    .bs-overlay.open { opacity: 1; pointer-events: auto; }
+    .bs-overlay.open {
+      display: block;
+      pointer-events: auto;
+    }
 
     /* ── CPR Info Modal ── */
     .cpr-modal-overlay {
@@ -1551,7 +1902,7 @@
       align-items: center;
       justify-content: center;
     }
-    .cpr-modal-close:hover { background: var(--bg-selected); border-radius: 50%; }
+    .cpr-modal-close:hover { background: transparent; border-radius: 50%; }
 
     /* ══ MOBILE: bottom sheet ══ */
     .bs-sheet {
@@ -1563,13 +1914,15 @@
       border-radius: 24px 24px 0 0;
       z-index: 201;
       max-height: 95dvh;
-      display: flex;
+      display: none;
       flex-direction: column;
-      transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
       pointer-events: none;
+      transition: none;
     }
-    .bs-sheet.open { transform: translateY(0); pointer-events: auto; }
+    .bs-sheet.open {
+      display: flex;
+      pointer-events: auto;
+    }
 
     /* show mobile, hide desktop content by default */
     .bs-mobile { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
@@ -1584,13 +1937,13 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 8px 20px 16px; flex-shrink: 0;
     }
-    .bs-title { font-family: 'OK family', Georgia, serif; font-size: 32px; font-weight: 600; color: var(--text); line-height: 40px; }
+    .bs-title { font-family: 'OK family', Georgia, serif; font-size: 32px; font-weight: 400; color: var(--text); line-height: 40px; }
     .bs-close-btn {
       width: 32px; height: 32px; min-width: 32px;
       background: transparent; border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center; border-radius: 50%;
     }
-    .bs-close-btn:hover { background: var(--bg-selected); }
+    .bs-close-btn:hover { background: transparent; }
 
     /* mobile scrollable area */
     .bs-scroll { overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
@@ -1630,15 +1983,10 @@
         max-height: 90vh;
         border-radius: 16px;
         overflow: hidden;
-        /* starts slightly low → slides up to center */
-        transform: translate(-50%, calc(-50% + 48px));
-        transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1),
-                    opacity  0.3s ease;
-        opacity: 0;
+        transform: translate(-50%, -50%);
       }
       .bs-sheet.open {
-        transform: translate(-50%, -50%);
-        opacity: 1;
+        display: flex;
         pointer-events: auto;
       }
 
@@ -1647,13 +1995,13 @@
         display: flex; align-items: center; justify-content: space-between;
         padding: 24px; flex-shrink: 0;
       }
-      .dm-title { font-family: 'OK family', Georgia, serif; font-size: 32px; font-weight: 600; line-height: 40px; color: var(--text); }
+      .dm-title { font-family: 'OK family', Georgia, serif; font-size: 32px; font-weight: 400; line-height: 40px; color: var(--text); }
       .dm-close-btn {
         width: 40px; height: 40px; min-width: 40px;
         background: transparent; border: none; cursor: pointer;
         display: flex; align-items: center; justify-content: center; border-radius: 50%;
       }
-      .dm-close-btn:hover { background: var(--bg-selected); }
+      .dm-close-btn:hover { background: transparent; }
 
       /* desktop table */
       .dm-table { display: flex; flex-direction: column; padding: 0 32px 32px; overflow-y: auto; }
@@ -1681,8 +2029,633 @@
       }
       .dm-head .dm-cell strong { font-weight: 600; }
       /* "Vælg" row cells */
-      .dm-btn-cell { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
-      .dm-btn-cell.featured { border-left: 1px solid var(--border-subtle); }
+    .dm-btn-cell { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+    .dm-btn-cell.featured { border-left: 1px solid var(--border-subtle); }
+    }
+
+    /* ── OK El details sheet / modal ── */
+    .okel-details-sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 202;
+      width: 100%;
+      max-height: 95dvh;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: 24px 24px 0 0;
+      background: #fff;
+      color: var(--text);
+      pointer-events: none;
+      transition: none;
+    }
+    .okel-details-sheet.open {
+      display: flex;
+      pointer-events: auto;
+    }
+    .okel-details-scroll {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .okel-details-handle-row {
+      display: flex;
+      justify-content: center;
+      padding: 28px 0 0;
+      flex-shrink: 0;
+    }
+    .okel-details-handle {
+      width: 36px;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border-tile);
+    }
+    .okel-details-header {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+    }
+    .okel-details-title {
+      margin: 0;
+      font-family: 'OK family', Georgia, serif;
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 40px;
+      color: var(--text);
+    }
+    .okel-details-close {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      border-radius: 16px;
+      background: transparent;
+      cursor: pointer;
+    }
+    .okel-details-close:hover {
+      background: transparent;
+    }
+    .okel-details-close img {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+    .okel-details-intro {
+      padding: 24px;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: 0;
+    }
+    .okel-details-table {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .okel-details-row {
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: 0;
+    }
+    .okel-details-row span:last-child {
+      flex-shrink: 0;
+      min-width: 94px;
+      text-align: right;
+    }
+    .okel-details-note {
+      padding: 24px;
+      color: var(--text-subtle);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: 0;
+    }
+    .okel-details-note p + p {
+      margin-top: 20px;
+    }
+    .okel-details-footer {
+      padding: 24px 20px;
+      padding-bottom: max(40px, calc(env(safe-area-inset-bottom, 0px) + 24px));
+      flex-shrink: 0;
+    }
+    .okel-details-footer .btn-primary {
+      width: 100%;
+      height: 36px;
+      margin: 0;
+      font-size: 14px;
+      line-height: 20px;
+    }
+    @media (min-width: 768px) {
+      .okel-details-sheet {
+        left: 50%;
+        right: auto;
+        top: 50%;
+        bottom: auto;
+        width: min(600px, calc(100vw - 48px));
+        max-height: 90vh;
+        border-radius: 16px;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 8px rgba(0,0,0,.2);
+      }
+      .okel-details-handle-row {
+        display: none;
+      }
+      .okel-details-header {
+        position: relative;
+        align-items: flex-start;
+        padding-top: 56px;
+        padding-right: 48px;
+        padding-bottom: 16px;
+        padding-left: 48px;
+      }
+      .okel-details-close {
+        position: absolute;
+        top: 16px;
+        right: 48px;
+      }
+      .okel-details-intro {
+        padding-right: 48px;
+        padding-left: 48px;
+      }
+      .okel-details-table {
+        padding-right: 48px;
+        padding-left: 48px;
+      }
+      .okel-details-row {
+        padding-right: 0;
+        padding-left: 0;
+      }
+      .okel-details-note {
+        padding-right: 48px;
+        padding-left: 48px;
+      }
+      .okel-details-footer {
+        padding-right: 48px;
+        padding-bottom: 32px;
+        padding-left: 48px;
+      }
+    }
+
+    .cpr-modal-close,
+    .bs-close-btn,
+    .dm-close-btn,
+    .okel-details-close,
+    .wind-power-close {
+      background: transparent;
+      box-shadow: none;
+    }
+    .cpr-modal-close:hover,
+    .cpr-modal-close:active,
+    .bs-close-btn:hover,
+    .bs-close-btn:active,
+    .dm-close-btn:hover,
+    .dm-close-btn:active,
+    .okel-details-close:hover,
+    .okel-details-close:active,
+    .wind-power-close:hover,
+    .wind-power-close:active {
+      background: transparent;
+    }
+
+    /* ── Dansk vindstrøm modal ── */
+    .wind-power-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 210;
+      display: none;
+      background: rgba(0,0,0,0.5);
+      pointer-events: none;
+      transition: none;
+    }
+    .wind-power-overlay.open {
+      display: block;
+      pointer-events: auto;
+    }
+    .wind-power-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      z-index: 211;
+      display: none;
+      flex-direction: column;
+      width: min(354px, calc(100vw - 24px));
+      height: min(740px, calc(100dvh - 24px));
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text);
+      box-shadow: 0 0 5px rgba(0,0,0,.15);
+      pointer-events: none;
+      transition: none;
+      transform: translate(-50%, -50%);
+    }
+    .wind-power-modal.open {
+      display: flex;
+      pointer-events: auto;
+    }
+    .wind-power-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 1;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    .wind-power-close img {
+      width: 14px;
+      height: 14px;
+      display: block;
+    }
+    .wind-power-scroll {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .wind-power-layout {
+      min-height: 740px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding-top: 48px;
+    }
+    .wind-power-copy {
+      width: 290px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 0 0 auto;
+      padding: 0 0 32px;
+    }
+    .wind-power-illustration {
+      display: none;
+    }
+    .wind-power-title {
+      margin: 0;
+      color: var(--primary);
+      font-family: 'Fellix', Arial, sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 26px;
+      letter-spacing: 0;
+    }
+    .wind-power-title-desktop {
+      display: none;
+    }
+    .wind-power-title-mobile,
+    .wind-power-title-mobile span {
+      display: block;
+    }
+    .wind-power-text {
+      margin: 0;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: 0;
+    }
+    .wind-power-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+    .wind-power-secondary,
+    .wind-power-primary {
+      min-width: 0;
+      height: 36px;
+      border-radius: 10px;
+      font-family: 'Fellix', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      cursor: pointer;
+    }
+    .wind-power-secondary {
+      flex: 0 0 134px;
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .wind-power-primary {
+      flex: 0 0 147px;
+      border: 0;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 8px rgba(0,0,0,.2);
+    }
+    .wind-power-secondary:focus-visible,
+    .wind-power-primary:focus-visible,
+    .wind-power-close:focus-visible,
+    .wind-power-guide-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .wind-power-calc {
+      position: relative;
+      flex: 0 0 auto;
+      width: 354px;
+      height: 364px;
+      background: var(--bg-selected);
+      border-radius: 10px;
+      transition: height .2s ease;
+    }
+    .wind-power-calc-header {
+      position: absolute;
+      top: 38px;
+      left: 32px;
+      width: 291px;
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 26px;
+    }
+    .wind-power-calc-header h3 {
+      margin: 0;
+      color: inherit;
+      font: inherit;
+    }
+    .wind-power-heading-break {
+      display: none;
+    }
+    .wind-power-slider-group {
+      position: absolute;
+      top: 91px;
+      left: 32px;
+      width: 290px;
+      height: 185px;
+      text-align: center;
+    }
+    .wind-power-slider-question {
+      position: absolute;
+      top: 27px;
+      left: 0;
+      width: 100%;
+      margin: 0;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+    }
+    .wind-power-kwh-value {
+      font-weight: 500;
+    }
+    .wind-power-range-wrap {
+      position: absolute;
+      top: 74px;
+      left: 0;
+      width: 100%;
+      height: 32px;
+    }
+    .wind-power-range-labels {
+      position: absolute;
+      top: 12px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 20px;
+    }
+    .wind-power-range {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 16px;
+      margin: 0;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    .wind-power-range::-webkit-slider-runnable-track {
+      height: 4px;
+      border-radius: 5px;
+      background: var(--border-subtle);
+    }
+    .wind-power-range::-webkit-slider-thumb {
+      width: 16px;
+      height: 16px;
+      margin-top: -6px;
+      appearance: none;
+      border: 0;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    .wind-power-range::-moz-range-track {
+      height: 4px;
+      border-radius: 5px;
+      background: var(--border-subtle);
+    }
+    .wind-power-range::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    .wind-power-monthly {
+      position: absolute;
+      top: 143px;
+      left: 0;
+      width: 100%;
+      margin: 0;
+      color: var(--accent);
+      font-family: 'OK family', Georgia, serif;
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 40px;
+      text-align: center;
+    }
+    .wind-power-guide-toggle {
+      position: absolute;
+      top: 321px;
+      left: 32px;
+      width: 290px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--text-subtle);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      text-align: left;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
+    }
+    .wind-power-info-icon {
+      position: relative;
+      width: 24px;
+      min-width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .wind-power-info-icon::before {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+    }
+    .wind-power-guide {
+      display: none;
+      position: absolute;
+      top: 355px;
+      left: 32px;
+      width: 290px;
+      flex-direction: column;
+      gap: 10px;
+      color: var(--text-subtle);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+    }
+    .wind-power-guide.open {
+      display: flex;
+    }
+    .wind-power-calc.guide-open {
+      height: 706px;
+    }
+    .wind-power-guide-heading {
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .wind-power-guide-heading .wind-power-info-icon {
+      align-self: flex-start;
+      margin-top: 8px;
+    }
+    .wind-power-guide p {
+      margin: 0;
+    }
+    .wind-power-guide p + p {
+      margin-top: 6px;
+    }
+    .wind-power-guide strong {
+      font-weight: 500;
+      color: var(--text-subtle);
+    }
+    [data-wind-power-row][hidden] {
+      display: none !important;
+    }
+    @media (min-width: 968px) {
+      .wind-power-modal {
+        width: 920px;
+        height: min(538px, calc(100dvh - 48px));
+      }
+      .wind-power-layout {
+        width: 920px;
+        min-height: 538px;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 24px;
+        padding: 98px 43px 72px;
+      }
+      .wind-power-layout:has(.wind-power-calc.guide-open) {
+        align-items: flex-start;
+      }
+      .wind-power-copy {
+        flex: 0 0 456px;
+        padding: 0;
+      }
+      .wind-power-illustration {
+        width: 113px;
+        height: 138px;
+        display: block;
+      }
+      .wind-power-title {
+        width: 427px;
+      }
+      .wind-power-title-mobile {
+        display: none;
+      }
+      .wind-power-title-desktop {
+        display: block;
+      }
+      .wind-power-text {
+        width: 414px;
+      }
+      .wind-power-actions {
+        width: 456px;
+        justify-content: center;
+      }
+      .wind-power-secondary {
+        flex-basis: 164px;
+      }
+      .wind-power-primary {
+        flex-basis: 214px;
+      }
+      .wind-power-calc {
+        flex: 0 0 354px;
+      }
+      .wind-power-calc-header {
+        top: 20px;
+      }
+      .wind-power-heading-break {
+        display: inline;
+      }
+      .wind-power-monthly {
+        top: 138px;
+        font-size: 40px;
+        line-height: 50px;
+      }
+      .wind-power-close {
+        width: 32px;
+        height: 32px;
+      }
+      .wind-power-close img {
+        width: 18px;
+        height: 18px;
+      }
     }
   </style>
 </head>
@@ -1782,7 +2755,7 @@
 
 
     <!-- ════════════════════════════════════════════
-         SCREEN 1 · FINANSIERING  (1 af 6)
+         SCREEN 1 · LADELØSNING  (1 af 6)
     ════════════════════════════════════════════ -->
     <div class="screen" id="screen-finansiering">
       <div class="screen-inner">
@@ -1793,15 +2766,21 @@
           </div>
           <div class="progress-label">
             <span class="progress-step">1 af 6</span>
-            <span class="progress-name">– Finansiering</span>
+            <span class="progress-name">– Ladeløsning</span>
           </div>
         </div>
 
-        <h2>Finansiering af din ladeboks</h2>
+        <h2>Sammensæt din ladeløsning</h2>
 
         <!-- Payment method -->
-        <div>
-          <h4 style="margin-bottom:16px;">Hvilken ladeløsning passer for dig?</h4>
+        <div class="payment-options">
+          <div class="payment-options-header">
+            <h4>Hvilken ladeløsning passer til dig?</h4>
+            <button class="compare-link" type="button" onclick="openCompare()">
+              <img src="assets/icon-compare-solutions.svg" width="20" height="20" alt="">
+              <span>Sammenlign ladeløsninger</span>
+            </button>
+          </div>
           <div class="option-tiles" id="tiles-payment">
 
             <div class="option-tile selected" onclick="pickTile('tiles-payment',this)">
@@ -1828,7 +2807,6 @@
             </div>
 
           </div>
-          <button class="btn-link" onclick="openCompare()">Sammenlign</button>
         </div>
 
         <!-- OK Elaftale -->
@@ -1875,7 +2853,7 @@
         </div>
 
         <p id="elaftale-info" class="helper" style="margin-top:0;">Du får vores elaftale <strong>OK El Højt Forbrug</strong>, som passer til kunder med hjemmeladeboks. Din nye elaftale vil træde i kraft <span id="elaftale-dato"></span></p>
-        <button class="btn-primary" onclick="goTo('screen-eksisterende-boks')">Videre</button>
+        <button class="btn-primary" onclick="handleFinansieringNext()">Videre</button>
 
       </div>
     </div><!-- /screen-finansiering -->
@@ -2111,57 +3089,23 @@
                   <span class="order-label"><span class="order-row-icon"><img src="assets/icon-check.svg" alt=""></span>Standardinstallation</span>
                   <span class="order-value">Inkluderet</span>
                 </div>
-                <div id="card-kabel9m" class="order-row" style="display:none;">
-                  <span class="order-label"><span class="order-row-icon"><img src="assets/icon-check.svg" alt=""></span>Ekstra ladekabel 9 meter</span>
-                  <span class="order-value">+ 1.500 kr.</span>
-                </div>
               </div>
             </div>
-            <div class="card-divider mobile-only"></div>
-            <div class="card-el-summary mobile-only">
+            <div class="card-divider"></div>
+            <div class="card-el-summary">
               <div class="order-section">OK Elaftale</div>
               <div class="order-row"><span>Abonnement</span><span class="order-value">49 kr./md.</span></div>
               <div class="order-row"><span>kWh-tillæg</span><span class="order-value">1,1 kr./kWh</span></div>
+              <div class="order-row" data-wind-power-row hidden><span>Dansk vindstrøm</span><span class="order-value">6 øre/kWh</span></div>
+              <button type="button" class="text-link" onclick="openOkElDetails()">
+                Flere detaljer om OK El
+                <img src="assets/icon-chevron-right.svg" width="16" height="16" alt="">
+              </button>
             </div>
             <button type="button" class="foretag-link" onclick="goTo('screen-finansiering')">
               Foretag ændringer
               <img src="assets/icon-edit.svg" width="20" height="20" alt="">
             </button>
-          </div>
-        </div>
-
-        <div class="price-summary">
-          <div class="price-summary-row"><span>Startpris (engangsbetaling)</span><span id="summary-start-price">-- kr.</span></div>
-          <div class="price-summary-row"><span>Fast månedlig pris</span><span id="summary-monthly-price">-- kr./md.</span></div>
-        </div>
-
-        <div class="summary-divider desktop-only"></div>
-
-        <div class="desktop-el-summary desktop-only">
-          <div class="order-section">OK Elaftale</div>
-          <div class="order-row"><span>Abonnement</span><span class="order-value">49 kr./md.</span></div>
-          <div class="order-row"><span>kWh-tillæg</span><span class="order-value">1,1 kr./kWh</span></div>
-        </div>
-
-        <div class="summary-divider desktop-only"></div>
-
-        <div id="addon-section">
-          <h4>Har du fået det hele med?</h4>
-          <div class="addon-list">
-            <label class="addon-item disabled">
-              <input type="checkbox" class="check-box" checked disabled>
-              <div class="addon-info">
-                <div class="addon-title">Ekstra ladekabel 7 meter</div>
-                <div class="addon-price included">Inkluderet</div>
-              </div>
-            </label>
-            <label class="addon-item">
-              <input type="checkbox" class="check-box" onchange="toggleKabel9m(this)">
-              <div class="addon-info">
-                <div class="addon-title">Ekstra ladekabel 9 meter</div>
-                <div class="addon-price extra">+ 1.500 kr.</div>
-              </div>
-            </label>
           </div>
         </div>
 
@@ -2317,9 +3261,10 @@
           </div>
         </div>
 
-        <h2>Betalingsservice</h2>
-
-        <p style="font-size:16px; line-height:24px; color:var(--text); margin-bottom:24px;">Ladeboksabonnement og elforbrug (og evt. elaftale) betales løbende via Betalingsservice.</p>
+        <div class="screen-heading-group">
+          <h2>Betalingsservice</h2>
+          <p class="body-text">Ladeboksabonnement og elforbrug (og evt. elaftale) betales løbende via Betalingsservice.</p>
+        </div>
 
         <div style="display:flex; flex-direction:column; gap:16px;">
           <div class="input-group">
@@ -2419,25 +3364,62 @@
          SCREEN ✓ · BEKRÆFTELSE
     ════════════════════════════════════════════ -->
     <div class="screen" id="screen-bekraeftelse">
-      <div class="confirm-screen">
-        <img src="assets/icon-check-circle.svg" width="80" height="80" alt="">
-        <h2>Tak for din bestilling!</h2>
-        <p style="font-size:16px; color:var(--text-subtle); max-width:280px; line-height:24px;">
-          Du vil modtage en bekræftelse på e-mail inden for kort tid.
-        </p>
-        <div style="background:var(--bg-selected); border-radius:12px; padding:24px; max-width:320px; width:100%; text-align:left;">
-          <img src="assets/hand.png" alt="" width="80" height="80" style="display:block; margin:0 auto 16px;">
-          <h2 style="font-size:24px; line-height:32px; margin-bottom:8px;">
-            Vi kommer på besøg<br>
-            <span style="color:var(--accent);">d. 12.-19. maj</span>
-          </h2>
-          <p style="font-size:14px; line-height:20px; color:var(--text-subtle);">
-            Vi installerer din ladeboks på en af dagene i denne periode. Vi giver dig besked om den præcise dato.
-          </p>
+      <div class="receipt-screen">
+        <img class="receipt-logo" src="assets/ok-logo.svg" width="48" height="20" alt="OK">
+
+        <div class="receipt-variant receipt-no-el active" id="receipt-no-el">
+          <div class="receipt-header">
+            <h1 class="receipt-title">Tak for din bestilling af OK Ladepakke</h1>
+            <p class="receipt-text receipt-intro">Din bestilling er modtaget og vi sender en kvittering til din mail <strong>- det kan tage op til 24 timer.</strong></p>
+          </div>
+
+          <div class="receipt-visit">
+            <img class="receipt-hand" src="assets/hand.png" alt="">
+            <h2 class="receipt-visit-title">
+              Vi kommer på besøg
+              <span class="receipt-visit-date">d. 12.-19.maj</span>
+            </h2>
+            <p class="receipt-text">Vi installerer din ladeboks på en af dagene i perioden. Vi kontakter dig for at planlægge den præcise dato.</p>
+          </div>
+
+          <div class="receipt-section">
+            <h2 class="receipt-section-title">Gør dig klar til første opladning</h2>
+            <p class="receipt-text">Hent OK Appen allerede nu. Log ind med det samme og få alt på plads, så du er klar til at lade bilen, så snart ladeboksen er installeret.</p>
+          </div>
+
+          <button type="button" class="receipt-app-button">Hent OK Appen</button>
         </div>
-        <button class="btn-primary" style="max-width:240px;" onclick="restart()">
-          Tilbage til forsiden
-        </button>
+
+        <div class="receipt-variant receipt-with-el" id="receipt-with-el">
+          <div class="receipt-header">
+            <h1 class="receipt-title">Tak for din bestilling af OK Ladepakke</h1>
+          </div>
+          <p class="receipt-text receipt-intro">Nu kan du snart lade din bil derhjemme! Du mangler bare et sidste trin.</p>
+          <p class="receipt-text receipt-intro" id="receipt-wind-power-note" hidden>Du har tilvalgt Dansk vindstrøm for 6 øre/kWh.</p>
+
+          <div class="receipt-mitid-card">
+            <span class="receipt-pill">Hold øje med din indbakke</span>
+            <h2 class="receipt-card-title">Bekræft din elaftale med MitID</h2>
+            <p class="receipt-text">Du modtager en mail med et link til MitID-bekræftelsen inden for 24 timer</p>
+          </div>
+
+          <div class="receipt-alert">
+            <span class="receipt-alert-icon" aria-hidden="true"></span>
+            <p class="receipt-text receipt-text-muted receipt-alert-copy"><strong>Bekræft inden 5 dage.</strong>Efter 5 dage annulleres din bestilling af OK El og din ladepakke bliver dyrere.</p>
+          </div>
+
+          <div class="receipt-section">
+            <h2 class="receipt-section-title">Vi kommer på besøg</h2>
+            <p class="receipt-text">Vi installerer din ladeboks <strong>d. 12-19. maj.</strong> Vi kontakter dig for at planlægge den præcise dato.</p>
+          </div>
+
+          <div class="receipt-section">
+            <h2 class="receipt-section-title">Gør dig klar til første opladning</h2>
+            <p class="receipt-text">Hent OK Appen allerede nu. Log ind med det samme og få alt på plads, så du er klar til at lade bilen, så snart ladeboksen er installeret.</p>
+          </div>
+
+          <button type="button" class="receipt-app-button">Hent OK Appen</button>
+        </div>
       </div>
     </div>
 
@@ -2477,6 +3459,7 @@
         <div class="bs-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
         <div class="bs-cell"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683418 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="#4c433e"/></svg></div>
       </div>
+      <div class="bs-row"><div class="bs-label">fysisk assistance ved driftstop</div><div class="bs-cell">Ja</div><div class="bs-cell">Ja</div><div class="bs-cell">Nej</div></div>
       <div class="bs-row">
         <div class="bs-label">10% rabat på OK's ladenetværk</div>
         <div class="bs-cell"><svg width="20" height="20" viewBox="0 0 16 11.3333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L6.37377 11.0404C5.98325 11.431 5.35008 11.431 4.95956 11.0404L0.292893 6.37377C-0.0976311 5.98325 -0.0976311 5.35008 0.292893 4.95956C0.683417 4.56904 1.31658 4.56904 1.70711 4.95956L5.66667 8.91912L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893Z" fill="#FF3C3C"/></svg></div>
@@ -2543,6 +3526,14 @@
         <div class="dm-cell"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683418 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683418 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z" fill="#4c433e"/></svg></div>
       </div>
 
+      <!-- Fysisk assistance ved driftstop -->
+      <div class="dm-row">
+        <div class="dm-label">fysisk assistance ved driftstop</div>
+        <div class="dm-cell featured">Ja</div>
+        <div class="dm-cell">Ja</div>
+        <div class="dm-cell">Nej</div>
+      </div>
+
       <!-- 10% på OK's ladenetværk -->
       <div class="dm-row">
         <div class="dm-label">10% på OK's ladenetværk</div>
@@ -2587,6 +3578,103 @@
 </div><!-- /bs-sheet -->
 
 <!-- ════════════════════════════════════════════
+     OVERLAY + OK EL DETAILS (bottom sheet on mobile, modal on desktop)
+════════════════════════════════════════════ -->
+<div id="okel-details-overlay" class="bs-overlay" onclick="closeOkElDetails()"></div>
+
+<div id="okel-details-sheet" class="okel-details-sheet" role="dialog" aria-modal="true" aria-labelledby="okel-details-title">
+  <div class="okel-details-handle-row"><div class="okel-details-handle"></div></div>
+
+  <div class="okel-details-scroll">
+    <div class="okel-details-header">
+      <h2 class="okel-details-title" id="okel-details-title">OK El Højt forbrug</h2>
+      <button type="button" class="okel-details-close" onclick="closeOkElDetails()" aria-label="Luk">
+        <img src="assets/icon-close.svg" width="16" height="16" alt="">
+      </button>
+    </div>
+
+    <p class="okel-details-intro">OK El Højt forbrug er til kunder med hjemmeladeboks og et forbrug på over 3.100kWh. Du betaler et månedligt abonnement, men til gengæld ingen kWh-tillægspris.</p>
+
+    <div class="okel-details-table">
+      <div class="okel-details-row"><span>Abonnement</span><span>49 kr.</span></div>
+      <div class="okel-details-row"><span>Pristillæg</span><span>0 kr*.</span></div>
+      <div class="okel-details-row" data-wind-power-row hidden><span>Dansk vindstrøm</span><span>6 øre/kWh</span></div>
+      <div class="okel-details-row"><span>Den rene elpris</span><span>49 kr.</span></div>
+      <div class="okel-details-row"><span>Transport og afgifter</span><span>12 mdr.</span></div>
+      <div class="okel-details-row"><span>Samlet estimeret kWh-pris</span><span>12 mdr.</span></div>
+    </div>
+
+    <div class="okel-details-note">
+      <p>Den rene elpris er sidste måneds gennemsnitspris på elbørsen, Nord Pool Day-ahead. Priserne bliver opdateret d. 1. i hver måned. Transport og afgifter er baseret på en standardkunde i dit netområde.</p>
+      <p>*Hvis dit elforbrug overstiger 15.000 kWh/år, betaler du et tillæg på 10 øre/kWh, for den del der overstiger.</p>
+    </div>
+
+    <div class="okel-details-footer">
+      <button class="btn-primary" type="button" onclick="closeOkElDetails()">Luk</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     OVERLAY + DANSK VINDSTRØM
+════════════════════════════════════════════ -->
+<div id="wind-power-overlay" class="wind-power-overlay" onclick="closeWindPowerModal()"></div>
+
+<div id="wind-power-modal" class="wind-power-modal" role="dialog" aria-modal="true" aria-labelledby="wind-power-title">
+  <button type="button" class="wind-power-close" onclick="closeWindPowerModal()" aria-label="Luk">
+    <img src="assets/icon-close.svg" width="20" height="20" alt="">
+  </button>
+
+  <div class="wind-power-scroll">
+    <div class="wind-power-layout">
+      <div class="wind-power-copy">
+        <img class="wind-power-illustration" src="assets/wind-power-turbine.svg" width="113" height="138" alt="">
+        <h2 class="wind-power-title" id="wind-power-title">
+          <span class="wind-power-title-desktop">Få dansk vindstrøm til din ladeboks</span>
+          <span class="wind-power-title-mobile"><span>Få Dansk vindstrøm</span><span>og gør en forskel for 6 øre/kWh</span></span>
+        </h2>
+        <p class="wind-power-text">Ved at tilvælge Dansk vindstrøm er du garanteret, at hele dit strømforbrug er dækket af vindmøller i Danmark. På den måde er du med til at skubbe elmarkedet i en mere CO2-neutral retning.</p>
+        <div class="wind-power-actions">
+          <button type="button" class="wind-power-secondary" onclick="declineWindPower()">Nej tak</button>
+          <button type="button" class="wind-power-primary" onclick="acceptWindPower()">Ja tak</button>
+        </div>
+      </div>
+
+      <div class="wind-power-calc">
+        <div class="wind-power-calc-header">
+          <h3>Se din pris på Dansk<span class="wind-power-heading-break"><br></span> vindstrøm</h3>
+        </div>
+        <div class="wind-power-slider-group">
+          <p class="wind-power-slider-question">Årligt elforbrug: <strong class="wind-power-kwh-value" id="wind-power-kwh-label">4.500 kWh</strong></p>
+          <div class="wind-power-range-wrap">
+            <input class="wind-power-range" id="wind-power-range" type="range" min="500" max="10000" step="100" value="4500" oninput="updateWindPowerCalculator(this.value)">
+            <div class="wind-power-range-labels" aria-hidden="true">
+              <span>500 kWh</span>
+              <span>10.000 kWh</span>
+            </div>
+          </div>
+          <p class="wind-power-monthly" id="wind-power-monthly-price">23 kr./md</p>
+        </div>
+        <button type="button" class="wind-power-guide-toggle" aria-expanded="false" aria-controls="wind-power-guide" onclick="toggleWindPowerGuide()">
+          <span class="wind-power-info-icon" aria-hidden="true">i</span>
+          <span>Sådan beregnes prisen</span>
+        </button>
+        <div class="wind-power-guide" id="wind-power-guide">
+          <div class="wind-power-guide-heading">
+            <span class="wind-power-info-icon" aria-hidden="true">i</span>
+            <span>Vejledning til strømforbrug og beregneren</span>
+          </div>
+          <p>Beregningen tager udgangspunkt i en merpris på 6 øre/kWh. Er du i tvivl om dit forbrug, kan du bruge følgende estimater:</p>
+          <p><strong>2.000 kWh pr. år</strong><br>Typisk forbrug for 1-2 personer i en lejlighed.</p>
+          <p><strong>4.500 kWh pr. år</strong><br>Typisk forbrug for en familie på 4 personer i et almindeligt parcelhus.</p>
+          <p><strong>6.000 kWh pr. år</strong><br>Typisk forbrug for familien med ladeboks eller varmepumpe.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
      MODAL · STØTTE INFO
 ════════════════════════════════════════════ -->
 <div id="stoette-modal-overlay" class="cpr-modal-overlay" onclick="if(event.target === this) closeStoetteModal()">
@@ -2621,6 +3709,11 @@
 </div>
 
 <script>
+  const WIND_POWER_PRICE_PER_KWH = 0.06;
+  const WIND_POWER_DEFAULT_KWH = 4500;
+  let windPowerSelected = false;
+  let windPowerKwh = WIND_POWER_DEFAULT_KWH;
+
   /* ── Comparison (bottom sheet / modal) ── */
   function openCompare() {
     document.getElementById('bs-overlay').classList.add('open');
@@ -2632,6 +3725,103 @@
     document.getElementById('bs-sheet').classList.remove('open');
     document.body.style.overflow = '';
   }
+  function openOkElDetails() {
+    document.getElementById('okel-details-overlay').classList.add('open');
+    document.getElementById('okel-details-sheet').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeOkElDetails() {
+    document.getElementById('okel-details-overlay').classList.remove('open');
+    document.getElementById('okel-details-sheet').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── Dansk vindstrøm ── */
+  function isWindPowerActive() {
+    return windPowerSelected && hasSelectedElaftale();
+  }
+
+  function formatKwh(value) {
+    return Number(value || 0).toLocaleString('da-DK');
+  }
+
+  function getWindPowerMonthlyPrice(kwh = windPowerKwh) {
+    return Math.round((Number(kwh) || 0) * WIND_POWER_PRICE_PER_KWH / 12);
+  }
+
+  function updateWindPowerCalculator(value = windPowerKwh) {
+    windPowerKwh = Number(value) || WIND_POWER_DEFAULT_KWH;
+    const range = document.getElementById('wind-power-range');
+    const label = document.getElementById('wind-power-kwh-label');
+    const price = document.getElementById('wind-power-monthly-price');
+
+    if (range) range.value = windPowerKwh;
+    if (label) label.textContent = `${formatKwh(windPowerKwh)} kWh`;
+    if (price) price.textContent = `${getWindPowerMonthlyPrice(windPowerKwh)} kr./md`;
+  }
+
+  function openWindPowerModal() {
+    updateWindPowerCalculator(windPowerKwh);
+    document.getElementById('wind-power-overlay')?.classList.add('open');
+    document.getElementById('wind-power-modal')?.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeWindPowerModal() {
+    document.getElementById('wind-power-overlay')?.classList.remove('open');
+    document.getElementById('wind-power-modal')?.classList.remove('open');
+    document.getElementById('wind-power-guide')?.classList.remove('open');
+    document.querySelector('.wind-power-calc')?.classList.remove('guide-open');
+    document.querySelector('.wind-power-guide-toggle')?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  function continueFromWindPowerModal() {
+    closeWindPowerModal();
+    updateWindPowerVisibility();
+    goTo('screen-eksisterende-boks');
+  }
+
+  function acceptWindPower() {
+    const range = document.getElementById('wind-power-range');
+    windPowerSelected = true;
+    windPowerKwh = Number(range?.value) || WIND_POWER_DEFAULT_KWH;
+    continueFromWindPowerModal();
+  }
+
+  function declineWindPower() {
+    windPowerSelected = false;
+    continueFromWindPowerModal();
+  }
+
+  function handleFinansieringNext() {
+    if (!hasSelectedElaftale()) {
+      windPowerSelected = false;
+      updateWindPowerVisibility();
+      goTo('screen-eksisterende-boks');
+      return;
+    }
+    openWindPowerModal();
+  }
+
+  function toggleWindPowerGuide() {
+    const guide = document.getElementById('wind-power-guide');
+    const toggle = document.querySelector('.wind-power-guide-toggle');
+    const calculator = document.querySelector('.wind-power-calc');
+    const isOpen = guide?.classList.toggle('open') ?? false;
+    calculator?.classList.toggle('guide-open', isOpen);
+    toggle?.setAttribute('aria-expanded', String(isOpen));
+  }
+
+  function updateWindPowerVisibility() {
+    const visible = isWindPowerActive();
+    document.querySelectorAll('[data-wind-power-row]').forEach(row => {
+      row.hidden = !visible;
+    });
+    const receiptNote = document.getElementById('receipt-wind-power-note');
+    if (receiptNote) receiptNote.hidden = !visible;
+  }
+
   // Desktop "Vælg" buttons — select the tile at the given index then close
   function selectAndClose(index) {
     const tiles = document.querySelectorAll('#tiles-payment .option-tile');
@@ -2642,6 +3832,8 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closeCompare();
+      closeOkElDetails();
+      closeWindPowerModal();
       closeCprModal();
       closeStoetteModal();
     }
@@ -2706,12 +3898,23 @@
   }
 
   const STEPS = [
-    { id: 'screen-finansiering', label: 'Finansiering' },
+    { id: 'screen-finansiering', label: 'Ladeløsning' },
     { id: 'screen-eksisterende-boks', label: 'Installation', aliases: ['screen-installation'] },
     { id: 'screen-opsummering', label: 'Kurv' },
     { id: 'screen-personlige', label: 'Personlige oplysninger' },
     { id: 'screen-fordele', label: 'OK Fordele' },
     { id: 'screen-betaling', label: 'Betalingsservice' }
+  ];
+
+  const FLOW_SCREEN_IDS = [
+    'screen-finansiering',
+    'screen-eksisterende-boks',
+    'screen-installation',
+    'screen-opsummering',
+    'screen-personlige',
+    'screen-fordele',
+    'screen-betaling',
+    'screen-godkend'
   ];
 
   function goToStep(n) {
@@ -2743,6 +3946,31 @@
     if (nameLabel) nameLabel.textContent = `– ${isGodkend ? 'Godkend bestilling' : STEPS[idx].label}`;
   }
 
+  function closeFlow() {
+    if (currentProduct) {
+      renderProductPage(currentProduct);
+      goTo('screen-produkt');
+      return;
+    }
+    goTo('screen-produktvalg');
+  }
+
+  function addFlowCloseButtons() {
+    FLOW_SCREEN_IDS.forEach(id => {
+      const screen = document.getElementById(id);
+      if (!screen || screen.querySelector('.flow-close-btn')) return;
+
+      screen.classList.add('flow-screen');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'flow-close-btn';
+      button.setAttribute('aria-label', 'Luk bestillingsflow');
+      button.innerHTML = '<img src="assets/icon-close.svg" width="14" height="14" alt="">';
+      button.addEventListener('click', closeFlow);
+      screen.insertBefore(button, screen.firstChild);
+    });
+  }
+
   /* ── Form state persistence ── */
   function saveFormData() {
     const inputs = {};
@@ -2758,13 +3986,21 @@
       const el = document.getElementById(id);
       if (el) display[id] = el.style.display;
     });
-    sessionStorage.setItem('flowState', JSON.stringify({ inputs, tiles, display }));
+    sessionStorage.setItem('flowState', JSON.stringify({
+      inputs,
+      tiles,
+      display,
+      windPower: {
+        selected: windPowerSelected,
+        kwh: windPowerKwh
+      }
+    }));
   }
 
   function restoreFormData() {
     const saved = sessionStorage.getItem('flowState');
     if (!saved) return;
-    const { inputs, tiles, display } = JSON.parse(saved);
+    const { inputs = {}, tiles = {}, display = {}, windPower = {} } = JSON.parse(saved);
     document.querySelectorAll('.screen input, .screen textarea').forEach((el, i) => {
       if (inputs[i] == null) return;
       if (el.type === 'checkbox') el.checked = inputs[i];
@@ -2781,6 +4017,10 @@
       const el = document.getElementById(id);
       if (el) el.style.display = val;
     });
+    windPowerSelected = !!windPower.selected;
+    windPowerKwh = Number(windPower.kwh) || WIND_POWER_DEFAULT_KWH;
+    updateWindPowerCalculator(windPowerKwh);
+    updateWindPowerVisibility();
   }
 
   /* ── Navigation ── */
@@ -2792,7 +4032,7 @@
     window.scrollTo({ top: 0, behavior: 'instant' });
     if (id === 'screen-opsummering') {
       updateSummaryCard();
-      updateAddonSection();
+      updateWindPowerVisibility();
     }
     if (id === 'screen-fordele') updateFordeleElaftaleState();
   }
@@ -2820,9 +4060,10 @@
       id: 'peblar',
       navn: 'Peblar',
       billede: 'assets/peblar.png',
-      billede_produktvalg: 'assets/peblar-productcard.png',
+      billede_produktvalg: 'https://www.ok.dk/imagevault/publishedmedia/kdl5jnnf5ze5xgdnhkpo/peblar-sort-v-g.png',
+      billede_produktvalg_fallback: 'assets/peblar-productcard.png',
       description: '11 kW ladeboks med fast 7,5 m kabel. Smart opladning med OK-appen eller ladebrik.',
-      highlights: ['Med fast ladekabel', '7,5 meter ladekabel'],
+      highlights: ['Med fast ladekabel', '7,5 meter ladekabel', 'Standardinstallation inkluderet'],
       priser: { køb: 6245, leje: 169, oprettelse_leje: 1750, oprettelse_køb: 6245 },
       specs: [
         { label: 'Kabel', value: 'Fastmonteret, 7,5 m' },
@@ -2842,9 +4083,10 @@
       id: 'domo',
       navn: 'Domo',
       billede: 'assets/domo-black.png',
-      billede_produktvalg: 'assets/domo-productcard.png',
+      billede_produktvalg: 'https://www.ok.dk/imagevault/publishedmedia/ge62mn9w5obn02ll5jxx/domo-mursten.png',
+      billede_produktvalg_fallback: 'assets/domo-productcard.png',
       description: '11 kW ladeboks uden fast kabel. Smart opladning med OK-appen eller ladebrik.',
-      highlights: ['Dansk designet og produceret', 'Vælg mellem sort og hvid'],
+      highlights: ['Dansk designet og produceret', 'Vælg mellem sort og hvid', 'Standardinstallation inkluderet'],
       hasColorVariants: true,
       colorVariants: [
         { color: 'sort', label: 'Sort', billede: 'assets/domo-black.png' },
@@ -2882,39 +4124,67 @@
   function renderProduktGrid() {
     const grid = document.getElementById('produkt-grid');
     grid.innerHTML = products.map(p => {
-      let købPris = 'Køb fra ';
-      let lejePris = 'Lej for ';
-      if (p.hasKabelVariants) {
-        købPris += p.kabelVariants[0].priser.køb.toLocaleString('da-DK') + ' kr.';
-        lejePris += p.kabelVariants[0].priser.leje.toLocaleString('da-DK') + ' kr./md.';
-      } else if (p.priser) {
-        købPris += p.priser.køb.toLocaleString('da-DK') + ' kr.';
-        lejePris += p.priser.leje.toLocaleString('da-DK') + ' kr./md.';
-      } else {
-        købPris = '';
-        lejePris = '';
-      }
-      const highlights = (p.highlights || []).map(h => `<div class="produkt-tile-highlight">${h}</div>`).join('');
+      const highlights = (p.highlights || []).map(h => `<li class="produkt-tile-highlight">${h}</li>`).join('');
       const billede = p.billede_produktvalg || p.billede;
+      const fallbackBillede = p.billede_produktvalg_fallback || p.billede || billede;
+      const priceLines = renderProduktTilePriceLines(p);
       return `
-      <div class="produkt-tile" onclick="selectProduct('${p.id}')">
+      <div class="produkt-tile produkt-tile--${p.id}" onclick="selectProduct('${p.id}')">
         <div class="produkt-tile-img-wrap">
-          <img class="produkt-tile-img" src="${billede}" alt="${p.navn}">
+          <img class="produkt-tile-img" src="${billede}" alt="${p.navn}" data-fallback-src="${fallbackBillede}">
         </div>
         <div class="produkt-tile-content">
-          <h3 class="produkt-tile-navn">${p.navn}</h3>
-          <p class="produkt-tile-desc">${p.description || ''}</p>
-          <div class="produkt-tile-highlights">${highlights}</div>
-          <div class="produkt-tile-footer">
-            <div class="produkt-tile-priser">
-              <div class="produkt-tile-pris">${købPris}</div>
-              <div class="produkt-tile-pris">${lejePris}</div>
+          <div class="produkt-tile-copy">
+            <div class="produkt-tile-title-group">
+              <h3 class="produkt-tile-navn">${p.navn}</h3>
+              <p class="produkt-tile-desc">${p.description || ''}</p>
             </div>
-            <button class="btn-primary" style="width: auto; min-width: 120px; margin: 0;">Bestil</button>
+            <ul class="produkt-tile-highlights">${highlights}</ul>
+          </div>
+          <div class="produkt-tile-footer">
+            <div class="produkt-tile-priser" aria-label="Priser">
+              ${priceLines}
+            </div>
+            <button class="produkt-tile-button" type="button">Bestil</button>
           </div>
         </div>
       </div>`;
     }).join('');
+
+    grid.querySelectorAll('.produkt-tile-img').forEach(img => {
+      img.addEventListener('error', () => {
+        const fallbackSrc = img.dataset.fallbackSrc;
+        if (fallbackSrc && img.getAttribute('src') !== fallbackSrc) {
+          img.src = fallbackSrc;
+        }
+      }, { once: true });
+    });
+  }
+
+  function getProduktTilePrices(product) {
+    if (product.hasKabelVariants && product.kabelVariants?.length) {
+      return product.kabelVariants[0].priser || {};
+    }
+    return product.priser || {};
+  }
+
+  function formatPris(value) {
+    return Number(value).toLocaleString('da-DK');
+  }
+
+  function renderProduktTilePriceLines(product) {
+    return renderPriceLines(getProduktTilePrices(product), 'produkt-tile-pris');
+  }
+
+  function renderPriceLines(priser, className) {
+    const købPris = priser.oprettelse_køb || priser.køb;
+    const lejePris = priser.leje;
+    const lejeOprettelse = priser.oprettelse_leje;
+
+    return [
+      købPris ? `<p class="${className}">Køb fra ${formatPris(købPris)} kr.</p>` : '',
+      lejePris ? `<p class="${className}">Lej: ${formatPris(lejePris)} kr./md.${lejeOprettelse ? ` + ${formatPris(lejeOprettelse)} kr. oprettelse` : ''}</p>` : ''
+    ].join('');
   }
 
   function selectProduct(id) {
@@ -2937,11 +4207,7 @@
       priser = p.priser;
     }
     const pr = document.getElementById('prod-priser');
-    const købPris = priser.oprettelse_køb || priser.køb;
-    pr.innerHTML = [
-      købPris  ? `<p class="price-row">Køb fra <strong>${købPris.toLocaleString('da-DK')} kr.</strong></p>` : '',
-      priser.leje ? `<p class="price-row">Lej for <strong>${priser.leje.toLocaleString('da-DK')} kr./md.</strong></p>` : ''
-    ].join('');
+    pr.innerHTML = renderPriceLines(priser, 'price-row');
     const oKøb = (priser.oprettelse_køb || 0).toLocaleString('da-DK');
     const oLeje = (priser.oprettelse_leje || 0).toLocaleString('da-DK');
     const købStr = oKøb + ' kr.';
@@ -3091,8 +4357,6 @@
     const setupPurchase = prices.oprettelse_køb || prices.køb || 0;
     const monthlyLease = prices.leje || 0;
     const kr = value => value.toLocaleString('da-DK') + ' kr.';
-    const isKabel9mSelected = !!document.querySelector('#screen-opsummering .addon-item:last-of-type .check-box')?.checked;
-    const addonStartPrice = isKabel9mSelected ? 1500 : 0;
     const paymentRows = [
       {
         solutionType: 'Leje-løsningen',
@@ -3141,19 +4405,8 @@
     set('card-solution-label', selected.solutionLabel);
     set('card-solution-value', selected.solutionValue);
     set('card-service-value', selected.serviceValue);
-    set('summary-start-price', kr(selected.setupValue + addonStartPrice));
-    set('summary-monthly-price', selected.monthlySummary);
-
     const serviceRow = document.getElementById('card-service-row');
     if (serviceRow) serviceRow.classList.toggle('is-muted', selected.serviceMuted);
-
-    const kabel9mRow = document.getElementById('card-kabel9m');
-    if (kabel9mRow) kabel9mRow.style.display = isKabel9mSelected ? 'flex' : 'none';
-  }
-
-  function updateAddonSection() {
-    const addonSection = document.getElementById('addon-section');
-    if (addonSection) addonSection.style.display = currentProduct ? 'flex' : 'none';
   }
 
   loadProducts();
@@ -3187,6 +4440,13 @@
     const tiles = [...document.querySelectorAll('#tiles-elaftale .option-tile')];
     const selectedIdx = tiles.findIndex(tile => tile.classList.contains('selected'));
     return selectedIdx === 0 || selectedIdx === 1;
+  }
+
+  function updateReceiptVariant() {
+    const withEl = hasSelectedElaftale();
+    document.getElementById('receipt-no-el')?.classList.toggle('active', !withEl);
+    document.getElementById('receipt-with-el')?.classList.toggle('active', withEl);
+    document.getElementById('receipt-wind-power-note')?.toggleAttribute('hidden', !isWindPowerActive());
   }
 
   function updateFordeleElaftaleState() {
@@ -3530,6 +4790,12 @@
       produkt: document.getElementById('prod-navn')?.textContent?.trim() ?? '',
       betalingsform: tileVal('tiles-payment', ['Leje', 'Køb med serviceaftale', 'Køb uden serviceaftale']),
       elaftale: tileVal('tiles-elaftale', ['Ja tak', 'Jeg er allerede elkunde', 'Nej tak']),
+      danskVindstroem: {
+        valgt: isWindPowerActive(),
+        forbrugKwh: windPowerKwh,
+        tillaeg: '6 øre/kWh',
+        estimeretMaanedspris: `${getWindPowerMonthlyPrice()} kr./md.`
+      },
       samleversNavn: inp('#elaftale-samlever-fields .input-field:first-of-type'),
       samleversCpr:  inp('#elaftale-samlever-fields .input-field:last-of-type'),
       instalAdresse: adresse(igade, ipostnr, iby),
@@ -3544,7 +4810,6 @@
       forening: hasSelectedElaftale() ? inp('#forening-input') : '',
       coopNr: inp('#screen-fordele .input-field:last-of-type'),
       betalingsservice: { registreringsnummer: regNr, kontonummer: kontoNr },
-      addon9mKabel: chk('#screen-opsummering .addon-item:last-of-type .check-box'),
     };
   }
 
@@ -3570,6 +4835,7 @@
     localStorage.setItem('ok_ladeboks_order', JSON.stringify(order, null, 2));
     console.log('[Bestilling] Klar til afsendelse:', order);
 
+    updateReceiptVariant();
     goTo('screen-bekraeftelse');
   }
 
@@ -3620,12 +4886,6 @@
     specs.push({ label: 'Oprettelse', value: oprettelse.toLocaleString('da-DK') + ' kr.' });
     specs.push({ label: 'Pr. måned', value: maanedlig.toLocaleString('da-DK') + ' kr./md.' });
 
-    // Ekstra kabel 9m
-    const kabel9m = document.querySelector('input[onchange="toggleKabel9m(this)"]');
-    if (kabel9m && kabel9m.checked) {
-      specs.push({ label: 'Løst kabel', value: '+ 1.500 kr.' });
-    }
-
     // Leveringsadresse
     const gade = document.getElementById('instal-gade')?.value || '';
     const postnr = document.getElementById('instal-postnr')?.value || '';
@@ -3655,19 +4915,22 @@
       elSection.style.display = 'flex';
       divider2.style.display = 'block';
       const elDate = document.getElementById('elaftale-dato')?.textContent || '';
+      const windActive = isWindPowerActive();
       const elSpecs = [
-        { label: 'OK El Højt forbrug med dansk vindstrøm', value: '1,40 kr.' },
+        { label: windActive ? 'OK El Højt forbrug med Dansk vindstrøm' : 'OK El Højt forbrug', value: '1,40 kr.' },
         { label: 'Den rene elpris', value: '93,02 øre/kWh' },
         { label: 'Pristillæg', value: '0 øre/kWh' },
         { label: 'Transport og afgifter', value: '40,97 øre/kWh' },
         { label: 'Fast betaling til distribution - pr. måned', value: '79,79 kr.' },
-        { label: 'Tillæg for Dansk vindstrøm', value: '6 øre/kWh' },
         { label: 'Abonnement til OK - pr. måned', value: '49 kr.' },
         { label: 'Oprettelse', value: '0 kr.' },
         { label: 'Betalingsgebyr', value: '5,50 kr.' },
         { label: 'Leverancestart', value: elDate },
         { label: 'Kampagne', value: 'Velkomstrabat - 500 kr.' }
       ];
+      if (windActive) {
+        elSpecs.splice(3, 0, { label: 'Dansk vindstrøm', value: '6 øre/kWh' });
+      }
       document.getElementById('godkend-elaftale-specs').innerHTML = elSpecs.map(s =>
         `<div class="spec-row"><span>${s.label}</span><span class="spec-val">${s.value}</span></div>`
       ).join('');
@@ -3718,18 +4981,13 @@
     document.getElementById('godkend-cb-persdata').checked = false;
   }
 
-  /* ── Add-on: ekstra ladekabel 9m ── */
-  function toggleKabel9m(cb) {
-    document.getElementById('card-kabel9m').style.display = cb.checked ? 'flex' : 'none';
-    updateSummaryCard();
-  }
-
   /* ── Restart ── */
   function restart() {
     sessionStorage.removeItem('flowState');
     goTo('screen-produktvalg');
   }
 
+  addFlowCloseButtons();
   restoreFormData();
   updateFordeleElaftaleState();
 </script>

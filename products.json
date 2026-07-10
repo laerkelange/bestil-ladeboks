@@ -3,34 +3,25 @@
     "id": "peblar",
     "navn": "Peblar",
     "billede": "assets/peblar.png",
-    "billede_produktvalg": "assets/peblar-productcard.png",
-    "description": "11 kW ladeboks uden fast kabel. Smart opladning med OK-appen eller ladebrik.",
+    "billede_produktvalg": "https://www.ok.dk/imagevault/publishedmedia/kdl5jnnf5ze5xgdnhkpo/peblar-sort-v-g.png",
+    "billede_produktvalg_fallback": "assets/peblar-productcard.png",
+    "description": "11 kW ladeboks med fast 7,5 m kabel. Smart opladning med OK-appen eller ladebrik.",
     "highlights": [
       "Med fast ladekabel",
-      "Vælg mellem 5 eller 7,5 meter ladekabel"
+      "7,5 meter ladekabel",
+      "Standardinstallation inkluderet"
     ],
-    "hasKabelVariants": true,
-    "kabelVariants": [
+    "priser": {
+      "køb": 6245,
+      "leje": 169,
+      "oprettelse_leje": 1750,
+      "oprettelse_køb": 6245
+    },
+    "specs": [
       {
-        "length": "5",
-        "priser": {
-          "køb": 5995,
-          "leje": 169,
-          "oprettelse_leje": 1500,
-          "oprettelse_køb": 5995
-        }
+        "label": "Kabel",
+        "value": "Fastmonteret, 7,5 m"
       },
-      {
-        "length": "7,5",
-        "priser": {
-          "køb": 6245,
-          "leje": 169,
-          "oprettelse_leje": 1750,
-          "oprettelse_køb": 6245
-        }
-      }
-    ],
-    "baseSpecs": [
       {
         "label": "Stik",
         "value": "Type 2"
@@ -50,7 +41,7 @@
     ],
     "usps": [
       {
-        "titel": "Smarte ladeplaner",
+        "titel": "Planlæg din opladning",
         "tekst": "Brug OK-appen til at opsætte ladeplaner, så du altid har strøm nok – og lader, når elprisen er lavest. Du kan også starte opladningen direkte fra appen eller scanne OK-ladebrikken over kortlæseren på boksen."
       },
       {
@@ -71,11 +62,13 @@
     "id": "domo",
     "navn": "Domo",
     "billede": "assets/domo-black.png",
-    "billede_produktvalg": "assets/domo-productcard.png",
+    "billede_produktvalg": "https://www.ok.dk/imagevault/publishedmedia/ge62mn9w5obn02ll5jxx/domo-mursten.png",
+    "billede_produktvalg_fallback": "assets/domo-productcard.png",
     "description": "11 kW ladeboks uden fast kabel. Smart opladning med OK-appen eller ladebrik.",
     "highlights": [
       "Dansk designet og produceret",
-      "Vælg mellem sort og hvid"
+      "Vælg mellem sort og hvid",
+      "Standardinstallation inkluderet"
     ],
     "hasColorVariants": true,
     "colorVariants": [
@@ -120,7 +113,7 @@
     ],
     "usps": [
       {
-        "titel": "Smarte ladeplaner",
+        "titel": "Planlæg din opladning",
         "tekst": "Brug OK-appen til at opsætte ladeplaner, så du altid har strøm nok – og lader, når elprisen er lavest. Du kan også starte opladningen direkte fra appen eller scanne OK-ladebrikken over kortlæseren på boksen."
       },
       {
